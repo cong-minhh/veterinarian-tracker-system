@@ -4,7 +4,8 @@ using System.Text.Json.Serialization;
 
 namespace TuyetDang.MyVetTracer.Entity
 {
-	public class Vaccine
+    [Table("Vaccine")]
+    public class Vaccine
 	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -12,7 +13,7 @@ namespace TuyetDang.MyVetTracer.Entity
 
 		public string VacName { get; set; }
 
-		public string Date { get; set; }  // Consider changing to DateTime if it's a real date
+		public DateTime? Date { get; set; }  // Consider changing to DateTime if it's a real date
 
 		public string Dose { get; set; }
 
@@ -25,9 +26,9 @@ namespace TuyetDang.MyVetTracer.Entity
 		public virtual Pet Pet { get; set; }
 
 		[ForeignKey("VetUser")]
-		public int? IdUser { get; set; }
+		public int? IdVeterinarian { get; set; }
 
 		[JsonIgnore]
-		public virtual VetUser VetUser { get; set; }
+		public virtual Veterinarian VetUser { get; set; }
 	}
 }

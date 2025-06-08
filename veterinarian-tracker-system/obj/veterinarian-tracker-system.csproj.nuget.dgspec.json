@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\NoC4\\source\\repos\\veterinarian-tracker-system\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj": {}
+    "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj": {}
   },
   "projects": {
-    "C:\\Users\\NoC4\\source\\repos\\veterinarian-tracker-system\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj": {
+    "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\NoC4\\source\\repos\\veterinarian-tracker-system\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj",
+        "projectUniqueName": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj",
         "projectName": "veterinarian-tracker-system",
-        "projectPath": "C:\\Users\\NoC4\\source\\repos\\veterinarian-tracker-system\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj",
-        "packagesPath": "C:\\Users\\NoC4\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\NoC4\\source\\repos\\veterinarian-tracker-system\\veterinarian-tracker-system\\obj\\",
+        "projectPath": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj",
+        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+        "outputPath": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\NoC4\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -25,7 +25,7 @@
           "net8.0"
         ],
         "sources": {
-          "D:\\minhne\\minhdanghoc_Q2_N4\\CSE422\\Lab6\\Lab6_Question6\\MyNuGetPackages": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -49,6 +49,16 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.5, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

@@ -1,32 +1,36 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using veterinarian_tracker_system.Models;
+using Microsoft.EntityFrameworkCore;
+using TuyetDang.MyVetTracer.Data;
 
 namespace veterinarian_tracker_system.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly MyVetTracerDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, MyVetTracerDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+        // GET: Veterinarian
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var vets = await _context.Veterinarians.ToListAsync();
+            return View(vets);
         }
-
         public IActionResult Privacy()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+
     }
 }

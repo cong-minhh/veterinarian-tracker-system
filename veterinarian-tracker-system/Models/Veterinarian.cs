@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace TuyetDang.MyVetTracer.Entity
 {
+    [Table("Veterinarian")]
     public class Veterinarian
     {
         [Key]
@@ -24,7 +25,7 @@ namespace TuyetDang.MyVetTracer.Entity
 
         public string FullName { get; set; }
 
-        public string Dob { get; set; } // Consider using DateTime? if needed
+        public DateTime? Dob { get; set; } 
 
         public string Gender { get; set; }
 

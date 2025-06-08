@@ -1,30 +1,30 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-public class Appointment : AuditEntity
+using TuyetDang.MyVetTracer.Entity;
+namespace TuyetDang.MyVetTracer.Entity
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int IdAppointment { get; set; }
+    [Table("Appointment")]
+    public class Appointment : AuditEntity
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int IdAppointment { get; set; }
 
-    public string Time { get; set; }
+        public string Time { get; set; }
 
-    public string OwnerName { get; set; }
+        public int IsConfirmed { get; set; }
 
-    public string Veterinarian { get; set; }
+        [ForeignKey("Pet")]
+        public int? IdPet { get; set; }
 
-    public int IsConfirmed { get; set; }
+        [JsonIgnore]
+        public virtual Pet Pet { get; set; }
 
-    [ForeignKey("Pet")]
-    public int? IdPet { get; set; }
+        [ForeignKey("VetUser")]
+        public int? IdVeterinarian { get; set; }
 
-    [JsonIgnore]
-    public virtual Pet Pet { get; set; }
-
-    [ForeignKey("VetUser")]
-    public int? IdUser { get; set; }
-
-    [JsonIgnore]
-    public virtual VetUser VetUser { get; set; }
+        [JsonIgnore]
+        public virtual Veterinarian VetUser { get; set; }
+    }
 }
