@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TuyetDang.MyVetTracer.Data;
+using veterinarian_tracker_system;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapHub<DashboardHub>("/dashboardHub");
 
 app.MapControllerRoute(
     name: "default",

@@ -20,6 +20,7 @@ namespace veterinarian_tracker_system.Controllers
         {
             var meds = await _context.Medicines
                                      .Include(m => m.Pet)
+                                        .ThenInclude(p => p.OwnerUser)
                                      .Include(m => m.VetUser)
                                      .ToListAsync();
 

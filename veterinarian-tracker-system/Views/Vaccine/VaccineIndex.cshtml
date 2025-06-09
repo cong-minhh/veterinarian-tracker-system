@@ -20,6 +20,7 @@
             <th>Dose</th>
             <th>Total</th>
             <th>Pet</th>
+			<th>Owner</th>
             <th>Veterinarian</th>
             <th>Created Date</th>
             <th class="text-center" style="width: 100px;">Actions</th>
@@ -37,6 +38,7 @@
                     <td>@vac.Dose</td>
                     <td>@vac.Total</td>
                     <td>@(vac.Pet != null ? vac.Pet.PetName : "-")</td>
+					<td>@(vac.Pet?.OwnerUser != null ? vac.Pet.OwnerUser.FullName : "-")</td>
                     <td>@(vac.VetUser != null ? vac.VetUser.FullName : "-")</td>
 					<td>@vac.CreatedAt</td>
                     <td class="text-center" style="width: 250px;">
