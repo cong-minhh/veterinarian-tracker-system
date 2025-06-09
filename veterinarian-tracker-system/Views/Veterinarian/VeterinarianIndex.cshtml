@@ -1,0 +1,98 @@
+﻿@model List<TuyetDang.MyVetTracer.Entity.Veterinarian>
+@{
+    Layout = "_AdminLayout";
+}
+
+<h2>Veterinarians Management</h2>
+<div class="mb-3">
+    <a href="@Url.Action("Create", "Veterinarian")" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Create New Veterinarian
+    </a>
+</div>
+<table class="table table-dark table-bordered table-striped table-responsive">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Avatar</th>
+            <th scope="col">User Name</th>
+            <th scope="col">Full Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Date of Birth</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Consulting Room</th>
+            <th scope="col">Clinic Address</th>
+            <th scope="col">Qualification</th>
+            <th scope="col">Authentication</th>
+            <th scope="col">Registed Pets</th>
+            <th scope="col">Created Date</th>
+            <th scope="col" class="text-center" style="width: 250px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var vet in Model)
+            {
+                <tr>
+                    <td>@vet.IdVetUser</td>
+                    <td>
+                        <img src="@vet.Img" alt="Vet Image" width="50" height="50" style="object-fit: cover; border-radius: 50%;" />
+                    </td>
+                    <td>@vet.UserName</td>
+                    <td>@vet.FullName</td>
+                    <td>@vet.Email</td>
+                    <td>@vet.PhoneNum</td>
+                    <td>@(vet.Dob.HasValue ? vet.Dob.Value.ToString("yyyy-MM-dd") : "-")</td>
+                    <td>@vet.Gender</td>
+                    <td>@vet.NameOfConsultingRoom</td>
+                    <td>@vet.ClinicAddress</td>
+                    <td>@vet.Qualification</td>
+                    <td>@vet.Authentication</td>
+                    <td>@(vet.Pets != null ? vet.Pets.Count : 0)</td>
+					<td>@vet.CreatedAt</td>
+                    <td class="text-center" style="width: 250px; white-space: nowrap;">
+                        <a href="@Url.Action("Edit", "Veterinarian", new { id = vet.IdVetUser })"
+                           class="btn btn-sm btn-warning d-inline-block me-1">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </a>
+                        <a href="@Url.Action("Delete", "Veterinarian", new { id = vet.IdVetUser })"
+                           class="btn btn-sm btn-danger d-inline-block"
+                           onclick="return confirm('Are you sure you want to delete this veterinarian?');">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="15" class="text-center">No veterinarian found.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    @TempData["SuccessMessage"]
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        window.onload = function () {
+            var toastEl = document.getElementById('successToast');
+            if (toastEl) {
+                var toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            }
+        };
+    </script>
+}

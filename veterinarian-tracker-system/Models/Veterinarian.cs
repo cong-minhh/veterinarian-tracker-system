@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace TuyetDang.MyVetTracer.Entity
 {
     [Table("Veterinarian")]
-    public class Veterinarian
+    public class Veterinarian : AuditEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -51,5 +52,25 @@ namespace TuyetDang.MyVetTracer.Entity
 
         [JsonIgnore]
         public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public Veterinarian()
+        {
+        }
+
+        public Veterinarian(string img, string userName, string email, string phoneNum, string password, string fullName, DateTime? dob, string gender, string nameOfConsultingRoom, string clinicAddress, string qualification, string experience, int authentication)
+        {
+            Img = img;
+            UserName = userName;
+            Email = email;
+            PhoneNum = phoneNum;
+            Password = password;
+            FullName = fullName;
+            Dob = dob;
+            Gender = gender;
+            NameOfConsultingRoom = nameOfConsultingRoom;
+            ClinicAddress = clinicAddress;
+            Qualification = qualification;
+            Experience = experience;
+            Authentication = authentication;
+        }
     }
 }

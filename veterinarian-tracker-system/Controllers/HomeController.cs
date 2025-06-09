@@ -16,11 +16,7 @@ namespace veterinarian_tracker_system.Controllers
             _context = context;
         }
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-        // GET: Veterinarian
+        // GET:
         public async Task<IActionResult> Index()
         {
             var vets = await _context.Veterinarians.ToListAsync();

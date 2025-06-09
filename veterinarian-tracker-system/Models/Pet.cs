@@ -48,5 +48,24 @@ namespace TuyetDang.MyVetTracer.Entity
 
         [JsonIgnore]
         public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+
+        public Pet()
+        {
+        }
+
+        public Pet(string img, string petType, string petName, int age, string sex, string weight, string height, string identification, int? idOwnerUser, int? idVetUser)
+        {
+            Img = img;
+            PetType = petType;
+            PetName = petName;
+            Age = age;
+            Sex = sex;
+            Weight = weight;
+            Height = height;
+            Identification = identification;
+            IdOwnerUser = idOwnerUser;
+            IdVetUser = idVetUser;
+            CreatedAt = DateTime.Now;
+        }
     }
 }

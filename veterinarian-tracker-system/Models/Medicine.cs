@@ -32,5 +32,21 @@ namespace TuyetDang.MyVetTracer.Entity
 
         [JsonIgnore]
         public virtual Veterinarian VetUser { get; set; }
+
+        public Medicine()
+        {
+        }
+        public Medicine(string medName, string amount, string notice, string dose, double total, int? idPet, int? idVeterinarian)
+        {
+            MedName = medName;
+            Amount = amount;
+            Notice = notice;
+            Dose = dose;
+            Total = total;
+            IdPet = idPet;
+            IdVeterinarian = idVeterinarian;
+            CreatedAt = DateTime.Now;
+
+        }
     }
 }

@@ -1,0 +1,52 @@
+﻿@model TuyetDang.MyVetTracer.ViewModels.VaccineFormModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Vaccine";
+}
+
+<h2>Edit Vaccine</h2>
+
+@using (Html.BeginForm("Edit", "Vaccine", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.VacName)
+        @Html.TextBoxFor(model => model.VacName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.VacName)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.Date)
+        @Html.TextBoxFor(model => model.Date, new { @class = "form-control", type = "date" })
+        @Html.ValidationMessageFor(model => model.Date)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.Dose)
+        @Html.TextBoxFor(model => model.Dose, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Dose)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.Total)
+        @Html.TextBoxFor(model => model.Total, new { @class = "form-control", type = "number", step = "0.01" })
+        @Html.ValidationMessageFor(model => model.Total)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.IdPet, "Pet")
+        @Html.DropDownListFor(model => model.IdPet, new SelectList(ViewBag.Pets, "IdPet", "PetName"), "-- Select Pet --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.IdPet)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.IdVeterinarian, "Veterinarian")
+        @Html.DropDownListFor(model => model.IdVeterinarian, new SelectList(ViewBag.Vets, "IdVetUser", "FullName"), "-- Select Veterinarian --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.IdVeterinarian)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="VaccineIndex" class="btn btn-secondary">Cancel</a>
+}

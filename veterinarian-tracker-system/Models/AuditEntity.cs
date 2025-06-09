@@ -1,9 +1,12 @@
 
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 public abstract class AuditEntity
 {
 
-	public DateTime CreatedAt { get; set; }
+    [Column(TypeName = "datetime2")]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 	public string? CreatedBy { get; set; }
 
 	public DateTime? UpdatedAt { get; set; }

@@ -1,19 +1,20 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace TuyetDang.MyVetTracer.Entity
 {
     [Table("Vaccine")]
-    public class Vaccine
-	{
+    public class Vaccine : AuditEntity
+    {
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int IdVac { get; set; }
 
 		public string VacName { get; set; }
 
-		public DateTime? Date { get; set; }  // Consider changing to DateTime if it's a real date
+		public DateTime? Date { get; set; }
 
 		public string Dose { get; set; }
 
@@ -30,5 +31,19 @@ namespace TuyetDang.MyVetTracer.Entity
 
 		[JsonIgnore]
 		public virtual Veterinarian VetUser { get; set; }
-	}
+        public Vaccine()
+        {
+        }
+        public Vaccine(string vacName, DateTime? date, string dose, double total, int? idPet, int? idVeterinarian)
+        {
+            VacName = vacName;
+            Date = date;
+            Dose = dose;
+            Total = total;
+            IdPet = idPet;
+            IdVeterinarian = idVeterinarian;
+            CreatedAt = DateTime.Now;
+
+        }
+    }
 }
