@@ -16,6 +16,7 @@
         <tr>
             <th>Id</th>
             <th>Pet</th>
+            <th>Owner</th>
             <th>Veterinarian</th>
             <th>Time</th>
             <th>Is Confirmed</th>
@@ -31,6 +32,7 @@
                 <tr>
                     <td>@appt.IdAppointment</td>
                     <td>@(appt.Pet != null ? appt.Pet.PetName : "-")</td>
+                    <td>@(appt.Pet?.OwnerUser != null ? appt.Pet.OwnerUser.FullName : "-")</td>
                     <td>@(appt.VetUser != null ? appt.VetUser.FullName : "-")</td>
                     <td>@appt.Time</td>
                     <td>@(appt.IsConfirmed == 1 ? "Yes" : "No")</td>

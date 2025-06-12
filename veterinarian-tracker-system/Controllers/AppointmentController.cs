@@ -21,6 +21,7 @@ namespace veterinarian_tracker_system.Controllers
         {
             var appointments = await _context.Appointments
                                              .Include(a => a.Pet)
+                                                 .ThenInclude(p => p.OwnerUser)
                                              .Include(a => a.VetUser)
                                              .ToListAsync();
 
