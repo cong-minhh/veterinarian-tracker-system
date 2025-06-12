@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace TuyetDang.MyVetTracer.Entity
 {
+    [Table("Owner")]
     public class Owner : AuditEntity
     {
         [Key]
@@ -24,11 +25,10 @@ namespace TuyetDang.MyVetTracer.Entity
 
         public string FullName { get; set; }
 
-        public string Dob { get; set; }  // Consider using DateTime if DOB is stored as date
+        public DateTime? Dob { get; set; } 
 
         public string Gender { get; set; }
 
-        public int NumOfPet { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<Pet> Pets { get; set; } = new List<Pet>();

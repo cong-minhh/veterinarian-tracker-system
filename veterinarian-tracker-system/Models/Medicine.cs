@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace TuyetDang.MyVetTracer.Entity 
 {
+    [Table("Medicine")]
     public class Medicine: AuditEntity
     {
         [Key]
@@ -27,9 +28,9 @@ namespace TuyetDang.MyVetTracer.Entity
         public virtual Pet Pet { get; set; }
 
         [ForeignKey("VetUser")]
-        public int? IdUser { get; set; }
+        public int? IdVeterinarian { get; set; }
 
         [JsonIgnore]
-        public virtual VetUser VetUser { get; set; }
+        public virtual Veterinarian VetUser { get; set; }
     }
 }
