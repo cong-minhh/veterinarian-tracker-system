@@ -1,45 +1,128 @@
-﻿body {
+body {
     background: #eee;
 }
 
-#side_nav {
-    background: #000;
-    min-width: 250px;
-    max-width: 250px;
-    transition: all 0.3s;
+/* This file is now primarily used for additional sidebar customizations */
+/* Most styles are now defined inline in _AdminLayout.cshtml */
+
+/* Custom scrollbar for sidebar */
+.sidebar-menu::-webkit-scrollbar {
+    width: 5px;
 }
 
-.content {
-    min-height: 100vh;
-    width: 100%;
+.sidebar-menu::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
 }
 
-hr.h-color {
-    background: #eee;
+.sidebar-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
 }
 
-.sidebar li.active {
-    background: #eee;
-    border-radius: 8px;
+.sidebar-menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
-    .sidebar li.active a, .sidebar li.active a:hover {
-        color: #000;
-    }
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
 
-.sidebar li a {
+@keyframes slideInLeft {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Apply animations */
+.sidebar-logo {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.nav-item {
+    animation: slideInLeft 0.3s ease-in-out;
+    animation-fill-mode: both;
+}
+
+/* Stagger animation for nav items */
+.nav-item:nth-child(1) { animation-delay: 0.1s; }
+.nav-item:nth-child(2) { animation-delay: 0.15s; }
+.nav-item:nth-child(3) { animation-delay: 0.2s; }
+.nav-item:nth-child(4) { animation-delay: 0.25s; }
+.nav-item:nth-child(5) { animation-delay: 0.3s; }
+.nav-item:nth-child(6) { animation-delay: 0.35s; }
+.nav-item:nth-child(7) { animation-delay: 0.4s; }
+.nav-item:nth-child(8) { animation-delay: 0.45s; }
+
+/* Hover effects */
+.nav-link i {
+    transition: transform 0.2s ease;
+}
+
+.nav-link:hover i {
+    transform: translateX(3px);
+}
+
+/* Active indicator */
+.nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: -0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 70%;
+    width: 4px;
+    background: linear-gradient(to bottom, #4e73df, #224abe);
+    border-radius: 0 4px 4px 0;
+}
+
+/* Badge styles */
+.nav-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    font-size: 0.7rem;
+    font-weight: 600;
     color: #fff;
+    background-color: var(--danger-color);
+    border-radius: 10px;
+    margin-left: auto;
 }
 
-@media(max-width: 767px) {
-    #side_nav {
-        margin-left: -250px;
-        position: absolute;
-        min-height: 100vh;
-        z-index: 1;
-    }
+/* Tooltip styles */
+.nav-tooltip {
+    position: relative;
+}
 
-        #side_nav.active {
-            margin-left: 0;
-        }
+.nav-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateY(-50%) translateX(10px);
+    z-index: 1000;
+}
+
+body.sidebar-collapsed .nav-tooltip:hover::after {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
 }

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj": {}
+    "C:\\Users\\NoC4\\source\\repos\\veterinarian-tracker-system\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj": {
+    "C:\\Users\\NoC4\\source\\repos\\veterinarian-tracker-system\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj",
+        "projectUniqueName": "C:\\Users\\NoC4\\source\\repos\\veterinarian-tracker-system\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj",
         "projectName": "veterinarian-tracker-system",
-        "projectPath": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\obj\\",
+        "projectPath": "C:\\Users\\NoC4\\source\\repos\\veterinarian-tracker-system\\veterinarian-tracker-system\\veterinarian-tracker-system.csproj",
+        "packagesPath": "C:\\Users\\NoC4\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\NoC4\\source\\repos\\veterinarian-tracker-system\\veterinarian-tracker-system\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\NoC4\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -25,8 +25,7 @@
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
+          "D:\\minhne\\minhdanghoc_Q2_N4\\CSE422\\Lab6\\Lab6_Question6\\MyNuGetPackages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -51,17 +50,13 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "BCrypt.Net-Next": {
-              "target": "Package",
-              "version": "[4.0.3, )"
-            },
             "Chart.js": {
               "target": "Package",
               "version": "[3.7.1, )"
             },
-            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+            "Microsoft.AspNetCore.SignalR.Common": {
               "target": "Package",
-              "version": "[8.0.5, )"
+              "version": "[9.0.5, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -70,14 +65,6 @@
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[9.0.5, )"
-            },
-            "Microsoft.IdentityModel.Tokens": {
-              "target": "Package",
-              "version": "[8.12.0, )"
-            },
-            "System.IdentityModel.Tokens.Jwt": {
-              "target": "Package",
-              "version": "[8.12.0, )"
             },
             "bootstrap": {
               "target": "Package",
@@ -103,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

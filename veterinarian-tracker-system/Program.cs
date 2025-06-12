@@ -26,9 +26,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+// app.UseAuthentication();
+// app.UseAuthorization();
 
-app.MapHub<DashboardHub>("/dashboardHub");
+//app.MapHub<DashboardHub>("/dashboardHub");
 
 app.MapControllerRoute(
     name: "default",
