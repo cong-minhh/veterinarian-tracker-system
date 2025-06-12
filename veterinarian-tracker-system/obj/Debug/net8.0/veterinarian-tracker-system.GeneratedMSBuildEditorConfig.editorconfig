@@ -24,6 +24,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Admin/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Appointment/AppointmentIndex.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcQXBwb2ludG1lbnRJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -38,6 +42,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Appointment/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Appointment/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Auth/AccessDenied.cshtml]
@@ -76,6 +84,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVkaWNpbmVcTWVkaWNpbmVJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Medicine/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVkaWNpbmVcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Owner/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3duZXJcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -92,6 +104,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3duZXJcT3duZXJJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Owner/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3duZXJcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Pet/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGV0XENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -106,6 +122,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Pet/PetIndex.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGV0XFBldEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Pet/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGV0XF9WaWV3U3RhcnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Shared/Error.cshtml]
@@ -136,6 +156,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmFjY2luZVxWYWNjaW5lSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Vaccine/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmFjY2luZVxfVmlld1N0YXJ0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Veterinarian/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmV0ZXJpbmFyaWFuXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -150,6 +174,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Veterinarian/VeterinarianIndex.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmV0ZXJpbmFyaWFuXFZldGVyaW5hcmlhbkluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/Veterinarian/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmV0ZXJpbmFyaWFuXF9WaWV3U3RhcnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/NoC4/source/repos/veterinarian-tracker-system/veterinarian-tracker-system/Views/_ViewImports.cshtml]
