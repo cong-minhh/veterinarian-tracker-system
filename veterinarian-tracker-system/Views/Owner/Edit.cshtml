@@ -1,0 +1,77 @@
+﻿@model TuyetDang.MyVetTracer.ViewModels.OwnerFormModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Owner";
+}
+
+<h2>Edit Owner</h2>
+
+@using (Html.BeginForm("Edit", "Owner", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="id" value="@ViewBag.OwnerId" />
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.UserName)
+        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.UserName)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.Email)
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Email)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.PhoneNum)
+        @Html.TextBoxFor(m => m.PhoneNum, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.PhoneNum)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.Password)
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Password)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.FullName)
+        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.FullName)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.Dob)
+        @Html.TextBoxFor(m => m.Dob, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+        @Html.ValidationMessageFor(m => m.Dob)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.Gender)
+        @Html.TextBoxFor(m => m.Gender, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Gender)
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Current Image</label><br />
+        @if (!string.IsNullOrEmpty(ViewBag.CurrentImg))
+        {
+            <img src="@ViewBag.CurrentImg" alt="Owner Image" style="height: 100px;" />
+        }
+        else
+        {
+            <p>No image</p>
+        }
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.Label("ImgFile", "Upload New Image")
+        <input type="file" name="ImgFile" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="OwnerIndex" class="btn btn-secondary">Cancel</a>
+}

@@ -32,5 +32,22 @@ namespace TuyetDang.MyVetTracer.Entity
 
         [JsonIgnore]
         public virtual ICollection<Pet> Pets { get; set; } = new List<Pet>();
+        public Owner()
+        {
+        }
+
+        public Owner(string img, string userName, string email, string phoneNum, string password, string fullName, DateTime? dob, string gender)
+        {
+            Img = img;
+            UserName = userName;
+            Email = email;
+            PhoneNum = phoneNum;
+            Password = password;
+            FullName = fullName;
+            Dob = dob;
+            Gender = gender;
+            CreatedAt = DateTime.Now;
+
+        }
     }
 }

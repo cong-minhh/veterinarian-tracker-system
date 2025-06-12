@@ -1,0 +1,40 @@
+﻿@model TuyetDang.MyVetTracer.ViewModels.AppointmentFormModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Appointment";
+}
+
+<h2>Edit Appointment</h2>
+
+@using (Html.BeginForm("Edit", "Appointment", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.AppointmentTime)
+        @Html.TextBoxFor(model => model.AppointmentTime, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local" })
+        @Html.ValidationMessageFor(model => model.AppointmentTime)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.IsConfirmed)
+        @Html.CheckBoxFor(model => model.IsConfirmed)
+        @Html.ValidationMessageFor(model => model.IsConfirmed)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.IdPet, "Pet")
+        @Html.DropDownListFor(model => model.IdPet, new SelectList(ViewBag.Pets, "IdPet", "PetName"), "-- Select Pet --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.IdPet)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.IdVeterinarian, "Veterinarian")
+        @Html.DropDownListFor(model => model.IdVeterinarian, new SelectList(ViewBag.Vets, "IdVetUser", "FullName"), "-- Select Veterinarian --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.IdVeterinarian)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="AppointmentsManagement" class="btn btn-secondary">Cancel</a>
+}

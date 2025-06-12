@@ -1,0 +1,77 @@
+﻿@model TuyetDang.MyVetTracer.ViewModels.PetFormModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Create Pet";
+}
+
+<h2>Create Pet</h2>
+
+@using (Html.BeginForm("Create", "Pet", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group mb-3">
+        @Html.Label("ImgFile", "Upload Image", new { @class = "form-label" })
+        <input type="file" name="ImgFile" class="form-control" accept="image/*" />
+        @Html.ValidationMessage("ImgFile", "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.PetType)
+        @Html.TextBoxFor(model => model.PetType, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.PetType)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.PetName)
+        @Html.TextBoxFor(model => model.PetName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.PetName)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.Age)
+        @Html.TextBoxFor(model => model.Age, new { @class = "form-control", type = "number", min = "0" })
+        @Html.ValidationMessageFor(model => model.Age)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.Sex)
+        @Html.TextBoxFor(model => model.Sex, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Sex)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.Weight)
+        @Html.TextBoxFor(model => model.Weight, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Weight)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.Height)
+        @Html.TextBoxFor(model => model.Height, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Height)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.Identification)
+        @Html.TextBoxFor(model => model.Identification, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Identification)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.IdOwnerUser, "Owner")
+        <select class="form-control" asp-for="IdOwnerUser" asp-items="@(new SelectList(ViewBag.Owners, "IdOwnerUser", "FullName"))"></select>
+        @Html.ValidationMessageFor(model => model.IdOwnerUser)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.IdVetUser, "Veterinarian (optional)")
+        <select class="form-control" asp-for="IdVetUser" asp-items="@(new SelectList(ViewBag.Vets, "IdVetUser", "FullName"))">
+            <option value="">-- None --</option>
+        </select>
+        @Html.ValidationMessageFor(model => model.IdVetUser)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+}

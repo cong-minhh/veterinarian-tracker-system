@@ -1,0 +1,84 @@
+﻿@model TuyetDang.MyVetTracer.ViewModels.PetFormModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Pet";
+}
+
+<h2>Edit Pet</h2>
+
+@using (Html.BeginForm("Edit", "Pet", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.PetType)
+        @Html.TextBoxFor(model => model.PetType, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.PetType)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.PetName)
+        @Html.TextBoxFor(model => model.PetName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.PetName)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.Age)
+        @Html.TextBoxFor(model => model.Age, new { @class = "form-control", type = "number", min = "0" })
+        @Html.ValidationMessageFor(model => model.Age)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.Sex)
+        @Html.TextBoxFor(model => model.Sex, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Sex)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.Weight)
+        @Html.TextBoxFor(model => model.Weight, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Weight)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.Height)
+        @Html.TextBoxFor(model => model.Height, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Height)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.Identification)
+        @Html.TextBoxFor(model => model.Identification, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Identification)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.IdOwnerUser, "Owner")
+        @Html.DropDownListFor(model => model.IdOwnerUser, new SelectList(ViewBag.Owners, "IdOwnerUser", "FullName"), "-- Select Owner --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.IdOwnerUser)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.IdVetUser, "Veterinarian")
+        @Html.DropDownListFor(model => model.IdVetUser, new SelectList(ViewBag.Vets, "IdVetUser", "FullName"), "-- Select Veterinarian --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.IdVetUser)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.Label("ImgFile", "Upload New Image", new { @class = "form-label" })
+        <input type="file" name="ImgFile" class="form-control" accept="image/*" />
+        @Html.ValidationMessage("ImgFile", "", new { @class = "text-danger" })
+    </div>
+
+    @if (ViewBag.CurrentImg != null)
+    {
+        <div class="form-group mb-3">
+            <label>Current Image:</label><br />
+            <img src="@ViewBag.CurrentImg" alt="Current Image" style="height: 100px;" />
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="PetsManagement" class="btn btn-secondary">Cancel</a>
+}

@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using TuyetDang.MyVetTracer.Entity;
 namespace TuyetDang.MyVetTracer.Entity
 {
     [Table("Appointment")]
@@ -26,5 +25,17 @@ namespace TuyetDang.MyVetTracer.Entity
 
         [JsonIgnore]
         public virtual Veterinarian VetUser { get; set; }
+        public Appointment()
+        {
+        }
+        public Appointment(string time, int isConfirmed, int? idPet,int? idVeterinarian)
+        {
+            Time = time;
+            IsConfirmed = isConfirmed;
+            IdPet = idPet;
+            IdVeterinarian = idVeterinarian;
+            CreatedAt = DateTime.Now;
+
+        }
     }
 }
