@@ -1,50 +1,82 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\",
+  "WorkspaceRootPath": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|e:\\volume d\\tuyet_cham_chi\\cse443_dotnet\\project\\veterinarian-tracker-system\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|e:\\volume d\\tuyet_cham_chi\\cse443_dotnet\\project\\veterinarian-tracker-system\\views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|e:\\volume d\\tuyet_cham_chi\\cse443_dotnet\\project\\veterinarian-tracker-system\\views\\veterinarian\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\views\\veterinarian\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\views\\auth\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\views\\auth\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|e:\\volume d\\tuyet_cham_chi\\cse443_dotnet\\project\\veterinarian-tracker-system\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|e:\\volume d\\tuyet_cham_chi\\cse443_dotnet\\project\\veterinarian-tracker-system\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|e:\\volume d\\tuyet_cham_chi\\cse443_dotnet\\project\\veterinarian-tracker-system\\models\\forms\\admindashboardstatsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\views\\auth\\accessdenied.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\views\\auth\\accessdenied.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\models\\forms\\admindashboardstatsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\models\\forms\\admindashboardstatsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|e:\\volume d\\tuyet_cham_chi\\cse443_dotnet\\project\\veterinarian-tracker-system\\models\\forms\\userregistrationstatsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\models\\forms\\userregistrationstatsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|e:\\volume d\\tuyet_cham_chi\\cse443_dotnet\\project\\veterinarian-tracker-system\\myvettracerdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\controllers\\appointmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\controllers\\appointmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\views\\auth\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\views\\auth\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\models\\owner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\models\\owner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\myvettracerdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\myvettracerdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|e:\\volume d\\tuyet_cham_chi\\cse443_dotnet\\project\\veterinarian-tracker-system\\controllers\\vaccinecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\controllers\\vaccinecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\models\\forms\\registerownerdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\models\\forms\\registerownerdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|e:\\volume d\\tuyet_cham_chi\\cse443_dotnet\\project\\veterinarian-tracker-system\\views\\vaccine\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\views\\vaccine\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\models\\forms\\userloginform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\models\\forms\\userloginform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|e:\\volume d\\tuyet_cham_chi\\cse443_dotnet\\project\\veterinarian-tracker-system\\views\\vaccine\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\views\\vaccine\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\models\\pet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\models\\pet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\models\\veterinarian.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\models\\veterinarian.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|c:\\users\\admin\\desktop\\dotnet\\dotnetproject\\veterinarian-tracker-system\\models\\forms\\registervetdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A3429B4-C581-4460-9AAE-7BA340F13D38}|veterinarian-tracker-system\\veterinarian-tracker-system.csproj|solutionrelative:veterinarian-tracker-system\\models\\forms\\registervetdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -53,169 +85,255 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 11,
-          "SelectedChildIndex": 3,
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Views\\Veterinarian\\Edit.cshtml",
-              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Views\\Veterinarian\\Edit.cshtml",
-              "ToolTip": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Views\\Veterinarian\\Edit.cshtml",
-              "RelativeToolTip": "veterinarian-tracker-system\\Views\\Veterinarian\\Edit.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-09T06:06:55.64Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Controllers\\AuthController.cs",
-              "ToolTip": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "veterinarian-tracker-system\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-09T06:06:19.416Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "AdminDashboardStatsDto.cs",
-              "DocumentMoniker": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Models\\Forms\\AdminDashboardStatsDto.cs",
-              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Models\\Forms\\AdminDashboardStatsDto.cs",
-              "ToolTip": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Models\\Forms\\AdminDashboardStatsDto.cs",
-              "RelativeToolTip": "veterinarian-tracker-system\\Models\\Forms\\AdminDashboardStatsDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-09T06:02:08.731Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AdminController.cs",
-              "DocumentMoniker": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Controllers\\AdminController.cs",
-              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Controllers\\AdminController.cs",
-              "ToolTip": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Controllers\\AdminController.cs",
-              "RelativeToolTip": "veterinarian-tracker-system\\Controllers\\AdminController.cs",
-              "ViewState": "AgIAAFwAAAAAAAAAAAAgwHsAAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-09T04:34:05.726Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "MyVetTracerDbContext.cs",
-              "DocumentMoniker": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\MyVetTracerDbContext.cs",
-              "RelativeDocumentMoniker": "veterinarian-tracker-system\\MyVetTracerDbContext.cs",
-              "ToolTip": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\MyVetTracerDbContext.cs",
-              "RelativeToolTip": "veterinarian-tracker-system\\MyVetTracerDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA1AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-09T04:32:48.65Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "UserRegistrationStatsDto.cs",
-              "DocumentMoniker": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Models\\Forms\\UserRegistrationStatsDto.cs",
-              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Models\\Forms\\UserRegistrationStatsDto.cs",
-              "ToolTip": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Models\\Forms\\UserRegistrationStatsDto.cs",
-              "RelativeToolTip": "veterinarian-tracker-system\\Models\\Forms\\UserRegistrationStatsDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-09T04:32:30.115Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "_AdminLayout.cshtml",
-              "DocumentMoniker": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Views\\Shared\\_AdminLayout.cshtml",
-              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Views\\Shared\\_AdminLayout.cshtml",
-              "ToolTip": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Views\\Shared\\_AdminLayout.cshtml",
-              "RelativeToolTip": "veterinarian-tracker-system\\Views\\Shared\\_AdminLayout.cshtml",
-              "ViewState": "AgIAAGcAAAAAAAAAAAAkwHgAAAAxAAAAAAAAAA==",
+              "Title": "AccessDenied.cshtml",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Views\\Auth\\AccessDenied.cshtml",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Views\\Auth\\AccessDenied.cshtml",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Views\\Auth\\AccessDenied.cshtml",
+              "RelativeToolTip": "veterinarian-tracker-system\\Views\\Auth\\AccessDenied.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-09T04:15:43.491Z",
+              "WhenOpened": "2025-06-10T17:55:03.596Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Views\\Auth\\Login.cshtml",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Views\\Auth\\Login.cshtml",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Views\\Auth\\Login.cshtml",
+              "RelativeToolTip": "veterinarian-tracker-system\\Views\\Auth\\Login.cshtml",
+              "ViewState": "AgIAAF4AAAAAAAAAAAAqwHIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-10T17:52:41.687Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Controllers\\UserController.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Controllers\\UserController.cs",
+              "RelativeToolTip": "veterinarian-tracker-system\\Controllers\\UserController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-10T17:28:59.557Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "veterinarian-tracker-system\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-10T16:58:44.778Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Program.cs",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Program.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Program.cs",
+              "RelativeToolTip": "veterinarian-tracker-system\\Program.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAAAAgAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-10T16:06:22.147Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "veterinarian-tracker-system\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAYwCAAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-09T11:06:17.006Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "Index.cshtml",
-              "DocumentMoniker": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Views\\Admin\\Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Views\\Admin\\Index.cshtml",
               "RelativeDocumentMoniker": "veterinarian-tracker-system\\Views\\Admin\\Index.cshtml",
-              "ToolTip": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Views\\Admin\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Views\\Admin\\Index.cshtml",
               "RelativeToolTip": "veterinarian-tracker-system\\Views\\Admin\\Index.cshtml",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAACEAAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-09T04:07:04.443Z",
+              "WhenOpened": "2025-06-10T18:15:10.303Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Views\\Vaccine\\Delete.cshtml",
-              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Views\\Vaccine\\Delete.cshtml",
-              "ToolTip": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Views\\Vaccine\\Delete.cshtml",
-              "RelativeToolTip": "veterinarian-tracker-system\\Views\\Vaccine\\Delete.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-09T03:32:13.619Z",
+              "DocumentIndex": 1,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "veterinarian-tracker-system\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-10T16:58:36.387Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Views\\Vaccine\\Edit.cshtml",
-              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Views\\Vaccine\\Edit.cshtml",
-              "ToolTip": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Views\\Vaccine\\Edit.cshtml",
-              "RelativeToolTip": "veterinarian-tracker-system\\Views\\Vaccine\\Edit.cshtml",
-              "ViewState": "AgIAABAAAAAAAAAAAAAQwDQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-06-09T03:31:49.746Z",
+              "DocumentIndex": 6,
+              "Title": "AdminDashboardStatsDto.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Models\\Forms\\AdminDashboardStatsDto.cs",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Models\\Forms\\AdminDashboardStatsDto.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Models\\Forms\\AdminDashboardStatsDto.cs",
+              "RelativeToolTip": "veterinarian-tracker-system\\Models\\Forms\\AdminDashboardStatsDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-10T18:03:28.725Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "VaccineController.cs",
-              "DocumentMoniker": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Controllers\\VaccineController.cs",
-              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Controllers\\VaccineController.cs",
-              "ToolTip": "E:\\Volume D\\tuyet_cham_chi\\CSE443_DotNet\\Project\\veterinarian-tracker-system\\Controllers\\VaccineController.cs",
-              "RelativeToolTip": "veterinarian-tracker-system\\Controllers\\VaccineController.cs",
-              "ViewState": "AgIAAF0AAAAAAAAAAAAgwHcAAAAVAAAAAAAAAA==",
+              "Title": "AppointmentController.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Controllers\\AppointmentController.cs",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Controllers\\AppointmentController.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Controllers\\AppointmentController.cs",
+              "RelativeToolTip": "veterinarian-tracker-system\\Controllers\\AppointmentController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-09T03:29:49.194Z",
+              "WhenOpened": "2025-06-10T18:14:42.364Z",
               "EditorCaption": ""
-            }
-          ]
-        },
-        {
-          "DockedWidth": 334,
-          "SelectedChildIndex": -1,
-          "Children": [
+            },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Owner.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Models\\Owner.cs",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Models\\Owner.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Models\\Owner.cs",
+              "RelativeToolTip": "veterinarian-tracker-system\\Models\\Owner.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-10T16:38:17.541Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "RegisterOwnerDto.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Models\\Forms\\RegisterOwnerDto.cs",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Models\\Forms\\RegisterOwnerDto.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Models\\Forms\\RegisterOwnerDto.cs",
+              "RelativeToolTip": "veterinarian-tracker-system\\Models\\Forms\\RegisterOwnerDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAQAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-10T16:31:52.53Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Views\\Auth\\Register.cshtml",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Views\\Auth\\Register.cshtml",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Views\\Auth\\Register.cshtml",
+              "RelativeToolTip": "veterinarian-tracker-system\\Views\\Auth\\Register.cshtml",
+              "ViewState": "AgIAADMAAAAAAAAAAAAAADYAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-10T17:56:45.769Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "RegisterVetDto.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Models\\Forms\\RegisterVetDto.cs",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Models\\Forms\\RegisterVetDto.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Models\\Forms\\RegisterVetDto.cs",
+              "RelativeToolTip": "veterinarian-tracker-system\\Models\\Forms\\RegisterVetDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-10T16:32:21.811Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Veterinarian.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Models\\Veterinarian.cs",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Models\\Veterinarian.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Models\\Veterinarian.cs",
+              "RelativeToolTip": "veterinarian-tracker-system\\Models\\Veterinarian.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABIAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-10T16:38:05.944Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Pet.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Models\\Pet.cs",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Models\\Pet.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Models\\Pet.cs",
+              "RelativeToolTip": "veterinarian-tracker-system\\Models\\Pet.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-10T16:38:13.142Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\appsettings.json",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\appsettings.json",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\appsettings.json",
+              "RelativeToolTip": "veterinarian-tracker-system\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-06-10T16:56:40.08Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "MyVetTracerDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\MyVetTracerDbContext.cs",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\MyVetTracerDbContext.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\MyVetTracerDbContext.cs",
+              "RelativeToolTip": "veterinarian-tracker-system\\MyVetTracerDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-10T17:11:39.386Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "UserLoginForm.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Models\\Forms\\UserLoginForm.cs",
+              "RelativeDocumentMoniker": "veterinarian-tracker-system\\Models\\Forms\\UserLoginForm.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\dotnet\\DotNetProject\\veterinarian-tracker-system\\Models\\Forms\\UserLoginForm.cs",
+              "RelativeToolTip": "veterinarian-tracker-system\\Models\\Forms\\UserLoginForm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-10T16:20:48.603Z",
+              "EditorCaption": ""
             }
           ]
         }
