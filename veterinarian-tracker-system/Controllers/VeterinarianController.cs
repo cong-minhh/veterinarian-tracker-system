@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TuyetDang.MyVetTracer.Data;
 using TuyetDang.MyVetTracer.Entity;
@@ -19,12 +19,96 @@ namespace veterinarian_tracker_system.Controllers
             _env = env;
         }
 
-        public async Task<IActionResult> VeterinarianIndex()
+        public async Task<IActionResult> VeterinarianIndex(string searchTerm, string qualification, string sortBy, int page = 1)
         {
-            var vets = await _context.Veterinarians
-                .Include(v => v.Pets)
-                .ToListAsync();
-            return View(vets);
+            try
+            {
+                // Start with all veterinarians
+                var vetsQuery = _context.Veterinarians
+                    .Include(v => v.Pets)
+                    .AsQueryable();
+
+                // Apply search if provided
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    searchTerm = searchTerm.ToLower();
+                    vetsQuery = vetsQuery.Where(v => 
+                        v.UserName.ToLower().Contains(searchTerm) ||
+                        v.FullName.ToLower().Contains(searchTerm) ||
+                        v.Email.ToLower().Contains(searchTerm) ||
+                        v.PhoneNum.ToLower().Contains(searchTerm) ||
+                        v.NameOfConsultingRoom.ToLower().Contains(searchTerm) ||
+                        v.ClinicAddress.ToLower().Contains(searchTerm) ||
+                        v.Qualification.ToLower().Contains(searchTerm)
+                    );
+                }
+
+                // Apply qualification filter if provided
+                if (!string.IsNullOrEmpty(qualification))
+                {
+                    vetsQuery = vetsQuery.Where(v => v.Qualification == qualification);
+                }
+
+                // Count total records for pagination
+                int totalRecords = await vetsQuery.CountAsync();
+                int pageSize = 9; // Number of records per page
+                int totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+                // Ensure page is within valid range
+                page = Math.Max(1, Math.Min(page, Math.Max(1, totalPages)));
+
+                // Apply sorting
+                switch (sortBy)
+                {
+                    case "name-desc":
+                        vetsQuery = vetsQuery.OrderByDescending(v => v.FullName);
+                        break;
+                    case "date":
+                        vetsQuery = vetsQuery.OrderByDescending(v => v.UpdatedAt);
+                        break;
+                    case "pets":
+                        vetsQuery = vetsQuery.OrderByDescending(v => v.Pets.Count);
+                        break;
+                    default: // Default to name ascending
+                        vetsQuery = vetsQuery.OrderBy(v => v.FullName);
+                        break;
+                }
+
+                // Apply pagination
+                var vets = await vetsQuery
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                // Pass data to view
+                ViewBag.CurrentSearch = searchTerm;
+                ViewBag.CurrentQualification = qualification;
+                ViewBag.CurrentSortBy = sortBy;
+                ViewBag.CurrentPage = page;
+                ViewBag.TotalPages = totalPages;
+                ViewBag.HasPreviousPage = page > 1;
+                ViewBag.HasNextPage = page < totalPages;
+
+                // Get statistics for dashboard
+                ViewBag.TotalVeterinarians = totalRecords;
+                ViewBag.VerifiedVeterinarians = await _context.Veterinarians.CountAsync(v => v.Authentication == 1);
+                ViewBag.PendingVeterinarians = await _context.Veterinarians.CountAsync(v => v.Authentication == 0);
+                ViewBag.TotalPets = await _context.Pets.CountAsync();
+
+                // Get qualification distribution for filtering
+                ViewBag.Qualifications = await _context.Veterinarians
+                    .GroupBy(v => v.Qualification)
+                    .Select(g => new { Qualification = g.Key, Count = g.Count() })
+                    .ToListAsync();
+
+                return View(vets);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving veterinarians");
+                TempData["ErrorMessage"] = "An error occurred while retrieving veterinarians. Please try again.";
+                return View(new List<Veterinarian>());
+            }
         }
         [HttpGet]
         public IActionResult Create()
@@ -41,11 +125,41 @@ namespace veterinarian_tracker_system.Controllers
                 return View(model);
             }
 
-            string imgPath = null;
+            // Check if username or email already exists
+            if (await _context.Veterinarians.AnyAsync(v => v.UserName == model.UserName))
+            {
+                ModelState.AddModelError("UserName", "This username is already taken.");
+                return View(model);
+            }
+
+            if (await _context.Veterinarians.AnyAsync(v => v.Email == model.Email))
+            {
+                ModelState.AddModelError("Email", "This email is already registered.");
+                return View(model);
+            }
+
+            string imgPath = "/uploads/default-profile.png"; // Default image path
 
             if (model.ImgFile != null && model.ImgFile.Length > 0)
             {
-                var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/");
+                // Check if file is an image
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var extension = Path.GetExtension(model.ImgFile.FileName).ToLowerInvariant();
+                
+                if (!allowedExtensions.Contains(extension))
+                {
+                    ModelState.AddModelError("ImgFile", "Only image files (jpg, jpeg, png, gif) are allowed.");
+                    return View(model);
+                }
+
+                // Check file size (max 5MB)
+                if (model.ImgFile.Length > 5 * 1024 * 1024)
+                {
+                    ModelState.AddModelError("ImgFile", "The file size should not exceed 5MB.");
+                    return View(model);
+                }
+
+                var uploads = Path.Combine(_env.WebRootPath, "uploads");
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ImgFile.FileName);
                 var filePath = Path.Combine(uploads, fileName);
 
@@ -66,7 +180,7 @@ namespace veterinarian_tracker_system.Controllers
                 UserName = model.UserName,
                 Email = model.Email,
                 PhoneNum = model.PhoneNum,
-                Password = model.Password,
+                Password = model.Password, // In a real app, you should hash this password
                 FullName = model.FullName,
                 Dob = model.Dob,
                 Gender = model.Gender,
@@ -74,13 +188,24 @@ namespace veterinarian_tracker_system.Controllers
                 ClinicAddress = model.ClinicAddress,
                 Qualification = model.Qualification,
                 Experience = model.Experience,
-                Authentication = model.Authentication
+                Authentication = model.Authentication,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
 
-            _context.Veterinarians.Add(veterinarian);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("VeterinarianIndex");
+            try
+            {
+                _context.Veterinarians.Add(veterinarian);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Veterinarian created successfully!";
+                return RedirectToAction("VeterinarianIndex");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating new veterinarian");
+                ModelState.AddModelError("", "An error occurred while saving. Please try again.");
+                return View(model);
+            }
         }
 
         [HttpGet]
@@ -111,6 +236,7 @@ namespace veterinarian_tracker_system.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, VeterinarianFormModel model)
         {
             if (!ModelState.IsValid)
@@ -122,29 +248,60 @@ namespace veterinarian_tracker_system.Controllers
             var vet = await _context.Veterinarians.FindAsync(id);
             if (vet == null) return NotFound();
 
-            string imgPath = vet.Img;
-
+            // Handle image upload
+            string imgPath = vet.Img; // Keep existing image path by default
             if (model.ImgFile != null && model.ImgFile.Length > 0)
             {
-                var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
-                Directory.CreateDirectory(uploadsFolder);
-
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ImgFile.FileName);
-                var filePath = Path.Combine(uploadsFolder, fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                // Validate file type
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                var fileExtension = Path.GetExtension(model.ImgFile.FileName).ToLowerInvariant();
+                if (!allowedExtensions.Contains(fileExtension))
                 {
-                    await model.ImgFile.CopyToAsync(stream);
+                    ModelState.AddModelError("ImgFile", "Only JPG and PNG images are allowed.");
+                    return View(model);
                 }
 
-                imgPath = "/uploads/" + fileName;
+                // Validate file size (max 5MB)
+                if (model.ImgFile.Length > 5 * 1024 * 1024)
+                {
+                    ModelState.AddModelError("ImgFile", "Image size should not exceed 5MB.");
+                    return View(model);
+                }
+
+                // Save the new image
+                var uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
+                var uploadsFolder = Path.Combine(_env.WebRootPath, "images", "veterinarians");
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                // Ensure directory exists
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.ImgFile.CopyToAsync(fileStream);
+                }
+
+                imgPath = $"/images/veterinarians/{uniqueFileName}";
+
+                // Delete old image if it's not the default
+                if (vet.Img != "/images/default-vet.png" && System.IO.File.Exists(Path.Combine(_env.WebRootPath, vet.Img.TrimStart('/'))))
+                {
+                    System.IO.File.Delete(Path.Combine(_env.WebRootPath, vet.Img.TrimStart('/')));
+                }
             }
 
             // Update the entity
             vet.UserName = model.UserName;
             vet.Email = model.Email;
             vet.PhoneNum = model.PhoneNum;
-            vet.Password = model.Password;
+            // Only update password if a new one is provided
+            if (!string.IsNullOrWhiteSpace(model.Password))
+            {
+                vet.Password = model.Password; // In a real app, you should hash this password
+            }
             vet.FullName = model.FullName;
             vet.Dob = model.Dob;
             vet.Gender = model.Gender;
@@ -154,10 +311,21 @@ namespace veterinarian_tracker_system.Controllers
             vet.Experience = model.Experience;
             vet.Authentication = model.Authentication;
             vet.Img = imgPath;
+            vet.UpdatedAt = DateTime.Now;
 
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("VeterinarianIndex");
+            try
+            {
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Veterinarian updated successfully!";
+                return RedirectToAction("VeterinarianIndex");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating veterinarian with ID {Id}", id);
+                ModelState.AddModelError("", "An error occurred while saving changes. Please try again.");
+                ViewBag.CurrentImg = vet.Img;
+                return View(model);
+            }
         }
 
         [HttpGet]
@@ -173,13 +341,48 @@ namespace veterinarian_tracker_system.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var vet = await _context.Veterinarians.FindAsync(id);
+            var vet = await _context.Veterinarians
+                .Include(v => v.Pets)
+                .FirstOrDefaultAsync(v => v.IdVetUser == id);
+                
             if (vet == null) return NotFound();
 
-            _context.Veterinarians.Remove(vet);
-            await _context.SaveChangesAsync();
+            // Check if veterinarian has associated pets
+            if (vet.Pets != null && vet.Pets.Any())
+            {
+                TempData["ErrorMessage"] = "Cannot delete veterinarian with associated pets. Please reassign or delete the pets first.";
+                return RedirectToAction("Delete", new { id });
+            }
 
-            TempData["SuccessMessage"] = "Deleted user successfully";
+            // Delete the profile image if it exists and is not the default image
+            if (!string.IsNullOrEmpty(vet.Img) && !vet.Img.Contains("default"))
+            {
+                var imagePath = Path.Combine(_env.WebRootPath, vet.Img.TrimStart('/').Replace("/", "\\"));
+                if (System.IO.File.Exists(imagePath))
+                {
+                    try
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log the error but continue with deletion
+                        _logger.LogError(ex, "Failed to delete image file: {Path}", imagePath);
+                    }
+                }
+            }
+
+            try
+            {
+                _context.Veterinarians.Remove(vet);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Veterinarian deleted successfully";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting veterinarian with ID {Id}", id);
+                TempData["ErrorMessage"] = "An error occurred while deleting the veterinarian. Please try again.";
+            }
 
             return RedirectToAction("VeterinarianIndex");
         }

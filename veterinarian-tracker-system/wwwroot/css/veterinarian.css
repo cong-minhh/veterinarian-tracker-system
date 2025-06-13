@@ -1,0 +1,324 @@
+/* Veterinarian Module Styling */
+
+/* Main container styling */
+.vet-container {
+    padding: 2rem 0;
+}
+
+/* Page header styling */
+.vet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.vet-header h2 {
+    margin: 0;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* Dashboard Stats */
+.vet-stats-container {
+    margin-bottom: 2rem;
+}
+
+.vet-stat-card {
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.vet-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+}
+
+.vet-stat-icon {
+    font-size: 2.5rem;
+    margin-right: 1rem;
+    opacity: 0.8;
+}
+
+.vet-stat-info {
+    flex-grow: 1;
+}
+
+.vet-stat-info h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1;
+}
+
+.vet-stat-info p {
+    margin: 0.5rem 0 0;
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+/* Search and filter section */
+.vet-search-container {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Card styling */
+.vet-card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border: none;
+}
+
+.vet-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.vet-card-header {
+    background-color: #3498db;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+.vet-card-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 1rem auto;
+    border: 4px solid white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.vet-card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+
+.vet-card-footer {
+    padding: 1rem;
+    background-color: rgba(0,0,0,0.02);
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Table styling */
+.vet-table {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.vet-table thead {
+    background-color: #3498db;
+    color: white;
+}
+
+.vet-table th {
+    font-weight: 500;
+    padding: 1rem;
+}
+
+.vet-table td {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+.vet-table tbody tr:hover {
+    background-color: rgba(52, 152, 219, 0.05);
+}
+
+/* Form styling */
+.vet-form-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.vet-form-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.vet-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.vet-form-group label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.vet-form-control {
+    border-radius: 5px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.vet-form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+/* Button styling */
+.vet-btn {
+    padding: 0.6rem 1.5rem;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.vet-btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.vet-btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.vet-btn-success {
+    background-color: #2ecc71;
+    border-color: #2ecc71;
+}
+
+.vet-btn-success:hover {
+    background-color: #27ae60;
+    border-color: #27ae60;
+}
+
+.vet-btn-danger {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+}
+
+.vet-btn-danger:hover {
+    background-color: #c0392b;
+    border-color: #c0392b;
+}
+
+/* Badge styling */
+.vet-badge {
+    padding: 0.5rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.vet-badge-primary {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: #3498db;
+}
+
+.vet-badge-success {
+    background-color: rgba(46, 204, 113, 0.1);
+    color: #2ecc71;
+}
+
+/* Pagination styling */
+.vet-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.vet-pagination .pagination {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.vet-pagination .page-item:first-child .page-link {
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+
+.vet-pagination .page-item:last-child .page-link {
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
+.vet-pagination .page-link {
+    color: #3498db;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.vet-pagination .page-item.active .page-link {
+    background-color: #3498db;
+    color: white;
+}
+
+.vet-pagination .page-item:not(.active) .page-link:hover {
+    background-color: #f8f9fa;
+    color: #2980b9;
+}
+
+.vet-results-summary {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Modal styling */
+.vet-modal-content {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.vet-modal-header {
+    background-color: #3498db;
+    color: white;
+    border-bottom: none;
+}
+
+.vet-modal-footer {
+    border-top: none;
+}
+
+/* Animation classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .vet-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .vet-header .btn {
+        margin-top: 1rem;
+        align-self: flex-start;
+    }
+}

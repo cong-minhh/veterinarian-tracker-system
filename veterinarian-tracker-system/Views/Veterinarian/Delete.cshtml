@@ -4,35 +4,91 @@
     ViewData["Title"] = "Delete Veterinarian";
 }
 
-<h2>Delete Veterinarian</h2>
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/veterinarian.css" />
+}
 
-<h4>Are you sure you want to delete this veterinarian?</h4>
+<div class="vet-container fade-in">
+    <div class="vet-header">
+        <h2><i class="bi bi-trash"></i> Delete Veterinarian</h2>
+        <a href="@Url.Action("VeterinarianIndex", "Veterinarian")" class="btn vet-btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+    </div>
 
-<div>
-    <strong>Username:</strong> @Model.UserName<br />
-    <strong>Full Name:</strong> @Model.FullName<br />
-    <strong>Email:</strong> @Model.Email<br />
-    <strong>Phone Number:</strong> @Model.PhoneNum<br />
-    <strong>Clinic Name:</strong> @Model.NameOfConsultingRoom<br />
-    <strong>Clinic Address:</strong> @Model.ClinicAddress<br />
-    <strong>Qualification:</strong> @Model.Qualification<br />
-    <strong>Experience:</strong> @Model.Experience<br />
-    <strong>Authentication:</strong> @(Model.Authentication == 1 ? "Yes" : "No")<br />
-    <strong>Image:</strong><br />
-    @if (!string.IsNullOrEmpty(Model.Img))
-    {
-        <img src="@Model.Img" alt="Veterinarian Image" style="height: 100px;" />
-    }
-    else
-    {
-        <p>No image</p>
-    }
+    <div class="vet-delete-container">
+        <div class="alert alert-danger">
+            <h4><i class="bi bi-exclamation-triangle"></i> Are you sure you want to delete this veterinarian?</h4>
+            <p class="text-muted">This action cannot be undone. All associated data will be permanently removed.</p>
+        </div>
+
+        <div class="card vet-card mb-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0"><i class="bi bi-person-badge"></i> Veterinarian Details</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <p><i class="bi bi-person"></i> <strong>Username:</strong> @Model.UserName</p>
+                                <p><i class="bi bi-person-badge"></i> <strong>Full Name:</strong> @Model.FullName</p>
+                                <p><i class="bi bi-envelope"></i> <strong>Email:</strong> @Model.Email</p>
+                                <p><i class="bi bi-telephone"></i> <strong>Phone Number:</strong> @Model.PhoneNum</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><i class="bi bi-building"></i> <strong>Clinic Name:</strong> @Model.NameOfConsultingRoom</p>
+                                <p><i class="bi bi-geo-alt"></i> <strong>Clinic Address:</strong> @Model.ClinicAddress</p>
+                                <p><i class="bi bi-award"></i> <strong>Qualification:</strong> @Model.Qualification</p>
+                                <p><i class="bi bi-shield-check"></i> <strong>Authentication:</strong> 
+                                    <span class="badge @(Model.Authentication == 1 ? "bg-success" : "bg-warning")">@(Model.Authentication == 1 ? "Verified" : "Pending")</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <p><i class="bi bi-journal-text"></i> <strong>Experience:</strong></p>
+                                <div class="p-2 bg-light rounded">
+                                    @(string.IsNullOrEmpty(Model.Experience) ? "No experience information provided" : Model.Experience)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <p><i class="bi bi-image"></i> <strong>Profile Image:</strong></p>
+                        @if (!string.IsNullOrEmpty(Model.Img))
+                        {
+                            <img src="@Model.Img" alt="Veterinarian Image" class="img-fluid rounded" style="max-height: 200px;" />
+                        }
+                        else
+                        {
+                            <div class="p-4 bg-light rounded">
+                                <i class="bi bi-person-bounding-box" style="font-size: 5rem;"></i>
+                                <p class="mt-2">No image available</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form asp-action="Delete" asp-controller="Veterinarian" method="post" class="mt-4">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.IdVetUser" />
+            <div class="d-flex justify-content-between">
+                <a href="@Url.Action("VeterinarianIndex", "Veterinarian")" class="btn btn-secondary">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Confirm Delete
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
-<form asp-action="Delete" asp-controller="Veterinarian" method="post">
-    @Html.AntiForgeryToken()
-    <input type="hidden" name="id" value="@Model.IdVetUser" />
-    <button type="submit" class="btn btn-danger mt-3">Delete</button>
-    <a asp-action="VeterinariansManagement" class="btn btn-secondary mt-3">Cancel</a>
-</form>
+@section Scripts {
+    <script src="~/js/veterinarian.js"></script>
+}
 
