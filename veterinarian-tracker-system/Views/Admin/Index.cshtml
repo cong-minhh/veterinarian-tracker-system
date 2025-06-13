@@ -1,91 +1,643 @@
 ﻿@model AdminDashboardStatsDto
 
 @{
-    Layout = "_AdminLayout";
+    ViewData["Title"] = "Admin Dashboard";
 }
 
 @section Styles {
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        /* Dashboard-specific styles only */
+        
+        /* Dashboard-specific styles */
+        
+        .stat-card {
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            border-radius: var(--card-border-radius);
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            opacity: 0.8;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            transition: transform var(--transition-speed) ease;
+            border-radius: var(--card-border-radius);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        
+        .chart-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .dashboard-welcome {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            border-radius: var(--card-border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .data-refresh {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .stat-trend {
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .trend-up {
+            color: #28a745;
+        }
+        
+        .trend-down {
+            color: #dc3545;
+        }
+        
+        .trend-neutral {
+            color: #6c757d;
+        }
+        
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            padding: 3px 6px;
+            border-radius: 50%;
+            background-color: #dc3545;
+            color: white;
+            font-size: 0.7rem;
+        }
+        
+        .progress-thin {
+            height: 4px;
+        }
+        
+        .mini-stat {
+            padding: 15px;
+            border-radius: var(--card-border-radius);
+            margin-bottom: 15px;
+            background-color: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .mini-stat-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        .mini-stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .mini-stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .appointment-status-card {
+            border-radius: var(--card-border-radius);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .appointment-status-card h5 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .appointment-status-card .progress {
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .appointment-status-card .status-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+        }
+        
+        .pet-distribution-card {
+            border-radius: var(--card-border-radius);
+            padding: 15px;
+            @* height: 100%; *@
+        }
+        
+        .pet-distribution-card h5 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .weekly-appointments-card {
+            border-radius: var(--card-border-radius);
+            padding: 15px;
+            @* height: 100%; *@
+        }
+        
+        .weekly-appointments-card h5 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .activity-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .activity-timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .activity-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+        
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+        }
+        
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+        }
+        
+        .activity-content {
+            font-size: 0.9rem;
+        }
+    </style>
 }
 
-<div class="container py-4">
-    <h2 class="mb-4">Hi, this is Admin's Dashboard</h2>
+<div class="container-fluid py-4">
+    <div class="dashboard-welcome">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="mb-1">Welcome to Your Dashboard</h2>
+                <p class="mb-0">Here's what's happening in your veterinary practice today</p>
+            </div>
+            <div class="d-flex align-items-center">
+                @* <div class="me-3">
+                    <label class="theme-switch" for="darkModeToggle">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div> *@
+                <button id="refreshDashboard" class="btn btn-light btn-sm position-relative">
+                    <i class="fas fa-sync-alt"></i> Refresh Data
+                    <span class="notification-badge">@Model.NewUsersToday</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
-    <div class="row g-4">
-        <!-- Statistic Cards -->
+    <!-- Quick Stats Row -->
+    <div class="row g-4 mb-4">
         <div class="col-md-3">
-            <div class="card text-white bg-primary shadow-sm">
+            <div class="card text-white bg-primary shadow-sm stat-card">
                 <div class="card-body">
-                    <h5 class="card-title">Total Veterinarians</h5>
-                    <p class="display-5">@Model.TotalVeterinarians</p>
-                    <small class="text-white-50">Updated just now</small>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="card-title">Veterinarians</h5>
+                            <p class="display-5 mb-0" id="vetCount">@Model.TotalVeterinarians</p>
+                            <div class="stat-trend">
+                                @if (Model.VeterinarianTrend > 0)
+                                {
+                                    <span class="trend-up"><i class="fas fa-arrow-up"></i> @Model.VeterinarianTrend% from last month</span>
+                                }
+                                else if (Model.VeterinarianTrend < 0)
+                                {
+                                    <span class="trend-down"><i class="fas fa-arrow-down"></i> @Math.Abs(Model.VeterinarianTrend)% from last month</span>
+                                }
+                                else
+                                {
+                                    <span class="trend-neutral"><i class="fas fa-minus"></i> Same as last month</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="card-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                    </div>
+                    <small class="data-refresh">Last updated: <span id="vetUpdateTime">@Model.LastUpdated.ToString("h:mm tt")</span></small>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-white bg-success shadow-sm">
+            <div class="card text-white bg-success shadow-sm stat-card">
                 <div class="card-body">
-                    <h5 class="card-title">Total Owners</h5>
-                    <p class="display-5">@Model.TotalOwners</p>
-                    <small class="text-white-50">Updated just now</small>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="card-title">Pet Owners</h5>
+                            <p class="display-5 mb-0" id="ownerCount">@Model.TotalOwners</p>
+                            <div class="stat-trend">
+                                @if (Model.OwnerTrend > 0)
+                                {
+                                    <span class="trend-up"><i class="fas fa-arrow-up"></i> @Model.OwnerTrend% from last month</span>
+                                }
+                                else if (Model.OwnerTrend < 0)
+                                {
+                                    <span class="trend-down"><i class="fas fa-arrow-down"></i> @Math.Abs(Model.OwnerTrend)% from last month</span>
+                                }
+                                else
+                                {
+                                    <span class="trend-neutral"><i class="fas fa-minus"></i> Same as last month</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <small class="data-refresh">Last updated: <span id="ownerUpdateTime">@Model.LastUpdated.ToString("h:mm tt")</span></small>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-white bg-warning shadow-sm">
+            <div class="card text-white bg-warning shadow-sm stat-card">
                 <div class="card-body">
-                    <h5 class="card-title">Total Pets</h5>
-                    <p class="display-5">@Model.TotalPets</p>
-                    <small class="text-white-50">Updated just now</small>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="card-title">Pets</h5>
+                            <p class="display-5 mb-0" id="petCount">@Model.TotalPets</p>
+                            <div class="stat-trend">
+                                @if (Model.PetTrend > 0)
+                                {
+                                    <span class="trend-up"><i class="fas fa-arrow-up"></i> @Model.PetTrend% from last month</span>
+                                }
+                                else if (Model.PetTrend < 0)
+                                {
+                                    <span class="trend-down"><i class="fas fa-arrow-down"></i> @Math.Abs(Model.PetTrend)% from last month</span>
+                                }
+                                else
+                                {
+                                    <span class="trend-neutral"><i class="fas fa-minus"></i> Same as last month</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="card-icon">
+                            <i class="fas fa-paw"></i>
+                        </div>
+                    </div>
+                    <small class="data-refresh">Last updated: <span id="petUpdateTime">@Model.LastUpdated.ToString("h:mm tt")</span></small>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-white bg-danger shadow-sm">
+            <div class="card text-white bg-danger shadow-sm stat-card">
                 <div class="card-body">
-                    <h5 class="card-title">Active Appointments</h5>
-                    <p class="display-5">@Model.ActiveAppointments</p>
-                    <small class="text-white-50">Need attention</small>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="card-title">Active Appointments</h5>
+                            <p class="display-5 mb-0" id="apptCount">@Model.ActiveAppointments</p>
+                            <div class="stat-trend">
+                                @if (Model.AppointmentTrend > 0)
+                                {
+                                    <span class="trend-up"><i class="fas fa-arrow-up"></i> @Model.AppointmentTrend% from yesterday</span>
+                                }
+                                else if (Model.AppointmentTrend < 0)
+                                {
+                                    <span class="trend-down"><i class="fas fa-arrow-down"></i> @Math.Abs(Model.AppointmentTrend)% from yesterday</span>
+                                }
+                                else
+                                {
+                                    <span class="trend-neutral"><i class="fas fa-minus"></i> Same as yesterday</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="card-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                    </div>
+                    <small class="data-refresh">Last updated: <span id="apptUpdateTime">@Model.LastUpdated.ToString("h:mm tt")</span></small>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row mt-5">
-
-        <!-- Chart 1: User Registration Chart -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-header py-2">
-                    <strong>User Registration Last 6 Months</strong>
+    <!-- Mini Stats Row -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="mini-stat d-flex align-items-center">
+                <div class="mini-stat-icon text-primary">
+                    <i class="fas fa-user-plus"></i>
                 </div>
-                <div class="card-body p-3" style="height: 300px;">
-                    <canvas id="userRegistrationChart" style="height: 200px !important;"></canvas>
+                <div>
+                    <div class="mini-stat-number" id="newUsersToday">@Model.NewUsersToday</div>
+                    <div class="mini-stat-label">New Users Today</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mini-stat d-flex align-items-center">
+                <div class="mini-stat-icon text-success">
+                    <i class="fas fa-paw"></i>
+                </div>
+                <div>
+                    <div class="mini-stat-number" id="newPetsToday">@Model.NewPetsToday</div>
+                    <div class="mini-stat-label">New Pets Today</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mini-stat d-flex align-items-center">
+                <div class="mini-stat-icon text-warning">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div>
+                    <div class="mini-stat-number" id="completedAppointments">@Model.CompletedAppointments</div>
+                    <div class="mini-stat-label">Completed Appointments</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="mini-stat d-flex align-items-center">
+                <div class="mini-stat-icon text-danger">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div>
+                    <div class="mini-stat-number" id="cancelledAppointments">@Model.CancelledAppointments</div>
+                    <div class="mini-stat-label">Cancelled Appointments</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Row -->
+    <div class="row">
+        <!-- Left Column -->
+        <div class="col-lg-8">
+            <!-- Charts Row -->
+            <div class="row">
+                <!-- User Registration Chart -->
+                <div class="col-12">
+                    <div class="card shadow-sm chart-container">
+                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                            <strong><i class="fas fa-chart-line me-2"></i>User Registration Trends</strong>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-outline-secondary active" data-period="6">6 Months</button>
+                                <button type="button" class="btn btn-outline-secondary" data-period="3">3 Months</button>
+                                <button type="button" class="btn btn-outline-secondary" data-period="1">1 Month</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-3" style="height: 300px;">
+                            <canvas id="userRegistrationChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pet Registration Chart -->
+                <div class="col-12">
+                    <div class="card shadow-sm chart-container">
+                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                            <strong><i class="fas fa-chart-bar me-2"></i>Pet Registration Trends</strong>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-outline-secondary active" data-period="6">6 Months</button>
+                                <button type="button" class="btn btn-outline-secondary" data-period="3">3 Months</button>
+                                <button type="button" class="btn btn-outline-secondary" data-period="1">1 Month</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-3" style="height: 300px;">
+                            <canvas id="petRegistrationChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointment Status Card -->
+            <div class="card appointment-status-card mb-4">
+                <h5><i class="fas fa-tasks me-2"></i>Appointment Status Overview</h5>
+                <div class="progress mb-3">
+                    @{
+                        var totalAppts = Model.ActiveAppointments + Model.CompletedAppointments + Model.CancelledAppointments;
+                        var activePercent = totalAppts > 0 ? (double)Model.ActiveAppointments / totalAppts * 100 : 0;
+                        var completedPercent = totalAppts > 0 ? (double)Model.CompletedAppointments / totalAppts * 100 : 0;
+                        var cancelledPercent = totalAppts > 0 ? (double)Model.CancelledAppointments / totalAppts * 100 : 0;
+                    }
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: @activePercent%" aria-valuenow="@activePercent" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: @completedPercent%" aria-valuenow="@completedPercent" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: @cancelledPercent%" aria-valuenow="@cancelledPercent" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="status-label">
+                            <span><i class="fas fa-circle text-primary me-1"></i> Active</span>
+                            <span>@Model.ActiveAppointments (@Math.Round(activePercent, 1)%)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="status-label">
+                            <span><i class="fas fa-circle text-success me-1"></i> Completed</span>
+                            <span>@Model.CompletedAppointments (@Math.Round(completedPercent, 1)%)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="status-label">
+                            <span><i class="fas fa-circle text-danger me-1"></i> Cancelled</span>
+                            <span>@Model.CancelledAppointments (@Math.Round(cancelledPercent, 1)%)</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Chart 2: Pet Registration Chart -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-header py-2">
-                    <strong>Pet Registration Last 6 Months</strong>
+        <!-- Right Column -->
+        <div class="col-lg-4">
+            <!-- Pet Type Distribution -->
+            <div class="card pet-distribution-card mb-2">
+                <h5><i class="fas fa-chart-pie me-2"></i>Pet Type Distribution</h5>
+                <div style="height: 180px;">
+                    <canvas id="petTypeChart"></canvas>
                 </div>
-                <div class="card-body p-3" style="height: 300px;">
-                    <canvas id="petRegistrationChart" style="height: 200px !important;"></canvas>
+            </div>
+
+            <!-- Weekly Appointments -->
+            <div class="card weekly-appointments-card mb-2">
+                <h5><i class="fas fa-calendar-week me-2"></i>Weekly Appointments</h5>
+                <div style="height: 180px;">
+                    <canvas id="weeklyAppointmentsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card mb-3">
+                <div class="card-header py-2">
+                    <strong><i class="fas fa-history me-2"></i>Recent Activity</strong>
+                </div>
+                <div class="card-body">
+                    <div class="activity-timeline">
+                        <div class="activity-item">
+                            <div class="activity-time">Today, @DateTime.Now.ToString("h:mm tt")</div>
+                            <div class="activity-content">Dashboard refreshed</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-time">Today, @DateTime.Now.AddHours(-1).ToString("h:mm tt")</div>
+                            <div class="activity-content">@Model.NewUsersToday new users registered today</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-time">Today, @DateTime.Now.AddHours(-2).ToString("h:mm tt")</div>
+                            <div class="activity-content">@Model.NewPetsToday new pets added today</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-time">Today, @DateTime.Now.AddHours(-3).ToString("h:mm tt")</div>
+                            <div class="activity-content">@Model.CompletedAppointments appointments completed</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
     <script>
-        async function loadUserRegistrationStats() {
+        // Global chart references
+        let userChart, petChart, petTypeChart, weeklyAppointmentsChart;
+        
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        
+        // Check for saved theme preference or prefer-color-scheme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            body.classList.add('dark-mode');
+            darkModeToggle.checked = true;
+        }
+        
+        // Theme toggle event listener
+        darkModeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+                updateChartsTheme(true);
+            } else {
+                body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+                updateChartsTheme(false);
+            }
+        });
+        
+        // Update charts theme
+        function updateChartsTheme(isDark) {
+            const textColor = isDark ? '#e9ecef' : '#666';
+            const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)';
+            
+            Chart.defaults.color = textColor;
+            Chart.defaults.scale.grid.color = gridColor;
+            
+            // Refresh all charts
+            if (userChart) userChart.update();
+            if (petChart) petChart.update();
+            if (petTypeChart) petTypeChart.update();
+            if (weeklyAppointmentsChart) weeklyAppointmentsChart.update();
+        }
+        
+        // Format the current time
+        function updateLastRefreshed() {
+            const elements = document.querySelectorAll('[id$="UpdateTime"]');
+            const timeStr = moment().format('h:mm A');
+            elements.forEach(el => {
+                el.textContent = timeStr;
+            });
+        }
+        
+        // Update trend indicator based on value
+        function updateTrendIndicator(elementId, trendValue, periodText) {
+            const parentElement = document.getElementById(elementId).parentNode;
+            const trendElement = parentElement.querySelector('.stat-trend');
+            
+            let trendHTML = '';
+            if (trendValue > 0) {
+                trendHTML = `<span class="trend-up"><i class="fas fa-arrow-up"></i> ${trendValue}% from ${periodText}</span>`;
+            } else if (trendValue < 0) {
+                trendHTML = `<span class="trend-down"><i class="fas fa-arrow-down"></i> ${Math.abs(trendValue)}% from ${periodText}</span>`;
+            } else {
+                trendHTML = `<span class="trend-neutral"><i class="fas fa-minus"></i> Same as ${periodText}</span>`;
+            }
+            
+            trendElement.innerHTML = trendHTML;
+        }
+        
+        // Load user registration stats
+        async function loadUserRegistrationStats(months = 6) {
             try {
-                const response = await fetch('/admin/GetUserRegistrationStats');
+                const response = await fetch(`/admin/GetUserRegistrationStats?months=${months}`);
                 const data = await response.json();
 
                 const labels = data.map(item => item.month);
@@ -93,7 +645,13 @@
                 const vetData = data.map(item => item.veterinarianCount);
 
                 const ctx = document.getElementById('userRegistrationChart').getContext('2d');
-                const chart = new Chart(ctx, {
+                
+                // Destroy existing chart if it exists
+                if (userChart) {
+                    userChart.destroy();
+                }
+                
+                userChart = new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: labels,
@@ -105,7 +663,8 @@
                                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                                 fill: true,
                                 tension: 0.4,
-                                pointRadius: 4
+                                pointRadius: 4,
+                                pointHoverRadius: 6
                             },
                             {
                                 label: 'Veterinarians',
@@ -114,26 +673,46 @@
                                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                                 fill: true,
                                 tension: 0.4,
-                                pointRadius: 4
+                                pointRadius: 4,
+                                pointHoverRadius: 6
                             }
                         ]
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         plugins: {
                             legend: {
                                 position: 'top'
                             },
-                            title: {
-                                display: true,
-                                text: 'User Registration (Last 6 months)'
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                backgroundColor: 'rgba(0,0,0,0.8)',
+                                padding: 10,
+                                cornerRadius: 4,
+                                titleFont: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
                             }
                         },
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                stepSize: 1
+                                grid: {
+                                    color: body.classList.contains('dark-mode') ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
                             }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeOutQuart'
                         }
                     }
                 });
@@ -141,16 +720,24 @@
                 console.error('Error loading user registration stats:', error);
             }
         }
-                async function loadPetRegistrationStats() {
+        
+        // Load pet registration stats
+        async function loadPetRegistrationStats(months = 6) {
             try {
-                const response = await fetch('/admin/GetPetRegistrationStats');
+                const response = await fetch(`/admin/GetPetRegistrationStats?months=${months}`);
                 const data = await response.json();
 
                 const labels = data.map(item => item.month);
                 const petData = data.map(item => item.petCount);
 
                 const ctx = document.getElementById('petRegistrationChart').getContext('2d');
-                const chart = new Chart(ctx, {
+                
+                // Destroy existing chart if it exists
+                if (petChart) {
+                    petChart.destroy();
+                }
+                
+                petChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: labels,
@@ -160,26 +747,47 @@
                                 data: petData,
                                 backgroundColor: 'rgba(255, 159, 64, 0.6)',
                                 borderColor: 'rgba(255, 159, 64, 1)',
-                                borderWidth: 1
+                                borderWidth: 1,
+                                borderRadius: 5,
+                                hoverBackgroundColor: 'rgba(255, 159, 64, 0.8)'
                             }
                         ]
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         plugins: {
                             legend: {
                                 display: false
                             },
-                            title: {
-                                display: true,
-                                text: 'Pet Registration (Last 6 months)'
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                backgroundColor: 'rgba(0,0,0,0.8)',
+                                padding: 10,
+                                cornerRadius: 4,
+                                titleFont: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
                             }
                         },
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                stepSize: 1
+                                grid: {
+                                    color: body.classList.contains('dark-mode') ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
                             }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeOutQuart'
                         }
                     }
                 });
@@ -187,11 +795,290 @@
                 console.error('Error loading pet registration stats:', error);
             }
         }
+        
+        // Initialize Pet Type Distribution Chart
+        function initPetTypeChart(petTypeData) {
+            const ctx = document.getElementById('petTypeChart').getContext('2d');
+            
+            // Prepare data
+            const labels = Object.keys(petTypeData);
+            const data = Object.values(petTypeData);
+            const backgroundColors = [
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(153, 102, 255, 0.7)',
+                'rgba(255, 159, 64, 0.7)',
+                'rgba(199, 199, 199, 0.7)'
+            ];
+            
+            // Destroy existing chart if it exists
+            if (petTypeChart) {
+                petTypeChart.destroy();
+            }
+            
+            petTypeChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors.slice(0, data.length),
+                        borderColor: 'rgba(255, 255, 255, 0.5)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                padding: 10,
+                                boxWidth: 10,
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            padding: 10,
+                            cornerRadius: 4,
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    cutout: '65%',
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+        }
+        
+        // Initialize Weekly Appointments Chart
+        function initWeeklyAppointmentsChart(appointmentsByDay) {
+            const ctx = document.getElementById('weeklyAppointmentsChart').getContext('2d');
+            
+            // Sort days of week in correct order
+            const daysOrder = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const sortedDays = daysOrder.filter(day => appointmentsByDay.hasOwnProperty(day));
+            const data = sortedDays.map(day => appointmentsByDay[day]);
+            
+            // Destroy existing chart if it exists
+            if (weeklyAppointmentsChart) {
+                weeklyAppointmentsChart.destroy();
+            }
+            
+            weeklyAppointmentsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sortedDays,
+                    datasets: [{
+                        label: 'Appointments',
+                        data: data,
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            padding: 10,
+                            cornerRadius: 4
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: body.classList.contains('dark-mode') ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'
+                            },
+                            ticks: {
+                                font: {
+                                    size: 10
+                                },
+                                padding: 5
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 10
+                                },
+                                padding: 5
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+        }
+        
+        // Refresh dashboard data
+        async function refreshDashboardData() {
+            try {
+                // Add loading indicators
+                document.querySelectorAll('.display-5, .mini-stat-number').forEach(el => {
+                    el.classList.add('text-muted');
+                });
+                
+                // API call for dashboard stats
+                const response = await fetch('/admin/Index', {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                // Parse the response and update the values
+                const data = await response.json();
+                
+                // Update the dashboard stats
+                document.getElementById('vetCount').textContent = data.totalVeterinarians;
+                document.getElementById('ownerCount').textContent = data.totalOwners;
+                document.getElementById('petCount').textContent = data.totalPets;
+                document.getElementById('apptCount').textContent = data.activeAppointments;
+                
+                // Update mini stats
+                document.getElementById('newUsersToday').textContent = data.newUsersToday;
+                document.getElementById('newPetsToday').textContent = data.newPetsToday;
+                document.getElementById('completedAppointments').textContent = data.completedAppointments;
+                document.getElementById('cancelledAppointments').textContent = data.cancelledAppointments;
+                
+                // Update trend indicators
+                updateTrendIndicator('vetCount', data.veterinarianTrend, 'last month');
+                updateTrendIndicator('ownerCount', data.ownerTrend, 'last month');
+                updateTrendIndicator('petCount', data.petTrend, 'last month');
+                updateTrendIndicator('apptCount', data.appointmentTrend, 'yesterday');
+                
+                // Update timestamps
+                updateLastRefreshed();
+                
+                // Update pet type distribution chart
+                initPetTypeChart(data.petTypeDistribution);
+                
+                // Update weekly appointments chart
+                initWeeklyAppointmentsChart(data.appointmentsByDay);
+                
+                // Update appointment status progress bars
+                const totalAppts = data.activeAppointments + data.completedAppointments + data.cancelledAppointments;
+                const activePercent = totalAppts > 0 ? (data.activeAppointments / totalAppts * 100) : 0;
+                const completedPercent = totalAppts > 0 ? (data.completedAppointments / totalAppts * 100) : 0;
+                const cancelledPercent = totalAppts > 0 ? (data.cancelledAppointments / totalAppts * 100) : 0;
+                
+                const progressBars = document.querySelectorAll('.progress-bar');
+                progressBars[0].style.width = `${activePercent}%`;
+                progressBars[0].setAttribute('aria-valuenow', activePercent);
+                progressBars[1].style.width = `${completedPercent}%`;
+                progressBars[1].setAttribute('aria-valuenow', completedPercent);
+                progressBars[2].style.width = `${cancelledPercent}%`;
+                progressBars[2].setAttribute('aria-valuenow', cancelledPercent);
+                
+                // Update status labels
+                const statusLabels = document.querySelectorAll('.status-label span:last-child');
+                statusLabels[0].textContent = `${data.activeAppointments} (${Math.round(activePercent * 10) / 10}%)`;
+                statusLabels[1].textContent = `${data.completedAppointments} (${Math.round(completedPercent * 10) / 10}%)`;
+                statusLabels[2].textContent = `${data.cancelledAppointments} (${Math.round(cancelledPercent * 10) / 10}%)`;
+                
+                // Remove loading indicators
+                setTimeout(() => {
+                    document.querySelectorAll('.display-5, .mini-stat-number').forEach(el => {
+                        el.classList.remove('text-muted');
+                    });
+                    
+                    // Add animation effect
+                    document.querySelectorAll('.stat-card, .mini-stat').forEach(card => {
+                        card.style.transform = 'scale(1.03)';
+                        setTimeout(() => {
+                            card.style.transform = '';
+                        }, 300);
+                    });
+                }, 500);
+                
+                // Refresh charts
+                const activePeriod = document.querySelector('.btn-group .active').getAttribute('data-period');
+                loadUserRegistrationStats(activePeriod);
+                loadPetRegistrationStats(activePeriod);
+                
+                // Update notification badge
+                document.querySelector('.notification-badge').textContent = data.newUsersToday;
+                
+                // Update recent activity
+                const activityTimeline = document.querySelector('.activity-timeline');
+                const newActivityItem = document.createElement('div');
+                newActivityItem.className = 'activity-item';
+                newActivityItem.innerHTML = `
+                    <div class="activity-time">Today, ${moment().format('h:mm A')}</div>
+                    <div class="activity-content">Dashboard refreshed</div>
+                `;
+                activityTimeline.insertBefore(newActivityItem, activityTimeline.firstChild);
+                
+            } catch (error) {
+                console.error('Error refreshing dashboard data:', error);
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', function () {
+            // Initialize charts
             loadUserRegistrationStats();
-            loadPetRegistrationStats(); 
-
+            loadPetRegistrationStats();
+            
+            // Initialize pet type distribution chart
+            initPetTypeChart(@Html.Raw(Json.Serialize(Model.PetTypeDistribution)));
+            
+            // Initialize weekly appointments chart
+            initWeeklyAppointmentsChart(@Html.Raw(Json.Serialize(Model.AppointmentsByDay)));
+            
+            // Set up refresh button
+            document.getElementById('refreshDashboard').addEventListener('click', refreshDashboardData);
+            
+            // Set up period buttons for charts
+            document.querySelectorAll('.btn-group .btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active state
+                    this.parentNode.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Get selected period
+                    const period = this.getAttribute('data-period');
+                    
+                    // Update charts based on which chart container was clicked
+                    if (this.closest('.card').contains(document.getElementById('userRegistrationChart'))) {
+                        loadUserRegistrationStats(period);
+                    } else {
+                        loadPetRegistrationStats(period);
+                    }
+                });
+            });
+            
+            // Set initial timestamps
+            updateLastRefreshed();
+            
+            // Apply theme to charts
+            updateChartsTheme(body.classList.contains('dark-mode'));
+            
+            // Auto-refresh every 5 minutes
+            setInterval(refreshDashboardData, 300000);
         });
     </script>
 }
