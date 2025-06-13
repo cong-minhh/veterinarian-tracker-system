@@ -1,0 +1,233 @@
+@model TuyetDang.MyVetTracer.Entity.Medicine
+@{
+    ViewData["Title"] = "Assign Medicine";
+    Layout = "_AdminLayout";
+    var pet = ViewBag.Pet as TuyetDang.MyVetTracer.Entity.Pet;
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "VeterinarianDashboard")">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("PetMedicalRecords", "VeterinarianDashboard", new { id = pet.IdPet })">Pet Medical Records</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Assign Medicine</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Pet Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        @if (!string.IsNullOrEmpty(pet.Img))
+                        {
+                            <img src="@pet.Img" alt="@pet.PetName" class="img-fluid rounded-circle pet-avatar mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <div class="pet-avatar-placeholder rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center bg-light" style="width: 100px; height: 100px;">
+                                <i class="fas fa-paw fa-3x text-secondary"></i>
+                            </div>
+                        }
+                        <h5>@pet.PetName</h5>
+                        <p class="text-muted">@pet.PetType (@pet.Identification)</p>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <div class="info-item">
+                                <span class="info-label">Age</span>
+                                <span class="info-value">@(pet.Age) years</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="info-item">
+                                <span class="info-label">Gender</span>
+                                <span class="info-value">@pet.Sex</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <div class="info-item">
+                                <span class="info-label">Weight</span>
+                                <span class="info-value">@pet.Weight kg</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="info-item">
+                                <span class="info-label">Owner</span>
+                                <span class="info-value">@pet.OwnerUser?.FullName</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* <div class="info-item">
+                        <span class="info-label">Special Notice</span>
+                        <p class="info-value">@(string.IsNullOrEmpty(pet.SpecialNotes) ? "No special notes" : pet.SpecialNotes)</p>
+                    </div> *@
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 mb-4">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Assign Medicine</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AssignMedicine" method="post">
+                        <input type="hidden" asp-for="IdPet" value="@pet.IdPet" />
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="MedName" class="form-label">Medication Name</label>
+                                    <input asp-for="MedName" class="form-control" required />
+                                    <span asp-validation-for="MedName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Dose" class="form-label">Dose</label>
+                                    <input asp-for="Dose" class="form-control" required />
+                                    <span asp-validation-for="Dose" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="CreatedAt" class="form-label">Start Date</label>
+                                    <input asp-for="CreatedAt" type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="CreatedAt" class="form-label">End Date</label>
+                                    <input asp-for="CreatedAt" type="date" class="form-control" value="@DateTime.Now.AddDays(14).ToString("yyyy-MM-dd")" />
+                                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Total" class="form-label">Total Amount</label>
+                                    <input asp-for="Total" type="number" step="0.01" class="form-control" required />
+                                    <span asp-validation-for="Total" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Amount" class="form-label">Remaining Amount</label>
+                                    <input asp-for="Amount" type="number" step="0.01" class="form-control" required />
+                                    <span asp-validation-for="Amount" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* <div class="form-group mb-3">
+                            <label asp-for="Instructions" class="form-label">Instructions</label>
+                            <textarea asp-for="Instructions" class="form-control" rows="3" required></textarea>
+                            <span asp-validation-for="Instructions" class="text-danger"></span>
+                        </div> *@
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Notice" class="form-label">Additional Notice</label>
+                            <textarea asp-for="Notice" class="form-control" rows="2"></textarea>
+                            <span asp-validation-for="Notice" class="text-danger"></span>
+                        </div>
+
+                        @* <div class="form-group mb-3">
+                            <div class="form-check">
+                                <input asp-for="RequiresRefill" class="form-check-input" type="checkbox" id="requiresRefill" />
+                                <label class="form-check-label" for="requiresRefill">
+                                    Requires Refill
+                                </label>
+                            </div>
+                        </div> *@
+
+                        <div class="d-flex justify-content-between">
+                            <a href="@Url.Action("PetMedicalRecords", "VeterinarianDashboard", new { id = pet.IdPet })" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i> Back to Medical Records
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-prescription-bottle-alt me-1"></i> Assign Medicine
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .info-item {
+            margin-bottom: 10px;
+        }
+        
+        .info-label {
+            display: block;
+            font-size: 0.8rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .info-value {
+            font-weight: 500;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Auto-populate remaining amount with total amount when total amount changes
+            $("#TotalAmount").change(function() {
+                $("#RemainingAmount").val($(this).val());
+            });
+            
+            // Initialize SignalR connection
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/notificationHub")
+                .withAutomaticReconnect()
+                .build();
+                
+            // Start the SignalR connection
+            connection.start().catch(function (err) {
+                console.error(err.toString());
+            });
+        });
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

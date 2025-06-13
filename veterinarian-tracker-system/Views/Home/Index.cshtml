@@ -1,35 +1,128 @@
-﻿@model IEnumerable<TuyetDang.MyVetTracer.Entity.Veterinarian>
+@model IEnumerable<TuyetDang.MyVetTracer.Entity.Veterinarian>
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Trang chủ";
 }
 
-<div class="text-center">
-    <h1>Veterinarians</h1>
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container hero-content">
+        <div class="row align-items-center">
+            <div class="col-lg-6 slide-in-up">
+                <h1 class="hero-title">Chăm sóc thú cưng của bạn cùng các chuyên gia</h1>
+                <p class="hero-subtitle">Kết nối với bác sĩ thú y hàng đầu và quản lý sức khỏe thú cưng của bạn một cách hiệu quả</p>
+                <div class="d-flex gap-3">
+                    <a href="@Url.Action("Register", "Auth")" class="btn btn-light btn-lg">Đăng ký ngay</a>
+                    <a href="#features" class="btn btn-outline-light btn-lg">Tìm hiểu thêm</a>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <img src="https://img.freepik.com/free-vector/veterinarian-examining-dog-clinic_23-2148868296.jpg" alt="Veterinarian with pet" class="img-fluid rounded-4 shadow-lg fade-in" style="max-height: 400px;">
+            </div>
+        </div>
+    </div>
+</section>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>IdVetUser</th>
-                <th>UserName</th>
-                <th>FullName</th>
-                <th>Email</th>
-                <th>PhoneNum</th>
-                <th>Img</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var vet in Model)
+<!-- Features Section -->
+<section class="features-section" id="features">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold mb-3">Tại sao chọn VetTracker?</h2>
+            <p class="text-muted mx-auto" style="max-width: 700px;">Hệ thống quản lý thú y hiện đại giúp kết nối chủ vật nuôi và bác sĩ thú y, mang đến trải nghiệm chăm sóc thú cưng tốt nhất</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                    <h3 class="feature-title">Đặt lịch dễ dàng</h3>
+                    <p>Đặt lịch khám cho thú cưng của bạn chỉ với vài thao tác đơn giản, tiết kiệm thời gian và công sức.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-clipboard2-pulse"></i>
+                    </div>
+                    <h3 class="feature-title">Theo dõi sức khỏe</h3>
+                    <p>Quản lý lịch sử tiêm chủng, thuốc men và các chỉ số sức khỏe của thú cưng một cách khoa học.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="bi bi-chat-dots"></i>
+                    </div>
+                    <h3 class="feature-title">Tư vấn trực tuyến</h3>
+                    <p>Kết nối với bác sĩ thú y để được tư vấn nhanh chóng về các vấn đề sức khỏe của thú cưng.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Veterinarians Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold mb-3">Đội ngũ bác sĩ thú y</h2>
+            <p class="text-muted mx-auto" style="max-width: 700px;">Các chuyên gia hàng đầu trong lĩnh vực thú y, luôn sẵn sàng chăm sóc thú cưng của bạn</p>
+        </div>
+        
+        <div class="row g-4">
+            @foreach (var vet in Model.Take(6))
             {
-                <tr>
-                    <td>@vet.IdVetUser</td>
-                    <td>@vet.UserName</td>
-                    <td>@vet.FullName</td>
-                    <td>@vet.Email</td>
-                    <td>@vet.PhoneNum</td>
-                    <td><img src="@vet.Img" alt="Vet Image" width="100" /></td>
-                </tr>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="position-relative">
+                            <img src="@(string.IsNullOrEmpty(vet.Img) ? "/img/veterinarians/default.jpg" : vet.Img)" 
+                                 class="card-img-top" alt="@vet.FullName" 
+                                 style="height: 200px; object-fit: cover;">
+                            <div class="position-absolute bottom-0 start-0 w-100 p-3" 
+                                 style="background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);">
+                                <h5 class="text-white mb-0">@vet.FullName</h5>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted mb-2">@vet.Qualification</p>
+                            <p class="mb-3"><i class="bi bi-geo-alt text-primary me-2"></i>@vet.ClinicAddress</p>
+                            <p class="mb-3"><i class="bi bi-telephone text-primary me-2"></i>@vet.PhoneNum</p>
+                            <p><i class="bi bi-envelope text-primary me-2"></i>@vet.Email</p>
+                        </div>
+                        <div class="card-footer bg-white border-0 pt-0">
+                            <a href="#" class="btn btn-primary w-100">Đặt lịch hẹn</a>
+                        </div>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
-</div>
+        </div>
+        
+        @if (Model.Count() > 6)
+        {
+            <div class="text-center mt-4">
+                <a href="@Url.Action("VeterinarianIndex", "Veterinarian")" class="btn btn-outline-primary">
+                    Xem tất cả bác sĩ thú y <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body p-5 text-center">
+                        <h3 class="fw-bold mb-3">Bạn là bác sĩ thú y?</h3>
+                        <p class="text-muted mb-4">Tham gia cộng đồng VetTracker để kết nối với nhiều chủ vật nuôi và phát triển sự nghiệp của bạn</p>
+                        <a href="@Url.Action("Register", "Auth")" class="btn btn-primary btn-lg px-5">Đăng ký làm bác sĩ thú y</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

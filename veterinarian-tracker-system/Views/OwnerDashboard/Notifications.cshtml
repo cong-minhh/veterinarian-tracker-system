@@ -1,0 +1,385 @@
+@model TuyetDang.MyVetTracer.Entity.Owner
+@{
+    ViewData["Title"] = "Notifications";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "OwnerDashboard")">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Notifications</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Notifications</h5>
+                    <button id="markAllReadBtn" class="btn btn-sm btn-light" disabled>
+                        <i class="fas fa-check-double me-1"></i> Mark All as Read
+                    </button>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="notificationsTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">
+                                All
+                                <span class="badge rounded-pill bg-primary ms-1" id="all-count">0</span>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="appointments-tab" data-bs-toggle="tab" data-bs-target="#appointments" type="button" role="tab" aria-controls="appointments" aria-selected="false">
+                                Appointments
+                                <span class="badge rounded-pill bg-primary ms-1" id="appointments-count">0</span>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="prescriptions-tab" data-bs-toggle="tab" data-bs-target="#prescriptions" type="button" role="tab" aria-controls="prescriptions" aria-selected="false">
+                                Prescriptions
+                                <span class="badge rounded-pill bg-primary ms-1" id="prescriptions-count">0</span>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="messages-tab" data-bs-toggle="tab" data-bs-target="#messages" type="button" role="tab" aria-controls="messages" aria-selected="false">
+                                Messages
+                                <span class="badge rounded-pill bg-primary ms-1" id="messages-count">0</span>
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content p-3 border border-top-0 rounded-bottom" id="notificationsTabContent">
+                        <!-- All Notifications Tab -->
+                        <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                            <div id="all-notifications-list" class="list-group">
+                                <!-- Notifications will be populated via JavaScript -->
+                                <div class="text-center py-5" id="no-all-notifications">
+                                    <i class="far fa-bell fa-3x text-muted mb-3"></i>
+                                    <h6>No notifications</h6>
+                                    <p class="text-muted">You're all caught up!</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Appointments Tab -->
+                        <div class="tab-pane fade" id="appointments" role="tabpanel" aria-labelledby="appointments-tab">
+                            <div id="appointment-notifications-list" class="list-group">
+                                <!-- Appointment notifications will be populated via JavaScript -->
+                                <div class="text-center py-5" id="no-appointment-notifications">
+                                    <i class="far fa-calendar-check fa-3x text-muted mb-3"></i>
+                                    <h6>No appointment notifications</h6>
+                                    <p class="text-muted">Appointment updates will appear here</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Prescriptions Tab -->
+                        <div class="tab-pane fade" id="prescriptions" role="tabpanel" aria-labelledby="prescriptions-tab">
+                            <div id="prescription-notifications-list" class="list-group">
+                                <!-- Prescription notifications will be populated via JavaScript -->
+                                <div class="text-center py-5" id="no-prescription-notifications">
+                                    <i class="fas fa-prescription-bottle-alt fa-3x text-muted mb-3"></i>
+                                    <h6>No prescription notifications</h6>
+                                    <p class="text-muted">New prescriptions will appear here</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Messages Tab -->
+                        <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+                            <div id="message-notifications-list" class="list-group">
+                                <!-- Message notifications will be populated via JavaScript -->
+                                <div class="text-center py-5" id="no-message-notifications">
+                                    <i class="far fa-comment-dots fa-3x text-muted mb-3"></i>
+                                    <h6>No message notifications</h6>
+                                    <p class="text-muted">Messages from veterinarians will appear here</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Sample notification data (in a real app, this would come from the server)
+            // This is just for demonstration purposes
+            const sampleNotifications = [];
+            
+            // Initialize SignalR connection
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl('/notificationHub')
+                .withAutomaticReconnect()
+                .build();
+
+            // Start the connection
+            connection.start().then(function () {
+                console.log('SignalR Connected!');
+                // Join owner group for notifications
+                connection.invoke('JoinOwnerGroup', '@Model.IdOwnerUser');
+                
+                // Load existing notifications from local storage
+                loadNotifications();
+            }).catch(function (err) {
+                console.error(err.toString());
+            });
+
+            // Handle appointment confirmation notifications
+            connection.on('ReceiveAppointmentConfirmation', function (message) {
+                const notification = {
+                    id: Date.now(),
+                    type: 'appointment',
+                    title: 'Appointment Update',
+                    message: message,
+                    timestamp: new Date(),
+                    read: false
+                };
+                addNotification(notification);
+            });
+
+            // Handle prescription notifications
+            connection.on('ReceivePrescriptionNotification', function (message) {
+                const notification = {
+                    id: Date.now(),
+                    type: 'prescription',
+                    title: 'New Prescription',
+                    message: message,
+                    timestamp: new Date(),
+                    read: false
+                };
+                addNotification(notification);
+            });
+
+            // Handle chat messages
+            connection.on('ReceiveChatMessage', function (message) {
+                const notification = {
+                    id: Date.now(),
+                    type: 'message',
+                    title: 'New Message',
+                    message: message,
+                    timestamp: new Date(),
+                    read: false
+                };
+                addNotification(notification);
+            });
+
+            // Function to add a new notification
+            function addNotification(notification) {
+                // Get existing notifications from local storage
+                let notifications = JSON.parse(localStorage.getItem('ownerNotifications') || '[]');
+                
+                // Add the new notification
+                notifications.unshift(notification);
+                
+                // Save to local storage
+                localStorage.setItem('ownerNotifications', JSON.stringify(notifications));
+                
+                // Update the UI
+                renderNotifications(notifications);
+                
+                // Update notification badge in the sidebar if it exists
+                updateNotificationBadge(notifications);
+            }
+
+            // Function to load notifications from local storage
+            function loadNotifications() {
+                let notifications = JSON.parse(localStorage.getItem('ownerNotifications') || '[]');
+                
+                // If no notifications in storage and we have sample data, use it (for demo purposes)
+                if (notifications.length === 0 && sampleNotifications.length > 0) {
+                    notifications = sampleNotifications;
+                    localStorage.setItem('ownerNotifications', JSON.stringify(notifications));
+                }
+                
+                renderNotifications(notifications);
+                updateNotificationBadge(notifications);
+            }
+
+            // Function to render notifications in the UI
+            function renderNotifications(notifications) {
+                // Clear existing notifications
+                $('#all-notifications-list').empty();
+                $('#appointment-notifications-list').empty();
+                $('#prescription-notifications-list').empty();
+                $('#message-notifications-list').empty();
+                
+                // Count notifications by type
+                const counts = {
+                    all: notifications.length,
+                    appointment: notifications.filter(n => n.type === 'appointment').length,
+                    prescription: notifications.filter(n => n.type === 'prescription').length,
+                    message: notifications.filter(n => n.type === 'message').length
+                };
+                
+                // Update counts in tabs
+                $('#all-count').text(counts.all);
+                $('#appointments-count').text(counts.appointment);
+                $('#prescriptions-count').text(counts.prescription);
+                $('#messages-count').text(counts.message);
+                
+                // Show/hide empty state messages
+                $('#no-all-notifications').toggle(counts.all === 0);
+                $('#no-appointment-notifications').toggle(counts.appointment === 0);
+                $('#no-prescription-notifications').toggle(counts.prescription === 0);
+                $('#no-message-notifications').toggle(counts.message === 0);
+                
+                // Enable/disable mark all read button
+                $('#markAllReadBtn').prop('disabled', counts.all === 0 || notifications.every(n => n.read));
+                
+                // Render notifications
+                if (counts.all > 0) {
+                    // Render all notifications
+                    notifications.forEach(notification => {
+                        const notificationHtml = createNotificationHtml(notification);
+                        $('#all-notifications-list').append(notificationHtml);
+                        
+                        // Also add to the appropriate type-specific list
+                        if (notification.type === 'appointment') {
+                            $('#appointment-notifications-list').append(notificationHtml);
+                        } else if (notification.type === 'prescription') {
+                            $('#prescription-notifications-list').append(notificationHtml);
+                        } else if (notification.type === 'message') {
+                            $('#message-notifications-list').append(notificationHtml);
+                        }
+                    });
+                }
+            }
+
+            // Function to create HTML for a notification
+            function createNotificationHtml(notification) {
+                const timeAgo = getTimeAgo(new Date(notification.timestamp));
+                const readClass = notification.read ? 'bg-light' : '';
+                const boldClass = notification.read ? '' : 'fw-bold';
+                
+                let iconClass = 'far fa-bell';
+                if (notification.type === 'appointment') {
+                    iconClass = 'far fa-calendar-check';
+                } else if (notification.type === 'prescription') {
+                    iconClass = 'fas fa-prescription-bottle-alt';
+                } else if (notification.type === 'message') {
+                    iconClass = 'far fa-comment-dots';
+                }
+                
+                return `
+                    <div class="list-group-item list-group-item-action ${readClass}" data-notification-id="${notification.id}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1 ${boldClass}">
+                                <i class="${iconClass} me-2"></i>
+                                ${notification.title}
+                            </h6>
+                            <small class="text-muted">${timeAgo}</small>
+                        </div>
+                        <p class="mb-1">${notification.message}</p>
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-sm btn-link p-0 mark-read-btn" data-notification-id="${notification.id}" ${notification.read ? 'style="display:none;"' : ''}>
+                                Mark as read
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Function to get time ago string
+            function getTimeAgo(date) {
+                const seconds = Math.floor((new Date() - date) / 1000);
+                let interval = Math.floor(seconds / 31536000);
+                
+                if (interval >= 1) {
+                    return interval + " year" + (interval === 1 ? "" : "s") + " ago";
+                }
+                interval = Math.floor(seconds / 2592000);
+                if (interval >= 1) {
+                    return interval + " month" + (interval === 1 ? "" : "s") + " ago";
+                }
+                interval = Math.floor(seconds / 86400);
+                if (interval >= 1) {
+                    return interval + " day" + (interval === 1 ? "" : "s") + " ago";
+                }
+                interval = Math.floor(seconds / 3600);
+                if (interval >= 1) {
+                    return interval + " hour" + (interval === 1 ? "" : "s") + " ago";
+                }
+                interval = Math.floor(seconds / 60);
+                if (interval >= 1) {
+                    return interval + " minute" + (interval === 1 ? "" : "s") + " ago";
+                }
+                return "just now";
+            }
+
+            // Function to update notification badge in the sidebar
+            function updateNotificationBadge(notifications) {
+                const unreadCount = notifications.filter(n => !n.read).length;
+                const notificationBadge = $('.notification-badge');
+                if (notificationBadge.length > 0) {
+                    notificationBadge.text(unreadCount);
+                    if (unreadCount > 0) {
+                        notificationBadge.removeClass('d-none');
+                    } else {
+                        notificationBadge.addClass('d-none');
+                    }
+                }
+            }
+
+            // Handle mark as read button click
+            $(document).on('click', '.mark-read-btn', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const notificationId = $(this).data('notification-id');
+                markNotificationAsRead(notificationId);
+            });
+
+            // Handle mark all as read button click
+            $('#markAllReadBtn').click(function() {
+                markAllNotificationsAsRead();
+            });
+
+            // Function to mark a notification as read
+            function markNotificationAsRead(notificationId) {
+                let notifications = JSON.parse(localStorage.getItem('ownerNotifications') || '[]');
+                
+                // Find and update the notification
+                notifications = notifications.map(notification => {
+                    if (notification.id === notificationId) {
+                        return { ...notification, read: true };
+                    }
+                    return notification;
+                });
+                
+                // Save to local storage
+                localStorage.setItem('ownerNotifications', JSON.stringify(notifications));
+                
+                // Update the UI
+                renderNotifications(notifications);
+                updateNotificationBadge(notifications);
+            }
+
+            // Function to mark all notifications as read
+            function markAllNotificationsAsRead() {
+                let notifications = JSON.parse(localStorage.getItem('ownerNotifications') || '[]');
+                
+                // Mark all as read
+                notifications = notifications.map(notification => {
+                    return { ...notification, read: true };
+                });
+                
+                // Save to local storage
+                localStorage.setItem('ownerNotifications', JSON.stringify(notifications));
+                
+                // Update the UI
+                renderNotifications(notifications);
+                updateNotificationBadge(notifications);
+            }
+        });
+    </script>
+}

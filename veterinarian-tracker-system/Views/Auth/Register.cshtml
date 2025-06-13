@@ -1,87 +1,199 @@
-﻿@{
-    ViewBag.Title = "Đăng ký";
+@model veterinarian_tracker_system.Models.Forms.RegisterOwnerDto
+
+@{
+    ViewData["Title"] = "Đăng ký";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Đăng ký</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <style>
-        .register-container {
-            max-width: 450px;
-            margin: 40px auto;
-            padding: 30px;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-
-            .register-container h2 {
-                font-weight: bold;
-            }
-
-        .form-control {
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .btn-register {
-            width: 100%;
-            background-color: #2d1e80;
-            color: white;
-            padding: 10px;
-            border-radius: 30px;
-            font-weight: bold;
-        }
-
-        .form-footer {
-            margin-top: 15px;
-            text-align: center;
-        }
-
-            .form-footer a {
-                color: #725bff;
-                text-decoration: none;
-            }
-
-                .form-footer a:hover {
-                    text-decoration: underline;
-                }
-    </style>
-</head>
-<body style="background-color: #f0f0f0;">
-    <div class="register-container">
-        <h2>Đăng ký</h2>
-        <p>Welcome to us! Please enter your details.</p>
-
-        <form asp-controller="Account" asp-action="Register" method="post">
-            <label>Họ và tên *</label>
-            <input type="text" class="form-control" name="FullName" required />
-
-            <label>Email *</label>
-            <input type="email" class="form-control" name="Email" required />
-
-            <label>Mật khẩu *</label>
-            <input type="password" class="form-control" name="Password" required />
-
-            <label>Xác nhận mật khẩu *</label>
-            <input type="password" class="form-control" name="ConfirmPassword" required />
-
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="accept" required>
-                <label class="form-check-label" for="accept">
-                    Tôi đã đọc <a href="#">quy định</a>
-                </label>
+<div class="register-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h2 class="fw-bold mb-2">Đăng ký tài khoản</h2>
+                            <p class="text-muted">Tạo tài khoản để sử dụng dịch vụ VetTracker</p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <ul class="nav nav-pills nav-justified" id="registerTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="owner-tab" data-bs-toggle="pill" data-bs-target="#owner-form" type="button" role="tab" aria-controls="owner-form" aria-selected="true">
+                                        <i class="bi bi-person me-2"></i>Chủ vật nuôi
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="vet-tab" data-bs-toggle="pill" data-bs-target="#vet-form" type="button" role="tab" aria-controls="vet-form" aria-selected="false">
+                                        <i class="bi bi-clipboard2-pulse me-2"></i>Bác sĩ thú y
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="tab-content" id="registerTabContent">
+                            <!-- Owner Registration Form -->
+                            <div class="tab-pane fade show active" id="owner-form" role="tabpanel" aria-labelledby="owner-tab">
+                                <form asp-action="Register" asp-controller="Auth" method="post">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                                    <input type="hidden" name="Role" value="Owner" />
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <input asp-for="FullName" class="form-control" placeholder="Họ và tên" />
+                                                <label asp-for="FullName">Họ và tên</label>
+                                                <span asp-validation-for="FullName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <input asp-for="Email" class="form-control" placeholder="Email" />
+                                                <label asp-for="Email">Email</label>
+                                                <span asp-validation-for="Email" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <input asp-for="Password" class="form-control" placeholder="Mật khẩu" />
+                                                <label asp-for="Password">Mật khẩu</label>
+                                                <span asp-validation-for="Password" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <input asp-for="ConfirmPassword" class="form-control" placeholder="Xác nhận mật khẩu" />
+                                                <label asp-for="ConfirmPassword">Xác nhận mật khẩu</label>
+                                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="PhoneNum" class="form-control" placeholder="Số điện thoại" />
+                                        <label asp-for="PhoneNum">Số điện thoại</label>
+                                        <span asp-validation-for="PhoneNum" class="text-danger"></span>
+                                    </div>
+                                    
+                                    <div class="form-check mb-4">
+                                        <input asp-for="AcceptRegulations" class="form-check-input" />
+                                        <label asp-for="AcceptRegulations" class="form-check-label">Tôi đồng ý với các điều khoản và điều kiện</label>
+                                        <span asp-validation-for="AcceptRegulations" class="text-danger d-block"></span>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary w-100 py-2 mb-3">Đăng ký</button>
+                                </form>
+                            </div>
+                            
+                            <!-- Vet Registration Form -->
+                            <div class="tab-pane fade" id="vet-form" role="tabpanel" aria-labelledby="vet-tab">
+                                <form asp-action="RegisterVet" asp-controller="Auth" method="post">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                                    <input type="hidden" name="Role" value="Vet" />
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <input name="FullName" class="form-control" placeholder="Họ và tên" />
+                                                <label>Họ và tên</label>
+                                                <span class="text-danger field-validation-valid" data-valmsg-for="FullName" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <input name="Email" class="form-control" placeholder="Email" />
+                                                <label>Email</label>
+                                                <span class="text-danger field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <input name="Password" type="password" class="form-control" placeholder="Mật khẩu" />
+                                                <label>Mật khẩu</label>
+                                                <span class="text-danger field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <input name="ConfirmPassword" type="password" class="form-control" placeholder="Xác nhận mật khẩu" />
+                                                <label>Xác nhận mật khẩu</label>
+                                                <span class="text-danger field-validation-valid" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <input name="PhoneNum" class="form-control" placeholder="Số điện thoại" />
+                                                <label>Số điện thoại</label>
+                                                <span class="text-danger field-validation-valid" data-valmsg-for="PhoneNum" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <input name="NameOfConsultingRoom" class="form-control" placeholder="Tên phòng khám" />
+                                                <label>Tên phòng khám</label>
+                                                <span class="text-danger field-validation-valid" data-valmsg-for="NameOfConsultingRoom" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-floating mb-3">
+                                        <input name="ClinicAddress" class="form-control" placeholder="Địa chỉ phòng khám" />
+                                        <label>Địa chỉ phòng khám</label>
+                                        <span class="text-danger field-validation-valid" data-valmsg-for="ClinicAddress" data-valmsg-replace="true"></span>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <input name="Qualification" class="form-control" placeholder="Bằng cấp/Chứng chỉ" />
+                                                <label>Bằng cấp/Chứng chỉ</label>
+                                                <span class="text-danger field-validation-valid" data-valmsg-for="Qualification" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <input name="Experience" class="form-control" placeholder="Kinh nghiệm" />
+                                                <label>Kinh nghiệm</label>
+                                                <span class="text-danger field-validation-valid" data-valmsg-for="Experience" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-check mb-4">
+                                        <input name="AcceptRegulations" class="form-check-input" type="checkbox" />
+                                        <label class="form-check-label">Tôi đồng ý với các điều khoản và điều kiện</label>
+                                        <span class="text-danger field-validation-valid" data-valmsg-for="AcceptRegulations" data-valmsg-replace="true"></span>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary w-100 py-2 mb-3">Đăng ký</button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <p class="mb-0">Đã có tài khoản? <a asp-action="Login" class="text-decoration-none">Đăng nhập</a></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
+                        <i class="bi bi-arrow-left me-1"></i> Quay lại trang chủ
+                    </a>
+                </div>
             </div>
-
-            <button type="submit" class="btn btn-register">Đăng ký</button>
-        </form>
-
-        <div class="form-footer">
-            Bạn đã là thành viên? <a href="@Url.Action("Login", "Login")">Đăng nhập ngay!</a>
         </div>
     </div>
-</body>
-</html>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

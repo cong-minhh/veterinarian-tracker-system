@@ -1,0 +1,437 @@
+@model TuyetDang.MyVetTracer.Entity.Pet
+@{
+    ViewData["Title"] = $"{Model.PetName} - Pet Details";
+    Layout = "_AdminLayout";
+    var onlineVeterinarians = ViewBag.OnlineVeterinarians as List<TuyetDang.MyVetTracer.Data.Veterinarian> ?? new List<TuyetDang.MyVetTracer.Data.Veterinarian>();
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "OwnerDashboard")">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.PetName</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Pet Overview Section -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Pet Overview</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div id="petImageCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+                            <div class="carousel-inner rounded">
+                                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                                {
+                                    <div class="carousel-item active">
+                                        <img src="@Model.ImageUrl" class="d-block w-100" alt="@Model.PetName" style="height: 250px; object-fit: cover;">
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="carousel-item active">
+                                        <img src="/images/default-pet.jpg" class="d-block w-100" alt="@Model.PetName" style="height: 250px; object-fit: cover;">
+                                    </div>
+                                }
+                                <!-- Additional images would be added here -->
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#petImageCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#petImageCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        
+                        <h4 class="fw-bold">@Model.PetName</h4>
+                        <span class="badge bg-info mb-2">@Model.Identification</span>
+                    </div>
+                    
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="border rounded p-3 text-center">
+                                <div class="text-muted small">Age</div>
+                                <div class="fw-bold">@Model.Age years</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-3 text-center">
+                                <div class="text-muted small">Gender</div>
+                                <div class="fw-bold">@Model.Gender</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-3 text-center">
+                                <div class="text-muted small">Weight</div>
+                                <div class="fw-bold">@Model.Weight kg</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-3 text-center">
+                                <div class="text-muted small">Color</div>
+                                <div class="fw-bold">@Model.Color</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <h6 class="fw-bold">About</h6>
+                    <p>@(string.IsNullOrEmpty(Model.Description) ? "No description available." : Model.Description)</p>
+                    
+                    <h6 class="fw-bold mt-3">Owner</h6>
+                    <p>@Model.Owner?.OwnerName</p>
+                    
+                    <h6 class="fw-bold mt-3">Primary Veterinarian</h6>
+                    <p>@(Model.Veterinarian?.VeterinarianName ?? "Not assigned")</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Medical History Section -->
+        <div class="col-md-8 mb-4">
+            <div class="card shadow border-0 mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Medical History</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="medicalHistoryTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="vaccines-tab" data-bs-toggle="tab" data-bs-target="#vaccines" type="button" role="tab" aria-controls="vaccines" aria-selected="true">
+                                <i class="fas fa-syringe me-2"></i>Vaccines
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="medications-tab" data-bs-toggle="tab" data-bs-target="#medications" type="button" role="tab" aria-controls="medications" aria-selected="false">
+                                <i class="fas fa-pills me-2"></i>Medications
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="appointments-tab" data-bs-toggle="tab" data-bs-target="#appointments" type="button" role="tab" aria-controls="appointments" aria-selected="false">
+                                <i class="far fa-calendar-check me-2"></i>Past Appointments
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content p-3 border border-top-0 rounded-bottom" id="medicalHistoryTabContent">
+                        <!-- Vaccines Tab -->
+                        <div class="tab-pane fade show active" id="vaccines" role="tabpanel" aria-labelledby="vaccines-tab">
+                            @if (Model.Vaccines != null && Model.Vaccines.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Vaccine</th>
+                                                <th>Date</th>
+                                                <th>Dose</th>
+                                                <th>Veterinarian</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var vaccine in Model.Vaccines.OrderByDescending(v => v.Date))
+                                            {
+                                                <tr>
+                                                    <td>@vaccine.VacName</td>
+                                                    <td>@vaccine.Date.ToString("MMM dd, yyyy")</td>
+                                                    <td>@vaccine.Dose</td>
+                                                    <td>@(vaccine.Veterinarian?.VeterinarianName ?? "Unknown")</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center py-4">
+                                    <i class="fas fa-syringe fa-3x text-muted mb-3"></i>
+                                    <h6>No vaccine records</h6>
+                                    <p class="text-muted">Your pet's vaccine history will appear here</p>
+                                </div>
+                            }
+                        </div>
+                        
+                        <!-- Medications Tab -->
+                        <div class="tab-pane fade" id="medications" role="tabpanel" aria-labelledby="medications-tab">
+                            @if (Model.Medicines != null && Model.Medicines.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Medication</th>
+                                                <th>Dose</th>
+                                                <th>Instructions</th>
+                                                <th>Prescribed By</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var medicine in Model.Medicines.OrderByDescending(m => m.IdMed))
+                                            {
+                                                <tr>
+                                                    <td>@medicine.MedName</td>
+                                                    <td>@medicine.Dose</td>
+                                                    <td>@medicine.Notice</td>
+                                                    <td>@(medicine.Veterinarian?.VeterinarianName ?? "Unknown")</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center py-4">
+                                    <i class="fas fa-pills fa-3x text-muted mb-3"></i>
+                                    <h6>No medication records</h6>
+                                    <p class="text-muted">Your pet's medication history will appear here</p>
+                                </div>
+                            }
+                        </div>
+                        
+                        <!-- Past Appointments Tab -->
+                        <div class="tab-pane fade" id="appointments" role="tabpanel" aria-labelledby="appointments-tab">
+                            @if (Model.Appointments != null && Model.Appointments.Where(a => a.Time < DateTime.Now).Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Veterinarian</th>
+                                                <th>Status</th>
+                                                <th>Notes</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var appointment in Model.Appointments.Where(a => a.Time < DateTime.Now).OrderByDescending(a => a.Time))
+                                            {
+                                                <tr>
+                                                    <td>@appointment.Time.ToString("MMM dd, yyyy h:mm tt")</td>
+                                                    <td>@(appointment.Veterinarian?.VeterinarianName ?? "Unknown")</td>
+                                                    <td>
+                                                        @if (appointment.IsConfirmed)
+                                                        {
+                                                            <span class="badge bg-success">Completed</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-danger">Cancelled</span>
+                                                        }
+                                                    </td>
+                                                    <td>@(appointment.Notes ?? "No notes")</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center py-4">
+                                    <i class="far fa-calendar-check fa-3x text-muted mb-3"></i>
+                                    <h6>No past appointments</h6>
+                                    <p class="text-muted">Your pet's appointment history will appear here</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Upcoming Appointments Section -->
+            <div class="card shadow border-0 mb-4">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Upcoming Appointments</h5>
+                    <a href="@Url.Action("RequestAppointment", "OwnerDashboard", new { petId = Model.IdPet })" class="btn btn-sm btn-light">
+                        <i class="fas fa-plus me-1"></i> Request Appointment
+                    </a>
+                </div>
+                <div class="card-body">
+                    @if (Model.Appointments != null && Model.Appointments.Where(a => a.Time > DateTime.Now).Any())
+                    {
+                        <div class="list-group">
+                            @foreach (var appointment in Model.Appointments.Where(a => a.Time > DateTime.Now).OrderBy(a => a.Time))
+                            {
+                                <div class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">@appointment.Time.ToString("MMM dd, yyyy h:mm tt")</h6>
+                                        @if (appointment.IsConfirmed)
+                                        {
+                                            <span class="badge bg-success">Confirmed</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        }
+                                    </div>
+                                    <p class="mb-1">With Dr. @(appointment.Veterinarian?.VeterinarianName ?? "Unknown")</p>
+                                    <small class="text-muted">@(appointment.Notes ?? "No additional notes")</small>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="far fa-calendar-alt fa-3x text-muted mb-3"></i>
+                            <h6>No upcoming appointments</h6>
+                            <p class="text-muted">Schedule a visit for your pet</p>
+                            <a href="@Url.Action("RequestAppointment", "OwnerDashboard", new { petId = Model.IdPet })" class="btn btn-success">
+                                <i class="fas fa-plus me-2"></i>Request Appointment
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+            
+            <!-- Online Veterinarians Section -->
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Online Veterinarians</h5>
+                </div>
+                <div class="card-body">
+                    @if (onlineVeterinarians.Any())
+                    {
+                        <div class="row row-cols-1 row-cols-md-2 g-4" id="onlineVetsContainer">
+                            @foreach (var vet in onlineVeterinarians)
+                            {
+                                <div class="col">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avatar-circle bg-primary text-white">
+                                                        @vet.VeterinarianName.Substring(0, 1).ToUpper()
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h6 class="mb-0">Dr. @vet.VeterinarianName</h6>
+                                                    <p class="text-muted small mb-0">@vet.Qualification</p>
+                                                    <span class="badge bg-success"><i class="fas fa-circle me-1 small"></i>Online</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-transparent border-0 pt-0">
+                                            <a href="@Url.Action("RequestAppointment", "OwnerDashboard", new { petId = Model.IdPet, vetId = vet.IdVeterinarian })" class="btn btn-sm btn-outline-primary w-100">
+                                                <i class="far fa-calendar-plus me-1"></i> Request Appointment
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4" id="noOnlineVetsMessage">
+                            <i class="fas fa-user-md fa-3x text-muted mb-3"></i>
+                            <h6>No veterinarians online</h6>
+                            <p class="text-muted">Check back later or request an appointment anyway</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .avatar-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Initialize SignalR connection
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl('/notificationHub')
+                .withAutomaticReconnect()
+                .build();
+
+            // Start the connection
+            connection.start().then(function () {
+                console.log('SignalR Connected!');
+                // Join owner group for notifications
+                connection.invoke('JoinOwnerGroup', '@Model.Owner.IdOwner');
+            }).catch(function (err) {
+                console.error(err.toString());
+            });
+
+            // Handle veterinarian status updates
+            connection.on('UpdateVeterinarianStatus', function (vetId, isOnline) {
+                // Update the UI based on veterinarian status changes
+                if (isOnline) {
+                    // If the vet is coming online and not already in the list, we'd need to fetch their details
+                    // This would typically require an AJAX call to get the vet's information
+                    $.get('@Url.Action("GetVeterinarianDetails", "OwnerDashboard")', { id: vetId }, function (data) {
+                        if (data) {
+                            // Add the vet to the online list
+                            const vetHtml = `
+                                <div class="col" data-vet-id="${data.idVeterinarian}">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avatar-circle bg-primary text-white">
+                                                        ${data.veterinarianName.substring(0, 1).toUpperCase()}
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h6 class="mb-0">Dr. ${data.veterinarianName}</h6>
+                                                    <p class="text-muted small mb-0">${data.qualification}</p>
+                                                    <span class="badge bg-success"><i class="fas fa-circle me-1 small"></i>Online</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-transparent border-0 pt-0">
+                                            <a href="@Url.Action("RequestAppointment", "OwnerDashboard")?petId=@Model.IdPet&vetId=${data.idVeterinarian}" class="btn btn-sm btn-outline-primary w-100">
+                                                <i class="far fa-calendar-plus me-1"></i> Request Appointment
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            // Hide the "no online vets" message if it's visible
+                            $('#noOnlineVetsMessage').hide();
+                            
+                            // Add the vet to the container
+                            $('#onlineVetsContainer').append(vetHtml);
+                        }
+                    });
+                } else {
+                    // Remove the vet from the online list
+                    $(`[data-vet-id="${vetId}"]`).remove();
+                    
+                    // If no vets are left online, show the message
+                    if ($('#onlineVetsContainer').children().length === 0) {
+                        $('#noOnlineVetsMessage').show();
+                    }
+                }
+            });
+        });
+    </script>
+}

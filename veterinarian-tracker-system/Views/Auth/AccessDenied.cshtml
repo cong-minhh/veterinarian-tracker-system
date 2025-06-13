@@ -1,13 +1,70 @@
-﻿@{
-    ViewData["Title"] = "Access Denied";
+@{
+    ViewData["Title"] = "Truy cập bị từ chối";
 }
 
-<div style="text-align: center; padding: 50px;">
-    <h1 style="color: #e74c3c; font-size: 3rem;">403 - Access Denied</h1>
-    <p style="font-size: 1.25rem; margin: 20px 0;">
-        You do not have permission to access this page.
-    </p>
-    <a href="/" style="text-decoration: none; color: white; background-color: #3498db; padding: 12px 24px; border-radius: 5px; font-size: 1rem;">
-        Return to Home
-    </a>
+<div class="access-denied-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body p-5 text-center">
+                        <div class="mb-4">
+                            <i class="bi bi-shield-exclamation text-danger" style="font-size: 5rem;"></i>
+                        </div>
+                        <h2 class="fw-bold mb-3">403 - Truy cập bị từ chối</h2>
+                        <p class="mb-4">Bạn không có quyền truy cập vào trang này. Vui lòng liên hệ quản trị viên nếu bạn cho rằng đây là lỗi.</p>
+                        
+                        <div class="d-grid gap-3 d-md-flex justify-content-md-center">
+                            <a href="javascript:history.back()" class="btn btn-outline-primary px-4">
+                                <i class="bi bi-arrow-left me-2"></i>Quay lại
+                            </a>
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-primary px-4">
+                                <i class="bi bi-house me-2"></i>Trang chủ
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    .access-denied-container {
+        max-width: 500px;
+        margin: 60px auto;
+        padding: 40px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    .access-denied-icon {
+        font-size: 4rem;
+        color: #dc3545;
+        margin-bottom: 20px;
+    }
+
+    .access-denied-container h1 {
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .access-denied-container p {
+        color: #666;
+        margin-bottom: 25px;
+        font-size: 1.1rem;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .actions .btn {
+        min-width: 120px;
+    }
+</style>

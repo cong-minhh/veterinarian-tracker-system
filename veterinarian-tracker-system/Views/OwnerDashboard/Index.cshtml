@@ -1,0 +1,233 @@
+@model TuyetDang.MyVetTracer.Entity.Owner
+@{
+    ViewData["Title"] = "Owner Dashboard";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Welcome, @Model.OwnerName!</h5>
+                </div>
+                <div class="card-body">
+                    <p>Welcome to your pet management dashboard. Here you can view your pets, manage appointments, and track medications.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">My Pets</h5>
+                    <a href="#" class="btn btn-sm btn-light"><i class="fas fa-plus"></i> Add Pet</a>
+                </div>
+                <div class="card-body">
+                    @if (Model.Pets != null && Model.Pets.Any())
+                    {
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                            @foreach (var pet in Model.Pets)
+                            {
+                                <div class="col">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="position-relative">
+                                            <img src="@(string.IsNullOrEmpty(pet.ImageUrl) ? "/images/default-pet.jpg" : pet.ImageUrl)" 
+                                                 class="card-img-top" alt="@pet.PetName" style="height: 180px; object-fit: cover;">
+                                            <div class="position-absolute bottom-0 end-0 p-2">
+                                                <span class="badge bg-primary">@pet.Identification</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title">@pet.PetName</h5>
+                                            <p class="card-text">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-birthday-cake me-1"></i> Age: @pet.Age years
+                                                </small>
+                                            </p>
+                                            <a href="@Url.Action("PetDetails", "OwnerDashboard", new { id = pet.IdPet })" 
+                                               class="btn btn-sm btn-outline-primary w-100">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-paw fa-3x text-muted mb-3"></i>
+                            <h6>No pets registered yet</h6>
+                            <p class="text-muted">Add your first pet to get started</p>
+                            <a href="#" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Add Pet</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Upcoming Appointments</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Pets != null && Model.Pets.SelectMany(p => p.Appointments).Where(a => a.Time > DateTime.Now && a.IsConfirmed).Any())
+                    {
+                        <div class="list-group">
+                            @foreach (var pet in Model.Pets)
+                            {
+                                @foreach (var appointment in pet.Appointments.Where(a => a.Time > DateTime.Now && a.IsConfirmed).OrderBy(a => a.Time).Take(5))
+                                {
+                                    <div class="list-group-item list-group-item-action">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">@pet.PetName</h6>
+                                            <small>@appointment.Time.ToString("MMM dd, yyyy h:mm tt")</small>
+                                        </div>
+                                        <p class="mb-1">Appointment with Dr. @(appointment.Veterinarian?.VeterinarianName ?? "Unknown")</p>
+                                        <small class="text-muted">@(appointment.Notes ?? "No additional notes")</small>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="far fa-calendar-alt fa-3x text-muted mb-3"></i>
+                            <h6>No upcoming appointments</h6>
+                            <p class="text-muted">Schedule a visit for your pet</p>
+                            <a href="#" class="btn btn-success"><i class="fas fa-plus me-2"></i>Request Appointment</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow border-0">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">Medication Reminders</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Pets != null && Model.Pets.SelectMany(p => p.Medicines).Any())
+                    {
+                        <div class="list-group">
+                            @foreach (var pet in Model.Pets)
+                            {
+                                @foreach (var medicine in pet.Medicines.OrderByDescending(m => m.IdMed).Take(3))
+                                {
+                                    <div class="list-group-item">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">@medicine.MedName</h6>
+                                            <span class="badge bg-primary rounded-pill">@pet.PetName</span>
+                                        </div>
+                                        <p class="mb-1">Dose: @medicine.Dose</p>
+                                        <small class="text-muted">@medicine.Notice</small>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="@Url.Action("Medications", "OwnerDashboard")" class="btn btn-outline-warning">View All Medications</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-pills fa-3x text-muted mb-3"></i>
+                            <h6>No medications assigned</h6>
+                            <p class="text-muted">Your pet's medications will appear here</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card shadow border-0">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Notifications</h5>
+                </div>
+                <div class="card-body">
+                    <div id="notificationsList">
+                        <!-- Notifications will be populated via SignalR -->
+                        <div class="text-center py-5">
+                            <i class="far fa-bell fa-3x text-muted mb-3"></i>
+                            <h6>No new notifications</h6>
+                            <p class="text-muted">You're all caught up!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Initialize SignalR connection
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl('/notificationHub')
+                .withAutomaticReconnect()
+                .build();
+
+            // Start the connection
+            connection.start().then(function () {
+                console.log('SignalR Connected!');
+                // Join owner group for notifications
+                connection.invoke('JoinOwnerGroup', '@Model.IdOwner');
+            }).catch(function (err) {
+                console.error(err.toString());
+            });
+
+            // Handle appointment confirmation notifications
+            connection.on('ReceiveAppointmentConfirmation', function (message) {
+                showNotification('Appointment Update', message);
+            });
+
+            // Handle prescription notifications
+            connection.on('ReceivePrescriptionNotification', function (message) {
+                showNotification('New Prescription', message);
+            });
+
+            // Handle chat messages
+            connection.on('ReceiveChatMessage', function (message) {
+                showNotification('New Message', message);
+            });
+
+            // Function to display notifications
+            function showNotification(title, message) {
+                const notificationsList = $('#notificationsList');
+                
+                // Clear the "no notifications" message if it exists
+                if (notificationsList.find('h6').length > 0 && notificationsList.find('h6').text() === 'No new notifications') {
+                    notificationsList.empty();
+                }
+                
+                const notification = `
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <strong>${title}</strong>: ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+                
+                notificationsList.prepend(notification);
+                
+                // Update notification badge in the sidebar if it exists
+                const notificationBadge = $('.notification-badge');
+                if (notificationBadge.length > 0) {
+                    const currentCount = parseInt(notificationBadge.text()) || 0;
+                    notificationBadge.text(currentCount + 1);
+                    notificationBadge.removeClass('d-none');
+                }
+            }
+        });
+    </script>
+}

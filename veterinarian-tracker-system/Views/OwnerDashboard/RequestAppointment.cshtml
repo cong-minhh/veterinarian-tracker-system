@@ -1,0 +1,142 @@
+@model veterinarian_tracker_system.ViewModels.AppointmentRequestViewModel
+@{
+    ViewData["Title"] = "Request Appointment";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "OwnerDashboard")">Dashboard</a></li>
+                    @if (Model.PetId > 0)
+                    {
+                        <li class="breadcrumb-item"><a
+                                href="@Url.Action("PetDetails", "OwnerDashboard", new { id = Model.PetId })">@Model.PetName</a>
+                        </li>
+                    }
+                    <li class="breadcrumb-item active" aria-current="page">Request Appointment</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Request New Appointment</h5>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewBag.ErrorMessage
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+                    {
+                        <div class="alert alert-success" role="alert">
+                            @ViewBag.SuccessMessage
+                        </div>
+                    }
+
+                    <form asp-action="RequestAppointment" method="post">
+                        <input type="hidden" asp-for="OwnerId" />
+
+                        <div class="mb-3">
+                            <label asp-for="PetId" class="form-label">Pet</label>
+                            <select asp-for="PetId" class="form-select" required>
+                                <option value="">Select a pet</option>
+                                @foreach (var pet in Model.AvailablePets)
+                                {
+                                    <option value="@pet.IdPet" selected="@(Model.PetId == pet.IdPet)">@pet.PetName</option>
+
+                                }
+                            </select>
+                            <span asp-validation-for="PetId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="VeterinarianId" class="form-label">Veterinarian</label>
+                            <select asp-for="VeterinarianId" class="form-select" required>
+                                <option value="">Select a veterinarian</option>
+                                @foreach (var vet in Model.AvailableVeterinarians)
+                                {
+                                    <option value="@vet.IdVeterinarian"
+                                        selected="@(Model.VeterinarianId == vet.IdVeterinarian)">
+                                        Dr. @vet.VeterinarianName - @vet.Qualification
+                                        @if (vet.IsOnline)
+                                        {
+                                            <text> (Online)</text>
+                                        }
+                                    </option>
+
+                                }
+                            </select>
+                            <span asp-validation-for="VeterinarianId" class="text-danger"></span>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="AppointmentDate" class="form-label">Date</label>
+                                <input asp-for="AppointmentDate" type="date" class="form-control" required
+                                    min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                <span asp-validation-for="AppointmentDate" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="AppointmentTime" class="form-label">Time</label>
+                                <input asp-for="AppointmentTime" type="time" class="form-control" required />
+                                <span asp-validation-for="AppointmentTime" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label">Reason for Visit</label>
+                            <textarea asp-for="Notes" class="form-control" rows="3"
+                                placeholder="Please describe the reason for this appointment..."></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="javascript:history.back()" class="btn btn-outline-secondary me-md-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Submit Request</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Set minimum time based on selected date
+            $('#AppointmentDate').change(function () {
+                const selectedDate = new Date($(this).val());
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                if (selectedDate.getTime() === today.getTime()) {
+                    // If today is selected, set minimum time to current time + 1 hour
+                    const now = new Date();
+                    now.setHours(now.getHours() + 1);
+                    const hours = String(now.getHours()).padStart(2, '0');
+                    const minutes = String(now.getMinutes()).padStart(2, '0');
+                    $('#AppointmentTime').attr('min', `${hours}:${minutes}`);
+                } else {
+                    // If future date, no minimum time restriction
+                    $('#AppointmentTime').removeAttr('min');
+                }
+            });
+
+            // Trigger the change event to set initial restrictions
+            $('#AppointmentDate').trigger('change');
+        });
+    </script>
+}

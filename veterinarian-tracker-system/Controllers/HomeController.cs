@@ -22,10 +22,6 @@ namespace veterinarian_tracker_system.Controllers
             var vets = await _context.Veterinarians.ToListAsync();
             return View(vets);
         }
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
 
     }

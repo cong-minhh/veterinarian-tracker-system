@@ -1,114 +1,62 @@
-﻿@{
+@model veterinarian_tracker_system.Models.Forms.UserLoginForm
+
+@{
     ViewData["Title"] = "Đăng nhập";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>@ViewData["Title"]</title>
-    <style>
-        .login-form {
-            margin: 40px auto;
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 400px;
-            font-family: Arial, sans-serif;
-        }
-
-            .login-form h2 {
-                margin-bottom: 5px;
-                font-weight: bold;
-            }
-
-            .login-form p {
-                margin-top: 0;
-                color: #555;
-                font-size: 14px;
-            }
-
-            .login-form input[type="text"],
-            .login-form input[type="password"] {
-                width: 100%;
-                padding: 12px;
-                margin-top: 10px;
-                margin-bottom: 10px;
-                border: 1px solid #ccc;
-                border-radius: 6px;
-                font-size: 14px;
-            }
-
-            .login-form .remember-forgot {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                font-size: 14px;
-                margin-bottom: 15px;
-            }
-
-            .login-form button {
-                width: 100%;
-                padding: 12px;
-                background-color: #302f95;
-                color: white;
-                border: none;
-                border-radius: 25px;
-                font-weight: bold;
-                cursor: pointer;
-                margin-bottom: 15px;
-            }
-
-            .login-form .activate-btn {
-                background-color: #f8f8f8;
-                border: 1px solid #ccc;
-                color: green;
-            }
-
-            .login-form .bottom-link {
-                text-align: center;
-                font-size: 14px;
-            }
-
-                .login-form .bottom-link a {
-                    color: #4f46e5;
-                    text-decoration: none;
-                }
-
-        .error-message {
-            color: red;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="login-form">
-        <h2>Đăng nhập</h2>
-        <p>Chào mừng! Vui lòng nhập thông tin chi tiết của bạn.</p>
-
-        @if (ViewBag.Error != null)
-        {
-            <div class="error-message">@ViewBag.Error</div>
-        }
-
-        <form method="post" asp-controller="Auth" asp-action="Login">
-            <input type="text" name="userName" placeholder="Tên đăng nhập" required />
-            <input type="password" name="password" placeholder="Mật khẩu" required />
-
-            <div class="remember-forgot">
-                <label><input type="checkbox" /> Ghi nhớ thông tin</label>
-                <a href="#">Quên mật khẩu?</a>
+<div class="login-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h2 class="fw-bold mb-2">Đăng nhập</h2>
+                            <p class="text-muted">Chào mừng bạn quay trở lại với VetTracker</p>
+                        </div>
+                        
+                        <form asp-action="Login" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                            
+                            <div class="form-floating mb-3">
+                                <input asp-for="Email" class="form-control" placeholder="Email" />
+                                <label asp-for="Email">Email</label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="form-floating mb-3">
+                                <input asp-for="Password" class="form-control" placeholder="Mật khẩu" />
+                                <label asp-for="Password">Mật khẩu</label>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check">
+                                    <input asp-for="RememberMe" class="form-check-input" />
+                                    <label asp-for="RememberMe" class="form-check-label">Ghi nhớ đăng nhập</label>
+                                </div>
+                                <a asp-action="ForgotPassword" class="text-decoration-none">Quên mật khẩu?</a>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary w-100 py-2 mb-3">Đăng nhập</button>
+                            
+                            <div class="text-center">
+                                <p class="mb-0">Chưa có tài khoản? <a asp-action="Register" class="text-decoration-none">Đăng ký ngay</a></p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
+                        <i class="bi bi-arrow-left me-1"></i> Quay lại trang chủ
+                    </a>
+                </div>
             </div>
-
-            <button type="submit">Đăng nhập</button>
-            <button type="button" class="activate-btn">🔑 Kích hoạt tài khoản</button>
-
-            <div class="bottom-link">
-                Bạn chưa là thành viên? <a href="/Auth/Register">Đăng ký ngay!</a>
-            </div>
-        </form>
+        </div>
     </div>
-</body>
-</html>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

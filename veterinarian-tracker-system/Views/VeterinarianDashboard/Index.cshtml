@@ -1,0 +1,693 @@
+@model TuyetDang.MyVetTracer.Entity.Veterinarian
+@{
+    ViewData["Title"] = "Veterinarian Dashboard";
+    Layout = "_AdminLayout";
+    var todayAppointments = ViewBag.TodayAppointments as List<TuyetDang.MyVetTracer.Entity.Appointment> ?? new
+    List<TuyetDang.MyVetTracer.Entity.Appointment>();
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0 text-gray-800">Welcome, Dr. @Model.FullName</h1>
+                <div class="form-check form-switch">
+                    @* <input class="form-check-input" type="checkbox" id="onlineStatusToggle" @(Model.IsOnline ? "checked"
+                        : "")> *@
+                    @* <label class="form-check-label" for="onlineStatusToggle">
+                        <span id="statusText" class="@(Model.IsOnline ? "text-success" : "text-secondary")">
+                            <i class="fas @(Model.IsOnline ? "fa-circle" : "fa-circle-notch") me-1"></i>
+                            @(Model.IsOnline ? "Online" : "Offline")
+                        </span>
+                    </label> *@
+                
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Today's Appointments Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Today's Appointments</h5>
+                    <a href="@Url.Action("Schedule", "VeterinarianDashboard")" class="btn btn-sm btn-light">
+                        <i class="fas fa-calendar-alt me-1"></i> View Full Schedule
+                    </a>
+                </div>
+                <div class="card-body">
+                    @if (todayAppointments.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Pet</th>
+                                        <th>Owner</th>
+                                        <th>Reason</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var appointment in todayAppointments.OrderBy(a => a.Time))
+                                    {
+                                        <tr>
+                                            <td>@appointment.Time.ToString("h:mm tt")</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    @if (!string.IsNullOrEmpty(appointment.Pet?.Img))
+                                                    {
+                                                        <img src="@appointment.Pet.Img" alt="@appointment.Pet.PetName"
+                                                            class="rounded-circle me-2"
+                                                            style="width: 30px; height: 30px; object-fit: cover;">
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2"
+                                                            style="width: 30px; height: 30px;">
+                                                            <i class="fas fa-paw text-secondary"></i>
+                                                        </div>
+                                                    }
+                                                    <div>
+                                                        @appointment.Pet?.PetName
+                                                        <div class="small text-muted">@appointment.Pet?.Identification</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>@appointment.Pet?.Owner?.OwnerName</td>
+                                            <td>@(string.IsNullOrEmpty(appointment.Notes) ? "No reason provided" :
+                                                    appointment.Notes)</td>
+                                            <td>
+                                                @if (appointment.IsConfirmed)
+                                                {
+                                                    <span class="badge bg-success">Confirmed</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-warning text-dark">Pending</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <a href="@Url.Action("PetMedicalRecords", "VeterinarianDashboard", new { id = appointment.Pet?.IdPet })"
+                                                    class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="tooltip"
+                                                    title="View Medical Records">
+                                                    <i class="fas fa-clipboard-list"></i>
+                                                </a>
+                                                @if (appointment.IsConfirmed == 0)
+                                                {
+                                                    <a href="@Url.Action("UpdateAppointment", "VeterinarianDashboard", new { id = appointment.IdAppointment, status = true })"
+                                                        class="btn btn-sm btn-success" data-bs-toggle="tooltip"
+                                                        title="Confirm Appointment">
+                                                        <i class="fas fa-check"></i>
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("UpdateAppointment", "VeterinarianDashboard", new { id = appointment.IdAppointment, status = false })"
+                                                        class="btn btn-sm btn-danger" data-bs-toggle="tooltip"
+                                                        title="Cancel Appointment">
+                                                        <i class="fas fa-times"></i>
+                                                    </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-calendar-check fa-3x text-muted mb-3"></i>
+                            <h5>No appointments scheduled for today</h5>
+                            <p class="text-muted">You have a clear schedule for the day.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics and Recent Patients Section -->
+    <div class="row">
+        <!-- Statistics Cards -->
+        <div class="col-lg-4 mb-4">
+            <div class="row">
+                <div class="col-md-6 col-lg-12 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Today's
+                                        Appointments</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">@(todayAppointments.Count)</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-calendar-day fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-12 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">This Week's
+                                        Appointments</div>
+                                    @* <div class="h5 mb-0 font-weight-bold text-gray-800">@(Model.Appointments?.Count(a =>
+                                        a.Time >= DateTime.Today && a.Time <= DateTime.Today.AddDays(7)) ?? 0)</div> *@
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">5</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-calendar-week fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-12 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Assigned Pets
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">@(Model.Pets?.Count ?? 0)</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-paw fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-12 mb-4">
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending
+                                        Appointments</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">@(Model.Appointments?.Count(a =>
+                                        a.IsConfirmed == 0) ?? 0)</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-clock fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Patients -->
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Recent Patients</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Pets != null && Model.Pets.Any())
+                    {
+                        <div class="row">
+                            @foreach (var pet in Model.Pets.OrderByDescending(p => p.Appointments?.Max(a =>
+                           a.Time)).Take(6))
+                            {
+                                <div class="col-md-6 col-lg-4 mb-4">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-3">
+                                                @if (!string.IsNullOrEmpty(pet.Img))
+                                                {
+                                                    <img src="@pet.Img" alt="@pet.PetName" class="rounded-circle me-3"
+                                                        style="width: 50px; height: 50px; object-fit: cover;">
+                                                }
+                                                else
+                                                {
+                                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-3"
+                                                        style="width: 50px; height: 50px;">
+                                                        <i class="fas fa-paw fa-lg text-secondary"></i>
+                                                    </div>
+                                                }
+                                                <div>
+                                                    <h6 class="mb-0">@pet.PetName</h6>
+                                                    <div class="small text-muted">@pet.Identification (@pet.PetType)</div>
+                                                </div>
+                                            </div>
+                                            <div class="small mb-2">
+                                                <i class="fas fa-user me-1 text-muted"></i> Owner: @pet.OwnerUser?.FullName
+                                            </div>
+                                            <div class="small mb-3">
+                                                <i class="fas fa-calendar-check me-1 text-muted"></i> Last Visit:
+                                                @{
+                                                    var lastVisit = pet.Appointments?.OrderByDescending(a =>
+                                                    a.Time).FirstOrDefault();
+                                                    if (lastVisit != null)
+                                                    {
+                                                        @lastVisit.Time
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>No visits</span>
+                                                    }
+                                                }
+                                            </div>
+                                            <a href="@Url.Action("PetMedicalRecords", "VeterinarianDashboard", new { id = pet.IdPet })"
+                                                class="btn btn-sm btn-outline-primary w-100">
+                                                <i class="fas fa-clipboard-list me-1"></i> View Medical Records
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-paw fa-3x text-muted mb-3"></i>
+                            <h5>No patients assigned yet</h5>
+                            <p class="text-muted">You don't have any patients assigned to you at the moment.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Section -->
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-bell me-1"></i> Notifications
+                        <span class="badge bg-danger ms-2" id="notificationBadge" style="display: none;">0</span>
+                    </h5>
+                    <button class="btn btn-sm btn-light" id="clearNotificationsBtn">
+                        <i class="fas fa-check-double me-1"></i> Mark All as Read
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="notificationsContainer">
+                        <div class="text-center py-4" id="noNotificationsMessage">
+                            <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
+                            <h5>No new notifications</h5>
+                            <p class="text-muted">You're all caught up!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Online status toggle
+            $("#onlineStatusToggle").change(function () {
+                const isOnline = $(this).is(":checked");
+
+                // Update UI immediately for better UX
+                if (isOnline) {
+                    $("#statusText").removeClass("text-secondary").addClass("text-success");
+                    $("#statusText i").removeClass("fa-circle-notch").addClass("fa-circle");
+                    $("#statusText").html('<i class="fas fa-circle me-1"></i> Online');
+                } else {
+                    $("#statusText").removeClass("text-success").addClass("text-secondary");
+                    $("#statusText i").removeClass("fa-circle").addClass("fa-circle-notch");
+                    $("#statusText").html('<i class="fas fa-circle-notch me-1"></i> Offline');
+                }
+
+                // Send status update to server
+                $.ajax({
+                    url: '@Url.Action("UpdateStatus", "VeterinarianDashboard")',
+                    type: 'POST',
+                    data: { isOnline: isOnline },
+                    success: function (response) {
+                        console.log("Status updated successfully");
+                    },
+                    error: function (error) {
+                        console.error("Error updating status", error);
+                        // Revert UI on error
+                        $("#onlineStatusToggle").prop("checked", !isOnline).trigger("change");
+                    }
+                });
+            });
+
+            // Initialize SignalR connection
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/notificationHub")
+                .withAutomaticReconnect()
+                .build();
+
+            // Join veterinarian group when connection starts
+            connection.start().then(function () {
+                connection.invoke("JoinVeterinarianGroup", "@Model.IdVetUser");
+                console.log("Connected to SignalR hub");
+
+                // Load notifications from local storage
+                loadNotifications();
+            }).catch(function (err) {
+                console.error(err.toString());
+            });
+
+            // Handle appointment request notifications
+            connection.on("ReceiveAppointmentRequest", function (ownerId, ownerName, petId, petName, appointmentId, appointmentTime, notes) {
+                const notification = {
+                    id: Date.now(),
+                    type: "appointment",
+                    title: "New Appointment Request",
+                    message: `${ownerName} requested an appointment for ${petName} on ${new Date(appointmentTime).toLocaleString()}.`,
+                    timestamp: new Date().toISOString(),
+                    read: false,
+                    data: {
+                        ownerId: ownerId,
+                        ownerName: ownerName,
+                        petId: petId,
+                        petName: petName,
+                        appointmentId: appointmentId,
+                        appointmentTime: appointmentTime,
+                        notes: notes
+                    }
+                };
+
+                addNotification(notification);
+            });
+
+            // Handle chat message notifications
+            connection.on("ReceiveChatMessage", function (senderId, senderName, message) {
+                const notification = {
+                    id: Date.now(),
+                    type: "message",
+                    title: "New Message",
+                    message: `${senderName}: ${message}`,
+                    timestamp: new Date().toISOString(),
+                    read: false,
+                    data: {
+                        senderId: senderId,
+                        senderName: senderName,
+                        message: message
+                    }
+                };
+
+                addNotification(notification);
+            });
+
+            // Add notification to local storage and UI
+            function addNotification(notification) {
+                // Get existing notifications from local storage
+                let notifications = JSON.parse(localStorage.getItem("veterinarianNotifications_@Model.IdVetUser")) || [];
+
+                // Add new notification
+                notifications.unshift(notification);
+
+                // Limit to 50 notifications
+                if (notifications.length > 50) {
+                    notifications = notifications.slice(0, 50);
+                }
+
+                // Save to local storage
+                localStorage.setItem("veterinarianNotifications_@Model.IdVetUser", JSON.stringify(notifications));
+
+                // Update UI
+                renderNotifications(notifications);
+                updateNotificationBadge(notifications);
+
+                // Show toast notification
+                showToast(notification);
+            }
+
+            // Load notifications from local storage
+            function loadNotifications() {
+                const notifications = JSON.parse(localStorage.getItem("veterinarianNotifications_@Model.IdVetUser")) || [];
+                renderNotifications(notifications);
+                updateNotificationBadge(notifications);
+            }
+
+            // Render notifications in the UI
+            function renderNotifications(notifications) {
+                const container = $("#notificationsContainer");
+
+                if (notifications.length === 0) {
+                    $("#noNotificationsMessage").show();
+                    return;
+                }
+
+                $("#noNotificationsMessage").hide();
+                container.empty();
+
+                notifications.slice(0, 5).forEach(function (notification) {
+                    let icon = "fa-bell";
+                    let bgColor = "bg-light";
+
+                    if (notification.type === "appointment") {
+                        icon = "fa-calendar-plus";
+                        bgColor = notification.read ? "bg-light" : "bg-light-blue";
+                    } else if (notification.type === "message") {
+                        icon = "fa-comment";
+                        bgColor = notification.read ? "bg-light" : "bg-light-green";
+                    }
+
+                    const timeAgo = getTimeAgo(new Date(notification.timestamp));
+
+                    const notificationHtml = `
+                                <div class="notification-item ${bgColor} p-3 mb-2 rounded ${notification.read ? 'read' : 'unread'}" data-id="${notification.id}">
+                                    <div class="d-flex">
+                                        <div class="notification-icon me-3">
+                                            <i class="fas ${icon} fa-lg text-primary"></i>
+                                        </div>
+                                        <div class="notification-content flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <h6 class="mb-0">${notification.title}</h6>
+                                                <small class="text-muted">${timeAgo}</small>
+                                            </div>
+                                            <p class="mb-0">${notification.message}</p>
+                                        </div>
+                                        <div class="notification-actions ms-2">
+                                            <button class="btn btn-sm btn-link text-muted mark-read-btn" data-id="${notification.id}" title="Mark as read">
+                                                <i class="fas ${notification.read ? 'fa-check-circle' : 'fa-circle'}"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    ${notification.type === "appointment" ? `
+                                        <div class="mt-2 d-flex justify-content-end">
+                                            <a href="@Url.Action("PetMedicalRecords", "VeterinarianDashboard")?id=${notification.data.petId}" class="btn btn-sm btn-outline-primary me-2">
+                                                <i class="fas fa-clipboard-list me-1"></i> View Pet
+                                            </a>
+                                            <a href="@Url.Action("UpdateAppointment", "VeterinarianDashboard")?id=${notification.data.appointmentId}&status=true" class="btn btn-sm btn-success">
+                                                <i class="fas fa-check me-1"></i> Confirm
+                                            </a>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `;
+
+                    container.append(notificationHtml);
+                });
+
+                // Add view all link if there are more than 5 notifications
+                if (notifications.length > 5) {
+                    container.append(`
+                                <div class="text-center mt-3">
+                                    <a href="#" class="text-primary">View all ${notifications.length} notifications</a>
+                                </div>
+                            `);
+                }
+
+                // Add event listeners for mark as read buttons
+                $(".mark-read-btn").click(function () {
+                    const notificationId = $(this).data("id");
+                    markNotificationAsRead(notificationId);
+                });
+            }
+
+            // Mark notification as read
+            function markNotificationAsRead(notificationId) {
+                let notifications = JSON.parse(localStorage.getItem("veterinarianNotifications_@Model.IdVetUser")) || [];
+
+                notifications = notifications.map(function (notification) {
+                    if (notification.id === notificationId) {
+                        notification.read = true;
+                    }
+                    return notification;
+                });
+
+                localStorage.setItem("veterinarianNotifications_@Model.IdVetUser", JSON.stringify(notifications));
+                renderNotifications(notifications);
+                updateNotificationBadge(notifications);
+            }
+
+            // Mark all notifications as read
+            $("#clearNotificationsBtn").click(function () {
+                let notifications = JSON.parse(localStorage.getItem("veterinarianNotifications_@Model.IdVetUser")) || [];
+
+                notifications = notifications.map(function (notification) {
+                    notification.read = true;
+                    return notification;
+                });
+
+                localStorage.setItem("veterinarianNotifications_@Model.IdVetUser", JSON.stringify(notifications));
+                renderNotifications(notifications);
+                updateNotificationBadge(notifications);
+            });
+
+            // Update notification badge
+            function updateNotificationBadge(notifications) {
+                const unreadCount = notifications.filter(n => !n.read).length;
+
+                if (unreadCount > 0) {
+                    $("#notificationBadge").text(unreadCount).show();
+                } else {
+                    $("#notificationBadge").hide();
+                }
+            }
+
+            // Show toast notification
+            function showToast(notification) {
+                const toastHtml = `
+                            <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="d-flex">
+                                    <div class="toast-body">
+                                        <strong>${notification.title}</strong><br>
+                                        ${notification.message}
+                                    </div>
+                                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        `;
+
+                const toastContainer = $("<div class='toast-container position-fixed top-0 end-0 p-3'></div>");
+                $("body").append(toastContainer);
+                toastContainer.html(toastHtml);
+
+                const toast = new bootstrap.Toast(toastContainer.find('.toast')[0], {
+                    delay: 5000
+                });
+                toast.show();
+
+                // Remove toast container after hiding
+                toastContainer.find('.toast').on('hidden.bs.toast', function () {
+                    toastContainer.remove();
+                });
+            }
+
+            // Helper function to format time ago
+            function getTimeAgo(date) {
+                const seconds = Math.floor((new Date() - date) / 1000);
+
+                let interval = Math.floor(seconds / 31536000);
+                if (interval >= 1) {
+                    return interval + " year" + (interval === 1 ? "" : "s") + " ago";
+                }
+
+                interval = Math.floor(seconds / 2592000);
+                if (interval >= 1) {
+                    return interval + " month" + (interval === 1 ? "" : "s") + " ago";
+                }
+
+                interval = Math.floor(seconds / 86400);
+                if (interval >= 1) {
+                    return interval + " day" + (interval === 1 ? "" : "s") + " ago";
+                }
+
+                interval = Math.floor(seconds / 3600);
+                if (interval >= 1) {
+                    return interval + " hour" + (interval === 1 ? "" : "s") + " ago";
+                }
+
+                interval = Math.floor(seconds / 60);
+                if (interval >= 1) {
+                    return interval + " minute" + (interval === 1 ? "" : "s") + " ago";
+                }
+
+                return "just now";
+            }
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .bg-light-blue {
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+
+        .bg-light-green {
+            background-color: rgba(40, 167, 69, 0.1);
+        }
+
+        .notification-item {
+            transition: background-color 0.3s;
+        }
+
+        .notification-item:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .notification-item.unread {
+            border-left: 3px solid #007bff;
+        }
+
+        .notification-item.read {
+            border-left: 3px solid transparent;
+        }
+
+        .border-left-primary {
+            border-left: 4px solid #4e73df;
+        }
+
+        .border-left-success {
+            border-left: 4px solid #1cc88a;
+        }
+
+        .border-left-info {
+            border-left: 4px solid #36b9cc;
+        }
+
+        .border-left-warning {
+            border-left: 4px solid #f6c23e;
+        }
+
+        .text-gray-300 {
+            color: #dddfeb;
+        }
+
+        .text-gray-800 {
+            color: #5a5c69;
+        }
+    </style>
+}

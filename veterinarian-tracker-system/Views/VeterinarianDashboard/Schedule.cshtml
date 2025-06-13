@@ -1,0 +1,560 @@
+@model List<TuyetDang.MyVetTracer.Entity.Appointment>
+@{
+    ViewData["Title"] = "Schedule & Appointments";
+    Layout = "_AdminLayout";
+    var selectedDate = ViewBag.SelectedDate as DateTime? ?? DateTime.Today;
+    var weekStart = selectedDate.AddDays(-(int)selectedDate.DayOfWeek);
+    var weekEnd = weekStart.AddDays(6);
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "VeterinarianDashboard")">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Schedule & Appointments</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Schedule & Appointments</h5>
+                    <div>
+                        <button class="btn btn-sm btn-light" id="todayBtn">
+                            Today
+                        </button>
+                        <div class="btn-group ms-2" role="group">
+                            <button type="button" class="btn btn-sm btn-light" id="viewDayBtn">Day</button>
+                            <button type="button" class="btn btn-sm btn-light active" id="viewWeekBtn">Week</button>
+                            <button type="button" class="btn btn-sm btn-light" id="viewMonthBtn">Month</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Calendar Navigation -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <button class="btn btn-outline-secondary" id="prevBtn">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h4 class="mb-0" id="calendarTitle">
+                            @if (ViewBag.ViewMode == "day" || ViewBag.ViewMode == null)
+                            {
+                                @selectedDate.ToString("MMMM d, yyyy")
+                            }
+                            else if (ViewBag.ViewMode == "week")
+                            {
+                                <span>@weekStart.ToString("MMM d") - @weekEnd.ToString("MMM d, yyyy")</span>
+                            }
+                            else
+                            {
+                                @selectedDate.ToString("MMMM yyyy")
+                            }
+                        </h4>
+                        <button class="btn btn-outline-secondary" id="nextBtn">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Calendar Views -->
+                    <div id="calendarContainer">
+                        <!-- Day View -->
+                        <div id="dayView" class="calendar-view @(ViewBag.ViewMode == "day" ? "" : "d-none")">
+                            <div class="day-header bg-light p-2 text-center rounded mb-2">
+                                <h5 class="mb-0">@selectedDate.ToString("dddd, MMMM d, yyyy")</h5>
+                            </div>
+                            <div class="day-schedule">
+                                @for (int hour = 8; hour < 18; hour++)
+                                {
+                                    var timeSlot = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, hour, 0, 0);
+                                    var appointments = Model.Where(a => a.Time.Hour == hour && a.Time.Date == selectedDate.Date).ToList();
+                                    
+                                    <div class="time-slot @(appointments.Any() ? "has-appointments" : "")">
+                                        <div class="time-label">@timeSlot.ToString("h:mm tt")</div>
+                                        <div class="appointments-container">
+                                            @if (appointments.Any())
+                                            {
+                                                foreach (var appointment in appointments)
+                                                {
+                                                    <div class="appointment-card @(appointment.IsConfirmed ? "confirmed" : "pending")">
+                                                        <div class="appointment-time">@appointment.Time.ToString("h:mm tt")</div>
+                                                        <div class="appointment-details">
+                                                            <strong>@appointment.Pet?.PetName</strong> (@appointment.Pet?.Identification)
+                                                            <div class="small text-muted">Owner: @appointment.Pet?.Owner?.OwnerName</div>
+                                                            <div class="small">@(appointment.Notes ?? "No notes")</div>
+                                                        </div>
+                                                        <div class="appointment-status">
+                                                            @if (appointment.IsConfirmed)
+                                                            {
+                                                                <span class="badge bg-success">Confirmed</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="badge bg-warning text-dark">Pending</span>
+                                                            }
+                                                        </div>
+                                                        <div class="appointment-actions">
+                                                            <a href="@Url.Action("PetMedicalRecords", "VeterinarianDashboard", new { id = appointment.Pet?.IdPet })" class="btn btn-sm btn-outline-primary me-1">
+                                                                <i class="fas fa-clipboard-list"></i>
+                                                            </a>
+                                                            @if (!appointment.IsConfirmed)
+                                                            {
+                                                                <a href="@Url.Action("UpdateAppointment", "VeterinarianDashboard", new { id = appointment.IdAppointment, status = true })" class="btn btn-sm btn-success">
+                                                                    <i class="fas fa-check"></i>
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a href="@Url.Action("UpdateAppointment", "VeterinarianDashboard", new { id = appointment.IdAppointment, status = false })" class="btn btn-sm btn-danger">
+                                                                    <i class="fas fa-times"></i>
+                                                                </a>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Week View -->
+                        <div id="weekView" class="calendar-view @(ViewBag.ViewMode == "week" || ViewBag.ViewMode == null ? "" : "d-none")">
+                            <div class="table-responsive">
+                                <table class="table table-bordered week-calendar">
+                                    <thead>
+                                        <tr>
+                                            <th class="time-column">Time</th>
+                                            @for (int i = 0; i < 7; i++)
+                                            {
+                                                var day = weekStart.AddDays(i);
+                                                var isToday = day.Date == DateTime.Today;
+                                                <th class="@(isToday ? "today" : "")">
+                                                    <div class="day-name">@day.ToString("ddd")</div>
+                                                    <div class="day-number">@day.Day</div>
+                                                </th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int hour = 8; hour < 18; hour++)
+                                        {
+                                            <tr>
+                                                <td class="time-column">@(new DateTime(2000, 1, 1, hour, 0, 0).ToString("h:mm tt"))</td>
+                                                @for (int i = 0; i < 7; i++)
+                                                {
+                                                    var day = weekStart.AddDays(i);
+                                                    var timeSlot = new DateTime(day.Year, day.Month, day.Day, hour, 0, 0);
+                                                    var appointments = Model.Where(a => a.Time.Hour == hour && a.Time.Date == day.Date).ToList();
+                                                    var isToday = day.Date == DateTime.Today;
+                                                    
+                                                    <td class="@(isToday ? "today" : "") @(appointments.Any() ? "has-appointments" : "")">
+                                                        @if (appointments.Any())
+                                                        {
+                                                            foreach (var appointment in appointments)
+                                                            {
+                                                                <div class="appointment-pill @(appointment.IsConfirmed ? "confirmed" : "pending")" 
+                                                                     data-bs-toggle="tooltip" data-bs-placement="top" 
+                                                                     title="@appointment.Time.ToString("h:mm tt") - @appointment.Pet?.PetName (@appointment.Pet?.Owner?.OwnerName)">
+                                                                    <span class="time">@appointment.Time.ToString("h:mm")</span>
+                                                                    <span class="name">@appointment.Pet?.PetName</span>
+                                                                    <div class="actions">
+                                                                        <a href="@Url.Action("PetMedicalRecords", "VeterinarianDashboard", new { id = appointment.Pet?.IdPet })" class="btn btn-sm btn-link p-0 text-primary me-1">
+                                                                            <i class="fas fa-clipboard-list"></i>
+                                                                        </a>
+                                                                        @if (!appointment.IsConfirmed)
+                                                                        {
+                                                                            <a href="@Url.Action("UpdateAppointment", "VeterinarianDashboard", new { id = appointment.IdAppointment, status = true })" class="btn btn-sm btn-link p-0 text-success">
+                                                                                <i class="fas fa-check"></i>
+                                                                            </a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a href="@Url.Action("UpdateAppointment", "VeterinarianDashboard", new { id = appointment.IdAppointment, status = false })" class="btn btn-sm btn-link p-0 text-danger">
+                                                                                <i class="fas fa-times"></i>
+                                                                            </a>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </td>
+                                                }
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Month View -->
+                        <div id="monthView" class="calendar-view @(ViewBag.ViewMode == "month" ? "" : "d-none")">
+                            <div class="table-responsive">
+                                <table class="table table-bordered month-calendar">
+                                    <thead>
+                                        <tr>
+                                            <th>Sunday</th>
+                                            <th>Monday</th>
+                                            <th>Tuesday</th>
+                                            <th>Wednesday</th>
+                                            <th>Thursday</th>
+                                            <th>Friday</th>
+                                            <th>Saturday</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            var firstDayOfMonth = new DateTime(selectedDate.Year, selectedDate.Month, 1);
+                                            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+                                            var firstDayOfCalendar = firstDayOfMonth.AddDays(-(int)firstDayOfMonth.DayOfWeek);
+                                            var lastDayOfCalendar = lastDayOfMonth.AddDays(6 - (int)lastDayOfMonth.DayOfWeek);
+                                            var currentDay = firstDayOfCalendar;
+                                        }
+
+                                        @while (currentDay <= lastDayOfCalendar)
+                                        {
+                                            <tr>
+                                                @for (int i = 0; i < 7; i++)
+                                                {
+                                                    var day = currentDay;
+                                                    var isCurrentMonth = day.Month == selectedDate.Month;
+                                                    var isToday = day.Date == DateTime.Today;
+                                                    var dayAppointments = Model.Where(a => a.Time.Date == day.Date).ToList();
+                                                    
+                                                    <td class="@(!isCurrentMonth ? "other-month" : "") @(isToday ? "today" : "") @(dayAppointments.Any() ? "has-appointments" : "")">
+                                                        <div class="day-number">@day.Day</div>
+                                                        <div class="day-content">
+                                                            @if (dayAppointments.Any())
+                                                            {
+                                                                <div class="appointment-count">
+                                                                    <a href="@Url.Action("Schedule", "VeterinarianDashboard", new { date = day.ToString("yyyy-MM-dd"), viewMode = "day" })" class="text-decoration-none">
+                                                                        <span class="badge bg-primary rounded-pill">
+                                                                            @dayAppointments.Count appointment@(dayAppointments.Count != 1 ? "s" : "")
+                                                                        </span>
+                                                                    </a>
+                                                                </div>
+                                                                
+                                                                @foreach (var appointment in dayAppointments.Take(2))
+                                                                {
+                                                                    <div class="month-appointment @(appointment.IsConfirmed == 1 ? "confirmed" : "pending")">
+                                                                        <span class="time">@appointment.Time.ToString("h:mm tt")</span>
+                                                                        <span class="name">@appointment.Pet?.PetName</span>
+                                                                    </div>
+                                                                }
+                                                                
+                                                                @if (dayAppointments.Count > 2)
+                                                                {
+                                                                    <div class="more-appointments">
+                                                                        <a href="@Url.Action("Schedule", "VeterinarianDashboard", new { date = day.ToString("yyyy-MM-dd"), viewMode = "day" })" class="text-decoration-none">
+                                                                            + @(dayAppointments.Count - 2) more
+                                                                        </a>
+                                                                    </div>
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </td>
+                                                    
+                                                    currentDay = currentDay.AddDays(1);
+                                                }
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        /* Calendar Styles */
+        .calendar-view {
+            min-height: 600px;
+        }
+        
+        /* Day View Styles */
+        .day-schedule {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .time-slot {
+            display: flex;
+            min-height: 60px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .time-label {
+            width: 100px;
+            padding: 10px;
+            font-weight: bold;
+            color: #6c757d;
+        }
+        
+        .appointments-container {
+            flex-grow: 1;
+            padding: 5px;
+            position: relative;
+        }
+        
+        .appointment-card {
+            background-color: #f8f9fa;
+            border-left: 4px solid #6c757d;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .appointment-card.confirmed {
+            border-left-color: #28a745;
+        }
+        
+        .appointment-card.pending {
+            border-left-color: #ffc107;
+        }
+        
+        .appointment-time {
+            width: 80px;
+            font-weight: bold;
+        }
+        
+        .appointment-details {
+            flex-grow: 1;
+        }
+        
+        .appointment-status {
+            margin: 0 10px;
+        }
+        
+        /* Week View Styles */
+        .week-calendar th {
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        .week-calendar .time-column {
+            width: 100px;
+            font-weight: bold;
+            color: #6c757d;
+        }
+        
+        .week-calendar .day-name {
+            font-weight: bold;
+        }
+        
+        .week-calendar .day-number {
+            font-size: 1.2rem;
+        }
+        
+        .week-calendar td {
+            height: 60px;
+            vertical-align: top;
+            padding: 5px;
+        }
+        
+        .week-calendar td.today {
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+        
+        .appointment-pill {
+            background-color: #f8f9fa;
+            border-left: 4px solid #6c757d;
+            border-radius: 4px;
+            padding: 2px 5px;
+            margin-bottom: 2px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
+        }
+        
+        .appointment-pill.confirmed {
+            border-left-color: #28a745;
+        }
+        
+        .appointment-pill.pending {
+            border-left-color: #ffc107;
+        }
+        
+        .appointment-pill .time {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .appointment-pill .actions {
+            display: none;
+            position: absolute;
+            right: 5px;
+            top: 2px;
+        }
+        
+        .appointment-pill:hover .actions {
+            display: block;
+        }
+        
+        /* Month View Styles */
+        .month-calendar th {
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        .month-calendar td {
+            height: 120px;
+            width: 14.28%;
+            vertical-align: top;
+            padding: 5px;
+        }
+        
+        .month-calendar td.other-month {
+            background-color: #f8f9fa;
+            color: #adb5bd;
+        }
+        
+        .month-calendar td.today {
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+        
+        .month-calendar .day-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .month-calendar .day-content {
+            font-size: 0.8rem;
+        }
+        
+        .month-appointment {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 2px 5px;
+            margin-bottom: 2px;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #6c757d;
+        }
+        
+        .month-appointment.confirmed {
+            border-left-color: #28a745;
+        }
+        
+        .month-appointment.pending {
+            border-left-color: #ffc107;
+        }
+        
+        .month-appointment .time {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .appointment-count {
+            margin-bottom: 5px;
+        }
+        
+        .more-appointments {
+            text-align: center;
+            margin-top: 5px;
+            font-style: italic;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // View mode buttons
+            $('#viewDayBtn').click(function() {
+                changeViewMode('day');
+            });
+            
+            $('#viewWeekBtn').click(function() {
+                changeViewMode('week');
+            });
+            
+            $('#viewMonthBtn').click(function() {
+                changeViewMode('month');
+            });
+            
+            // Navigation buttons
+            $('#prevBtn').click(function() {
+                navigateCalendar('prev');
+            });
+            
+            $('#nextBtn').click(function() {
+                navigateCalendar('next');
+            });
+            
+            $('#todayBtn').click(function() {
+                navigateCalendar('today');
+            });
+            
+            // Function to change view mode
+            function changeViewMode(mode) {
+                // Update active button
+                $('.btn-group button').removeClass('active');
+                $(`#view${mode.charAt(0).toUpperCase() + mode.slice(1)}Btn`).addClass('active');
+                
+                // Hide all views
+                $('.calendar-view').addClass('d-none');
+                
+                // Show selected view
+                $(`#${mode}View`).removeClass('d-none');
+                
+                // Update URL without reloading the page
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('viewMode', mode);
+                const newUrl = window.location.pathname + '?' + urlParams.toString();
+                history.pushState({}, '', newUrl);
+            }
+            
+            // Function to navigate calendar
+            function navigateCalendar(direction) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const currentDate = urlParams.get('date') ? new Date(urlParams.get('date')) : new Date();
+                const viewMode = urlParams.get('viewMode') || 'week';
+                
+                let newDate;
+                
+                if (direction === 'today') {
+                    newDate = new Date();
+                } else {
+                    if (viewMode === 'day') {
+                        newDate = new Date(currentDate);
+                        newDate.setDate(currentDate.getDate() + (direction === 'next' ? 1 : -1));
+                    } else if (viewMode === 'week') {
+                        newDate = new Date(currentDate);
+                        newDate.setDate(currentDate.getDate() + (direction === 'next' ? 7 : -7));
+                    } else { // month
+                        newDate = new Date(currentDate);
+                        newDate.setMonth(currentDate.getMonth() + (direction === 'next' ? 1 : -1));
+                    }
+                }
+                
+                // Format date as YYYY-MM-DD
+                const formattedDate = newDate.toISOString().split('T')[0];
+                
+                // Redirect to the new date
+                window.location.href = `@Url.Action("Schedule", "VeterinarianDashboard")?date=${formattedDate}&viewMode=${viewMode}`;
+            }
+        });
+    </script>
+}

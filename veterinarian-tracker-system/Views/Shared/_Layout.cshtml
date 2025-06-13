@@ -3,47 +3,151 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - veterinarian_tracker_system</title>
+    <meta name="description" content="VetTracker - Hệ thống quản lý thú y hiện đại" />
+    <title>@ViewData["Title"] - VetTracker</title>
+    
+    <!-- Core CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/css/modern-effects.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/button-effects.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/card-effects.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/table-effects.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/form-effects.css" />
+    <link rel="stylesheet" href="~/css/input-effects.css" asp-append-version="true" /> *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/veterinarian_tracker_system.styles.css" asp-append-version="true" />
+    
+    <!-- Page specific styles -->
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">veterinarian_tracker_system</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+    <!-- Navbar -->
+    <header class="fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-heart-pulse-fill text-primary me-2" style="font-size: 1.5rem;"></i>
+                    <span class="fw-bold">VetTracker</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" 
+                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link px-3" asp-controller="Home" asp-action="Index">Trang chủ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link px-3" asp-controller="Home" asp-action="Services">Dịch vụ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3" asp-controller="Home" asp-action="About">Về chúng tôi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3" asp-controller="Home" asp-action="Contact">Liên hệ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3" asp-controller="Home" asp-action="Privacy">Quyền riêng tư</a>
                         </li>
                     </ul>
+                    <div class="ms-lg-3 mt-3 mt-lg-0 d-flex">
+                        <a asp-controller="Auth" asp-action="Login" class="btn btn-outline-primary me-2">Đăng nhập</a>
+                        <a asp-controller="Auth" asp-action="Register" class="btn btn-primary">Đăng ký</a>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
+    <!-- Main Content -->
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer bg-light py-5 mt-5">
         <div class="container">
-            &copy; 2025 - veterinarian_tracker_system - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-heart-pulse-fill text-primary me-2" style="font-size: 1.5rem;"></i>
+                        <span class="fw-bold fs-4">VetTracker</span>
+                    </div>
+                    <p class="text-muted">Hệ thống quản lý thú y hiện đại giúp kết nối chủ vật nuôi và bác sĩ thú y một cách hiệu quả.</p>
+                    <div class="social-links mt-3">
+                        <a href="#" class="me-2 text-secondary"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="me-2 text-secondary"><i class="bi bi-twitter fs-5"></i></a>
+                        <a href="#" class="me-2 text-secondary"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="#" class="text-secondary"><i class="bi bi-linkedin fs-5"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="mb-3">Liên kết</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a class="text-decoration-none text-secondary" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                        <li class="mb-2"><a class="text-decoration-none text-secondary" asp-controller="Home" asp-action="Services">Dịch vụ</a></li>
+                        <li class="mb-2"><a class="text-decoration-none text-secondary" asp-controller="Home" asp-action="About">Về chúng tôi</a></li>
+                        <li class="mb-2"><a class="text-decoration-none text-secondary" asp-controller="Home" asp-action="Contact">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="mb-3">Dịch vụ</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a class="text-decoration-none text-secondary" href="#">Khám thú cưng</a></li>
+                        <li class="mb-2"><a class="text-decoration-none text-secondary" href="#">Tiêm chủng</a></li>
+                        <li class="mb-2"><a class="text-decoration-none text-secondary" href="#">Tư vấn dinh dưỡng</a></li>
+                        <li class="mb-2"><a class="text-decoration-none text-secondary" href="#">Chăm sóc khẩn cấp</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="mb-3">Liên hệ</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2 d-flex align-items-center">
+                            <i class="bi bi-geo-alt text-primary me-2"></i>
+                            <span>123 Đường Nguyễn Văn Linh, Quận 7, TP.HCM</span>
+                        </li>
+                        <li class="mb-2 d-flex align-items-center">
+                            <i class="bi bi-telephone text-primary me-2"></i>
+                            <span>+84 123 456 789</span>
+                        </li>
+                        <li class="mb-2 d-flex align-items-center">
+                            <i class="bi bi-envelope text-primary me-2"></i>
+                            <span>info@vettracker.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">&copy; @DateTime.Now.Year - VetTracker - Bản quyền thuộc về chúng tôi</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a class="text-decoration-none text-secondary" asp-controller="Home" asp-action="Privacy">Chính sách bảo mật</a>
+                    <span class="mx-2">|</span>
+                    <a class="text-decoration-none text-secondary" href="#">Điều khoản sử dụng</a>
+                </div>
+            </div>
         </div>
     </footer>
+
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/modern-features.js" asp-append-version="true"></script>
+    <script src="~/js/advanced-effects.js" asp-append-version="true"></script>
+    <script src="~/js/table-features.js" asp-append-version="true"></script>
+    <script src="~/js/form-features.js" asp-append-version="true"></script>
+    <script src="~/js/input-features.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

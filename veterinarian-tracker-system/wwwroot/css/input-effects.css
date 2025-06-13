@@ -1,0 +1,608 @@
+/**
+ * Input Effects CSS
+ * Modern, interactive input styles for the VetTracker application
+ */
+
+/* Base input styles */
+.input-effect {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.input-effect input,
+.input-effect textarea,
+.input-effect select {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0;
+  border-bottom: 2px solid var(--border-color);
+  background-color: transparent;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-effect label {
+  position: absolute;
+  top: 0.75rem;
+  left: 0;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+/* Effect 1: Bottom line slides from left to right */
+.input-effect-1 input:focus,
+.input-effect-1 textarea:focus,
+.input-effect-1 select:focus {
+  border-bottom: 2px solid var(--primary-color);
+  box-shadow: none;
+}
+
+.input-effect-1 input:focus ~ label,
+.input-effect-1 textarea:focus ~ label,
+.input-effect-1 select:focus ~ label,
+.input-effect-1 input:not(:placeholder-shown) ~ label,
+.input-effect-1 textarea:not(:placeholder-shown) ~ label,
+.input-effect-1 select:not([value=""]) ~ label {
+  top: -0.75rem;
+  font-size: 0.85rem;
+  color: var(--primary-color);
+}
+
+/* Effect 2: Bottom border expands */
+.input-effect-2 input,
+.input-effect-2 textarea,
+.input-effect-2 select {
+  border-bottom: 2px solid var(--border-color);
+}
+
+.input-effect-2::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.input-effect-2 input:focus ~ label,
+.input-effect-2 textarea:focus ~ label,
+.input-effect-2 select:focus ~ label,
+.input-effect-2 input:not(:placeholder-shown) ~ label,
+.input-effect-2 textarea:not(:placeholder-shown) ~ label,
+.input-effect-2 select:not([value=""]) ~ label {
+  top: -0.75rem;
+  font-size: 0.85rem;
+  color: var(--primary-color);
+}
+
+.input-effect-2 input:focus ~ ::after,
+.input-effect-2 textarea:focus ~ ::after,
+.input-effect-2 select:focus ~ ::after {
+  width: 100%;
+}
+
+/* Effect 3: Bottom border with highlight */
+.input-effect-3 input,
+.input-effect-3 textarea,
+.input-effect-3 select {
+  border-bottom: 2px solid var(--border-color);
+}
+
+.input-effect-3::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--primary-color);
+  visibility: hidden;
+  transform: scaleX(0);
+  transition: all 0.3s ease;
+}
+
+.input-effect-3 input:focus ~ ::before,
+.input-effect-3 textarea:focus ~ ::before,
+.input-effect-3 select:focus ~ ::before {
+  visibility: visible;
+  transform: scaleX(1);
+}
+
+.input-effect-3 input:focus ~ label,
+.input-effect-3 textarea:focus ~ label,
+.input-effect-3 select:focus ~ label,
+.input-effect-3 input:not(:placeholder-shown) ~ label,
+.input-effect-3 textarea:not(:placeholder-shown) ~ label,
+.input-effect-3 select:not([value=""]) ~ label {
+  top: -0.75rem;
+  font-size: 0.85rem;
+  color: var(--primary-color);
+}
+
+/* Effect 4: Box fill */
+.input-effect-4 {
+  overflow: hidden;
+}
+
+.input-effect-4 input,
+.input-effect-4 textarea,
+.input-effect-4 select {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  background-color: transparent;
+}
+
+.input-effect-4::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(var(--primary-rgb), 0.05);
+  z-index: -1;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: all 0.3s ease;
+}
+
+.input-effect-4 input:focus ~ ::before,
+.input-effect-4 textarea:focus ~ ::before,
+.input-effect-4 select:focus ~ ::before {
+  transform: scaleY(1);
+}
+
+.input-effect-4 input:focus,
+.input-effect-4 textarea:focus,
+.input-effect-4 select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.25);
+}
+
+.input-effect-4 input:focus ~ label,
+.input-effect-4 textarea:focus ~ label,
+.input-effect-4 select:focus ~ label,
+.input-effect-4 input:not(:placeholder-shown) ~ label,
+.input-effect-4 textarea:not(:placeholder-shown) ~ label,
+.input-effect-4 select:not([value=""]) ~ label {
+  top: -0.75rem;
+  left: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--primary-color);
+  background-color: var(--body-bg);
+  padding: 0 0.5rem;
+}
+
+/* Effect 5: Border highlight with glow */
+.input-effect-5 input,
+.input-effect-5 textarea,
+.input-effect-5 select {
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+}
+
+.input-effect-5 input:focus,
+.input-effect-5 textarea:focus,
+.input-effect-5 select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.5);
+}
+
+.input-effect-5 input:focus ~ label,
+.input-effect-5 textarea:focus ~ label,
+.input-effect-5 select:focus ~ label,
+.input-effect-5 input:not(:placeholder-shown) ~ label,
+.input-effect-5 textarea:not(:placeholder-shown) ~ label,
+.input-effect-5 select:not([value=""]) ~ label {
+  top: -0.75rem;
+  left: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--primary-color);
+  background-color: var(--body-bg);
+  padding: 0 0.5rem;
+}
+
+/* Effect 6: Gradient border */
+.input-effect-6 input,
+.input-effect-6 textarea,
+.input-effect-6 select {
+  border: double 3px transparent;
+  border-radius: 0.375rem;
+  background-image: linear-gradient(var(--body-bg), var(--body-bg)), 
+                    linear-gradient(to right, var(--border-color), var(--border-color));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  transition: all 0.3s ease;
+}
+
+.input-effect-6 input:focus,
+.input-effect-6 textarea:focus,
+.input-effect-6 select:focus {
+  background-image: linear-gradient(var(--body-bg), var(--body-bg)), 
+                    linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  box-shadow: none;
+}
+
+.input-effect-6 input:focus ~ label,
+.input-effect-6 textarea:focus ~ label,
+.input-effect-6 select:focus ~ label,
+.input-effect-6 input:not(:placeholder-shown) ~ label,
+.input-effect-6 textarea:not(:placeholder-shown) ~ label,
+.input-effect-6 select:not([value=""]) ~ label {
+  top: -0.75rem;
+  left: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--primary-color);
+  background-color: var(--body-bg);
+  padding: 0 0.5rem;
+}
+
+/* Effect 7: Shaking effect on invalid */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+.input-effect-7 input:invalid:focus,
+.input-effect-7 textarea:invalid:focus,
+.input-effect-7 select:invalid:focus {
+  animation: shake 0.5s;
+  border-color: var(--danger-color);
+}
+
+.input-effect-7 input:focus,
+.input-effect-7 textarea:focus,
+.input-effect-7 select:focus {
+  border-color: var(--primary-color);
+}
+
+.input-effect-7 input:focus ~ label,
+.input-effect-7 textarea:focus ~ label,
+.input-effect-7 select:focus ~ label,
+.input-effect-7 input:not(:placeholder-shown) ~ label,
+.input-effect-7 textarea:not(:placeholder-shown) ~ label,
+.input-effect-7 select:not([value=""]) ~ label {
+  top: -0.75rem;
+  font-size: 0.85rem;
+  color: var(--primary-color);
+}
+
+/* Effect 8: Typing indicator */
+.input-effect-8 input:focus::after,
+.input-effect-8 textarea:focus::after {
+  content: "|";
+  display: inline-block;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.input-effect-8 input:focus,
+.input-effect-8 textarea:focus,
+.input-effect-8 select:focus {
+  border-color: var(--primary-color);
+}
+
+.input-effect-8 input:focus ~ label,
+.input-effect-8 textarea:focus ~ label,
+.input-effect-8 select:focus ~ label,
+.input-effect-8 input:not(:placeholder-shown) ~ label,
+.input-effect-8 textarea:not(:placeholder-shown) ~ label,
+.input-effect-8 select:not([value=""]) ~ label {
+  top: -0.75rem;
+  font-size: 0.85rem;
+  color: var(--primary-color);
+}
+
+/* Effect 9: Bouncing label */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+.input-effect-9 input:focus ~ label,
+.input-effect-9 textarea:focus ~ label,
+.input-effect-9 select:focus ~ label {
+  animation: bounce 0.5s;
+  top: -0.75rem;
+  font-size: 0.85rem;
+  color: var(--primary-color);
+}
+
+.input-effect-9 input:not(:placeholder-shown) ~ label,
+.input-effect-9 textarea:not(:placeholder-shown) ~ label,
+.input-effect-9 select:not([value=""]) ~ label {
+  top: -0.75rem;
+  font-size: 0.85rem;
+  color: var(--primary-color);
+}
+
+.input-effect-9 input:focus,
+.input-effect-9 textarea:focus,
+.input-effect-9 select:focus {
+  border-color: var(--primary-color);
+}
+
+/* Effect 10: Colorful focus */
+.input-effect-10 input,
+.input-effect-10 textarea,
+.input-effect-10 select {
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  transition: all 0.3s ease;
+}
+
+.input-effect-10 input:focus,
+.input-effect-10 textarea:focus,
+.input-effect-10 select:focus {
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--primary-color), 
+              0 0 0 4px rgba(var(--primary-rgb), 0.3), 
+              0 0 0 6px rgba(var(--primary-rgb), 0.1);
+}
+
+.input-effect-10 input:focus ~ label,
+.input-effect-10 textarea:focus ~ label,
+.input-effect-10 select:focus ~ label,
+.input-effect-10 input:not(:placeholder-shown) ~ label,
+.input-effect-10 textarea:not(:placeholder-shown) ~ label,
+.input-effect-10 select:not([value=""]) ~ label {
+  top: -0.75rem;
+  left: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--primary-color);
+  background-color: var(--body-bg);
+  padding: 0 0.5rem;
+}
+
+/* Checkbox and radio effects */
+.checkbox-effect,
+.radio-effect {
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.checkbox-effect input,
+.radio-effect input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: var(--light-bg);
+  border: 2px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.radio-effect .checkmark {
+  border-radius: 50%;
+}
+
+.checkbox-effect:hover input ~ .checkmark,
+.radio-effect:hover input ~ .checkmark {
+  background-color: var(--border-color);
+}
+
+.checkbox-effect input:checked ~ .checkmark,
+.radio-effect input:checked ~ .checkmark {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-effect input:checked ~ .checkmark:after,
+.radio-effect input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-effect .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.radio-effect .checkmark:after {
+  left: 7px;
+  top: 7px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+
+/* Checkbox effect 1: Scale */
+.checkbox-effect-1 .checkmark {
+  transform-origin: center;
+  transition: all 0.3s ease;
+}
+
+.checkbox-effect-1 input:checked ~ .checkmark {
+  transform: scale(1.1);
+}
+
+/* Checkbox effect 2: Rotate */
+.checkbox-effect-2 .checkmark:after {
+  transition: all 0.3s ease;
+  transform: rotate(0deg) scale(0);
+}
+
+.checkbox-effect-2 input:checked ~ .checkmark:after {
+  transform: rotate(45deg) scale(1);
+}
+
+/* Checkbox effect 3: Pulse */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.checkbox-effect-3 input:checked ~ .checkmark {
+  animation: pulse 0.5s;
+}
+
+/* Radio effect 1: Ripple */
+@keyframes ripple {
+  0% { box-shadow: 0 0 0 0px rgba(var(--primary-rgb), 0.5); }
+  100% { box-shadow: 0 0 0 10px rgba(var(--primary-rgb), 0); }
+}
+
+.radio-effect-1 input:checked ~ .checkmark {
+  animation: ripple 0.6s;
+}
+
+/* Radio effect 2: Glow */
+.radio-effect-2 input:checked ~ .checkmark {
+  box-shadow: 0 0 5px rgba(var(--primary-rgb), 0.5);
+}
+
+/* Switch effects */
+.switch-effect {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch-effect input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.switch-effect input:checked + .slider {
+  background-color: var(--primary-color);
+}
+
+.switch-effect input:focus + .slider {
+  box-shadow: 0 0 1px var(--primary-color);
+}
+
+.switch-effect input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Switch effect 1: Bounce */
+.switch-effect-1 input:checked + .slider:before {
+  animation: bounce 0.5s;
+}
+
+/* Switch effect 2: Glow */
+.switch-effect-2 input:checked + .slider {
+  box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.5);
+}
+
+/* Switch effect 3: Color transition */
+.switch-effect-3 .slider {
+  background: linear-gradient(to right, var(--border-color) 50%, var(--primary-color) 50%);
+  background-size: 200% 100%;
+  background-position: left bottom;
+  transition: all 0.5s ease;
+}
+
+.switch-effect-3 input:checked + .slider {
+  background-position: right bottom;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .input-effect label {
+    font-size: 0.9rem;
+  }
+  
+  .checkbox-effect,
+  .radio-effect {
+    padding-left: 30px;
+  }
+  
+  .checkmark {
+    height: 20px;
+    width: 20px;
+  }
+  
+  .checkbox-effect .checkmark:after {
+    left: 7px;
+    top: 3px;
+    width: 4px;
+    height: 8px;
+  }
+  
+  .radio-effect .checkmark:after {
+    left: 5px;
+    top: 5px;
+    width: 6px;
+    height: 6px;
+  }
+  
+  .switch-effect {
+    width: 50px;
+    height: 28px;
+  }
+  
+  .slider:before {
+    height: 20px;
+    width: 20px;
+  }
+  
+  .switch-effect input:checked + .slider:before {
+    transform: translateX(22px);
+  }
+}

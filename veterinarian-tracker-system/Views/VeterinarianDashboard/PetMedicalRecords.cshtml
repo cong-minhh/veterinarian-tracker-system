@@ -1,0 +1,461 @@
+@model TuyetDang.MyVetTracer.Entity.Pet
+@{
+    ViewData["Title"] = "Pet Medical Records";
+    Layout = "_AdminLayout";
+    @* var age = Model.Age;
+if (DateTime.Now.DayOfYear < Model.BirthDate.DayOfYear)
+{
+age--;
+} *@
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "VeterinarianDashboard")">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Pet Medical Records</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Pet Overview Section -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Pet Overview</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        @if (!string.IsNullOrEmpty(Model.Img))
+                        {
+                            <img src="@Model.Img" alt="@Model.PetName" class="img-fluid rounded-circle pet-avatar mb-3"
+                                style="width: 150px; height: 150px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <div class="pet-avatar-placeholder rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center bg-light"
+                                style="width: 150px; height: 150px;">
+                                <i class="fas fa-paw fa-4x text-secondary"></i>
+                            </div>
+                        }
+                        <h4>@Model.PetName</h4>
+                        <p class="text-muted">@Model.Identification (@Model.PetType)</p>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <div class="info-item">
+                                <span class="info-label">Age</span>
+                                <span class="info-value">@age years</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="info-item">
+                                <span class="info-label">Gender</span>
+                                <span class="info-value">@Model.Sex</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <div class="info-item">
+                                <span class="info-label">Weight</span>
+                                <span class="info-value">@Model.Weight kg</span>
+                            </div>
+                        </div>
+                        @* <div class="col-6">
+                        <div class="info-item">
+                        <span class="info-label">Color</span>
+                        <span class="info-value">@Model.Color</span>
+                        </div>
+                        </div> *@
+                    </div>
+
+                    <div class="info-item mb-3">
+                        <span class="info-label">Owner</span>
+                        <span class="info-value">@Model.OwnerUser?.FullName</span>
+                    </div>
+
+                    <div class="info-item mb-3">
+                        <span class="info-label">Contact</span>
+                        <span class="info-value">@Model.OwnerUser?.PhoneNum</span>
+                    </div>
+
+                    @* <div class="info-item mb-3">
+                    <span class="info-label">Microchip ID</span>
+                    <span class="info-value">@(string.IsNullOrEmpty(Model.MicrochipId) ? "Not available" :
+                    Model.MicrochipId)</span>
+                    </div> *@
+
+                    @* <div class="info-item">
+                    <span class="info-label">Special Notes</span>
+                    <p class="info-value">@(string.IsNullOrEmpty(Model.SpecialNotes) ? "No special notes" :
+                    Model.SpecialNotes)</p>
+                    </div> *@
+                </div>
+            </div>
+        </div>
+
+        <!-- Medical Records Section -->
+        <div class="col-md-8 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Medical Records</h5>
+                    <div>
+                        <a href="@Url.Action("AssignMedicine", "VeterinarianDashboard", new { petId = Model.IdPet })"
+                            class="btn btn-sm btn-light me-2">
+                            <i class="fas fa-prescription-bottle-alt me-1"></i> Assign Medicine
+                        </a>
+                        <a href="@Url.Action("AssignVaccine", "VeterinarianDashboard", new { petId = Model.IdPet })"
+                            class="btn btn-sm btn-light">
+                            <i class="fas fa-syringe me-1"></i> Assign Vaccine
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="medicalRecordsTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="vaccines-tab" data-bs-toggle="tab"
+                                data-bs-target="#vaccines" type="button" role="tab" aria-controls="vaccines"
+                                aria-selected="true">
+                                <i class="fas fa-syringe me-1"></i> Vaccines
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="medications-tab" data-bs-toggle="tab"
+                                data-bs-target="#medications" type="button" role="tab" aria-controls="medications"
+                                aria-selected="false">
+                                <i class="fas fa-prescription-bottle-alt me-1"></i> Medications
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="appointments-tab" data-bs-toggle="tab"
+                                data-bs-target="#appointments" type="button" role="tab" aria-controls="appointments"
+                                aria-selected="false">
+                                <i class="fas fa-calendar-check me-1"></i> Appointments
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes"
+                                type="button" role="tab" aria-controls="notes" aria-selected="false">
+                                <i class="fas fa-clipboard me-1"></i> Examination Notes
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content pt-4" id="medicalRecordsTabContent">
+                        <!-- Vaccines Tab -->
+                        <div class="tab-pane fade show active" id="vaccines" role="tabpanel"
+                            aria-labelledby="vaccines-tab">
+                            @if (Model.Vacs != null && Model.Vacs.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Vaccine</th>
+                                                <th>Date</th>
+                                                <th>Dose</th>
+                                                <th>Next Due</th>
+                                                <th>Status</th>
+                                                <th>Administered By</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var vaccine in Model.Vacs.OrderByDescending(v => v.Date))
+                                            {
+                                                var nextDueDate = vaccine.Date.AddMonths(vaccine.ValidityPeriod);
+                                                var daysUntilDue = (nextDueDate - DateTime.Now).Days;
+                                                string statusClass = "";
+                                                string statusText = "";
+
+                                                if (daysUntilDue > 30)
+                                                {
+                                                    statusClass = "bg-success";
+                                                    statusText = "Up to date";
+                                                }
+                                                else if (daysUntilDue > 0)
+                                                {
+                                                    statusClass = "bg-warning text-dark";
+                                                    statusText = "Due soon";
+                                                }
+                                                else
+                                                {
+                                                    statusClass = "bg-danger";
+                                                    statusText = "Overdue";
+                                                }
+
+                                                <tr>
+                                                    <td>@vaccine.VaccineName</td>
+                                                    <td>@vaccine.VaccinationDate.ToString("MMM d, yyyy")</td>
+                                                    <td>@vaccine.Dose</td>
+                                                    <td>@nextDueDate.ToString("MMM d, yyyy")</td>
+                                                    <td><span class="badge @statusClass">@statusText</span></td>
+                                                    <td>@vaccine.VetUser?.FullName</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i> No vaccination records found for this pet.
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Medications Tab -->
+                        <div class="tab-pane fade" id="medications" role="tabpanel" aria-labelledby="medications-tab">
+                            @if (Model.Meds != null && Model.Meds.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Medication</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
+                                                <th>Dosage</th>
+                                                <th>Instructions</th>
+                                                <th>Remaining</th>
+                                                <th>Prescribed By</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var medication in Model.Meds.OrderByDescending(m => m.CreatedAt))
+                                            {
+                                                var remainingPercentage = medication.RemainingAmount / medication.Total * 100;
+                                                string quantityClass = "";
+
+                                                if (remainingPercentage > 50)
+                                                {
+                                                    quantityClass = "bg-success";
+                                                }
+                                                else if (remainingPercentage > 20)
+                                                {
+                                                    quantityClass = "bg-warning";
+                                                }
+                                                else
+                                                {
+                                                    quantityClass = "bg-danger";
+                                                }
+
+                                                <tr>
+                                                    <td>@medication.MedicationName</td>
+                                                    <td>@medication.StartDate.ToString("MMM d, yyyy")</td>
+                                                    <td>@medication.EndDate?.ToString("MMM d, yyyy")</td>
+                                                    <td>@medication.Dosage</td>
+                                                    <td>@medication.Instructions</td>
+                                                    <td>
+                                                        <div class="progress" style="height: 20px;">
+                                                            <div class="progress-bar @quantityClass" role="progressbar"
+                                                                style="width: @remainingPercentage%"
+                                                                aria-valuenow="@remainingPercentage" aria-valuemin="0"
+                                                                aria-valuemax="100">
+                                                                @medication.RemainingAmount/@medication.Total</div>
+                                                        </div>
+                                                    </td>
+                                                    <td>@medication.VetUser?.FullName</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i> No medication records found for this pet.
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Appointments Tab -->
+                        <div class="tab-pane fade" id="appointments" role="tabpanel" aria-labelledby="appointments-tab">
+                            @if (Model.Appointments != null && Model.Appointments.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Date & Time</th>
+                                                <th>Reason</th>
+                                                <th>Status</th>
+                                                <th>VetUser</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var appointment in Model.Appointments.OrderByDescending(a => a.Time))
+                                            {
+                                                <tr>
+                                                    @* <td>@appointment.Time.ToString("MMM d, yyyy h:mm tt")</td>
+                                            <td>@(string.IsNullOrEmpty(appointment.Notes) ? "No reason provided" :
+                                            appointment.Notes)</td> *@
+                                                    <td>
+                                                        @if (appointment.IsConfirmed == 1)
+                                                        {
+                                                            <span class="badge bg-success">Confirmed</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-warning text-dark">Pending</span>
+                                                        }
+                                                    </td>
+                                                    <td>@appointment.VetUser?.FullName</td>
+                                                    <td>
+                                                        @if (appointment.IsConfirmed == 0)
+                                                        {
+                                                            <a href="@Url.Action("UpdateAppointment", "VeterinarianDashboard", new { id = appointment.IdAppointment, status = true })"
+                                                                class="btn btn-sm btn-success me-1">
+                                                                <i class="fas fa-check"></i> Confirm
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="@Url.Action("UpdateAppointment", "VeterinarianDashboard", new { id = appointment.IdAppointment, status = false })"
+                                                                class="btn btn-sm btn-danger me-1">
+                                                                <i class="fas fa-times"></i> Cancel
+                                                            </a>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i> No appointment records found for this pet.
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Examination Notes Tab -->
+                        <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
+                            <div class="mb-4">
+                                <h5>Add Examination Note</h5>
+                                <form id="examinationNoteForm">
+                                    <input type="hidden" id="petId" value="@Model.IdPet" />
+                                    <div class="mb-3">
+                                        <label for="noteTitle" class="form-label">Title</label>
+                                        <input type="text" class="form-control" id="noteTitle" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="noteContent" class="form-label">Note Content</label>
+                                        <textarea class="form-control" id="noteContent" rows="4" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save me-1"></i> Save Note
+                                    </button>
+                                </form>
+                            </div>
+
+                            <hr />
+
+                            <div id="examinationNotesContainer">
+                                <!-- This would be populated with examination notes from the database -->
+                                <!-- For now, we'll show a placeholder message -->
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i> No examination notes found for this pet.
+                                </div>
+
+                                <!-- Example note (for demonstration) -->
+                                <div class="card mb-3 d-none">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-0">Annual Checkup</h6>
+                                        <small class="text-muted">May 15, 2023</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Pet is in good health. Weight is stable. Recommended dental cleaning in the
+                                            next 3 months.</p>
+                                        <div class="text-muted small">By: Dr. John Smith</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .info-item {
+            margin-bottom: 10px;
+        }
+
+        .info-label {
+            display: block;
+            font-size: 0.8rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-weight: 500;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize SignalR connection
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/notificationHub")
+                .withAutomaticReconnect()
+                .build();
+
+            // Handle form submission for examination notes
+            $("#examinationNoteForm").submit(function (e) {
+                e.preventDefault();
+
+                const petId = $("#petId").val();
+                const title = $("#noteTitle").val();
+                const content = $("#noteContent").val();
+
+                // This would normally send an AJAX request to save the note
+                // For now, we'll just show a success message and clear the form
+                alert("Note saved successfully!");
+                $("#noteTitle").val("");
+                $("#noteContent").val("");
+
+                // You would then refresh the notes list or add the new note to the UI
+            });
+
+            // Start the SignalR connection
+            connection.start().catch(function (err) {
+                console.error(err.toString());
+            });
+        });
+    </script>
+}

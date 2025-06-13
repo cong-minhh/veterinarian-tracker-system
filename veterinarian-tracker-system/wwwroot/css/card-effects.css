@@ -1,0 +1,458 @@
+/**
+ * Card Effects CSS
+ * Modern, interactive card styles for the VetTracker application
+ */
+
+/* Base card styles */
+.card {
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Hover lift effect */
+.hover-lift {
+  transform: translateY(0);
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+}
+
+/* 3D tilt card effect */
+.tilt-card {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: all 0.3s ease;
+}
+
+.tilt-card .card-body {
+  transform: translateZ(20px);
+  transition: all 0.3s ease;
+}
+
+.card-glare {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Border glow effect */
+.border-glow {
+  position: relative;
+}
+
+.border-glow::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    45deg,
+    var(--primary-color),
+    var(--secondary-color),
+    var(--primary-color)
+  );
+  z-index: -1;
+  border-radius: calc(0.375rem + 2px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.border-glow:hover::before {
+  opacity: 1;
+}
+
+/* Reveal content on hover */
+.reveal-content .card-hidden-content {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.reveal-content:hover .card-hidden-content {
+  max-height: 200px;
+  opacity: 1;
+}
+
+/* Zoom image on hover */
+.zoom-image .card-img-top {
+  transition: all 0.5s ease;
+}
+
+.zoom-image:hover .card-img-top {
+  transform: scale(1.1);
+}
+
+/* Rotate card effect */
+.flip-card {
+  perspective: 1000px;
+  height: 300px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.flip-card-front {
+  background-color: var(--light-bg);
+}
+
+.flip-card-back {
+  background-color: var(--primary-color);
+  color: white;
+  transform: rotateY(180deg);
+}
+
+/* Gradient border card */
+.gradient-border {
+  position: relative;
+  background: var(--light-bg);
+  background-clip: padding-box;
+  border: solid 2px transparent;
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  margin: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    to right,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+}
+
+/* Floating animation */
+.floating {
+  animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Shine effect */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 50%;
+  height: 300%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 100%
+  );
+  transform: rotate(30deg);
+  transition: all 0.7s ease;
+}
+
+.shine:hover::before {
+  left: 150%;
+}
+
+/* Pulse animation */
+.pulse {
+  animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(var(--primary-rgb), 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0);
+  }
+}
+
+/* Hover overlay */
+.hover-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-overlay .card-img-overlay {
+  opacity: 0;
+  background-color: rgba(var(--primary-rgb), 0.8);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hover-overlay:hover .card-img-overlay {
+  opacity: 1;
+}
+
+/* Staggered animation for card groups */
+.stagger-animation .card {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.stagger-animation .card:nth-child(1) {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.stagger-animation .card:nth-child(2) {
+  animation: fadeInUp 0.5s 0.1s ease forwards;
+}
+
+.stagger-animation .card:nth-child(3) {
+  animation: fadeInUp 0.5s 0.2s ease forwards;
+}
+
+.stagger-animation .card:nth-child(4) {
+  animation: fadeInUp 0.5s 0.3s ease forwards;
+}
+
+.stagger-animation .card:nth-child(5) {
+  animation: fadeInUp 0.5s 0.4s ease forwards;
+}
+
+.stagger-animation .card:nth-child(6) {
+  animation: fadeInUp 0.5s 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Card with ribbon */
+.ribbon-card {
+  position: relative;
+  overflow: visible;
+}
+
+.ribbon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;
+  height: 22px;
+  margin-right: -40px;
+  margin-top: 15px;
+  transform: rotate(45deg);
+  background-color: var(--primary-color);
+  color: white;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  line-height: 22px;
+  z-index: 1;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Card with hover buttons */
+.hover-buttons .card-hover-buttons {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.hover-buttons::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.hover-buttons:hover::after {
+  opacity: 1;
+}
+
+.hover-buttons:hover .card-hover-buttons {
+  opacity: 1;
+}
+
+/* Card with progress bar */
+.progress-card .progress {
+  height: 5px;
+  margin-top: 10px;
+  overflow: visible;
+}
+
+.progress-card .progress-bar {
+  position: relative;
+  border-radius: 5px;
+  overflow: visible;
+}
+
+.progress-card .progress-bar::after {
+  content: attr(aria-valuenow) "%";
+  position: absolute;
+  right: 0;
+  top: -20px;
+  font-size: 0.75rem;
+  color: var(--primary-color);
+}
+
+/* Card with hover info */
+.info-reveal .card-img-overlay {
+  transform: translateY(100%);
+  transition: all 0.3s ease;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 1rem;
+}
+
+.info-reveal:hover .card-img-overlay {
+  transform: translateY(0);
+}
+
+/* Card with hover zoom */
+.zoom-effect {
+  overflow: hidden;
+}
+
+.zoom-effect .card-img-top {
+  transition: all 0.5s ease;
+  transform: scale(1);
+}
+
+.zoom-effect:hover .card-img-top {
+  transform: scale(1.2);
+}
+
+/* Card with shadow on hover */
+.shadow-hover {
+  transition: all 0.3s ease;
+}
+
+.shadow-hover:hover {
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
+}
+
+/* Card with border animation */
+.border-animation {
+  position: relative;
+}
+
+.border-animation::before,
+.border-animation::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+}
+
+.border-animation::before {
+  top: 0;
+  left: 0;
+  border-top: 2px solid var(--primary-color);
+  border-left: 2px solid var(--primary-color);
+}
+
+.border-animation::after {
+  bottom: 0;
+  right: 0;
+  border-bottom: 2px solid var(--primary-color);
+  border-right: 2px solid var(--primary-color);
+}
+
+.border-animation:hover::before,
+.border-animation:hover::after {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hover-lift:hover {
+    transform: none;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  
+  .flip-card {
+    height: auto;
+  }
+  
+  .flip-card-inner {
+    transform-style: flat;
+  }
+  
+  .flip-card:hover .flip-card-inner {
+    transform: none;
+  }
+  
+  .flip-card-back {
+    display: none;
+  }
+}

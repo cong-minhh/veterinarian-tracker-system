@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Không tìm thấy trang";
+}
+
+<div class="not-found-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body p-5 text-center">
+                        <div class="mb-4">
+                            <i class="bi bi-search text-primary" style="font-size: 5rem;"></i>
+                        </div>
+                        <h2 class="fw-bold mb-3">404 - Không tìm thấy trang</h2>
+                        <p class="mb-4">Trang bạn đang tìm kiếm không tồn tại hoặc đã bị di chuyển. Vui lòng kiểm tra lại URL hoặc quay lại trang chủ.</p>
+                        
+                        <div class="d-grid gap-3 d-md-flex justify-content-md-center">
+                            <a href="javascript:history.back()" class="btn btn-outline-primary px-4">
+                                <i class="bi bi-arrow-left me-2"></i>Quay lại
+                            </a>
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-primary px-4">
+                                <i class="bi bi-house me-2"></i>Trang chủ
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
