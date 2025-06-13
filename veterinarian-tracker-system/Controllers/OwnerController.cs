@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 using TuyetDang.MyVetTracer.Data;
 using TuyetDang.MyVetTracer.Entity;
 using TuyetDang.MyVetTracer.ViewModels;
@@ -112,42 +117,85 @@ namespace veterinarian_tracker_system.Controllers
                 return View(model);
             }
 
-            string imgPath = null;
-
-            if (model.ImgFile != null && model.ImgFile.Length > 0)
+            try
             {
-                var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/");
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ImgFile.FileName);
-                var filePath = Path.Combine(uploads, fileName);
-
-                if (!Directory.Exists(uploads))
-                    Directory.CreateDirectory(uploads);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                // Check if username already exists
+                if (await _context.Owners.AnyAsync(o => o.UserName == model.UserName))
                 {
-                    await model.ImgFile.CopyToAsync(stream);
+                    ModelState.AddModelError("UserName", "This username is already taken");
+                    return View(model);
                 }
 
-                imgPath = "/uploads/" + fileName;
+                // Check if email already exists
+                if (await _context.Owners.AnyAsync(o => o.Email == model.Email))
+                {
+                    ModelState.AddModelError("Email", "This email address is already registered");
+                    return View(model);
+                }
+
+                string imgPath = null;
+
+                // Process image upload if provided
+                if (model.ImgFile != null && model.ImgFile.Length > 0)
+                {
+                    // Validate file type
+                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                    var extension = Path.GetExtension(model.ImgFile.FileName).ToLowerInvariant();
+                    
+                    if (!allowedExtensions.Contains(extension))
+                    {
+                        ModelState.AddModelError("ImgFile", "Only image files (.jpg, .jpeg, .png, .gif) are allowed");
+                        return View(model);
+                    }
+
+                    // Validate file size (max 5MB)
+                    if (model.ImgFile.Length > 5 * 1024 * 1024)
+                    {
+                        ModelState.AddModelError("ImgFile", "The file size should not exceed 5MB");
+                        return View(model);
+                    }
+
+                    var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
+                    var fileName = Guid.NewGuid().ToString() + extension;
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    if (!Directory.Exists(uploadsFolder))
+                        Directory.CreateDirectory(uploadsFolder);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.ImgFile.CopyToAsync(stream);
+                    }
+
+                    imgPath = "/uploads/" + fileName;
+                }
+
+                var owner = new Owner
+                {
+                    Img = imgPath,
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    PhoneNum = model.PhoneNum,
+                    Password = model.Password, // In a real application, this should be hashed
+                    FullName = model.FullName,
+                    Dob = model.Dob,
+                    Gender = model.Gender,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+
+                _context.Owners.Add(owner);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Owner created successfully";
+                return RedirectToAction("OwnerIndex");
             }
-
-            var owner = new Owner
+            catch (Exception ex)
             {
-                Img = imgPath,
-                UserName = model.UserName,
-                Email = model.Email,
-                PhoneNum = model.PhoneNum,
-                Password = model.Password,
-                FullName = model.FullName,
-                Dob = model.Dob,
-                Gender = model.Gender
-            };
-
-
-            _context.Owners.Add(owner);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("OwnerIndex");
+                _logger.LogError(ex, "Error creating owner");
+                ModelState.AddModelError("", "An error occurred while creating the owner. Please try again.");
+                return View(model);
+            }
         }
 
         [HttpGet]
@@ -184,36 +232,107 @@ namespace veterinarian_tracker_system.Controllers
                 return View(model);
             }
 
-            var owner = await _context.Owners.FindAsync(id);
-            if (owner == null) return NotFound();
-
-            owner.UserName = model.UserName;
-            owner.Email = model.Email;
-            owner.PhoneNum = model.PhoneNum;
-            owner.Password = model.Password;
-            owner.FullName = model.FullName;
-            owner.Dob = model.Dob;
-            owner.Gender = model.Gender;
-            if (model.ImgFile != null && model.ImgFile.Length > 0)
+            try
             {
-                var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
-                Directory.CreateDirectory(uploadsFolder);
+                var owner = await _context.Owners.FindAsync(id);
+                if (owner == null) return NotFound();
 
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ImgFile.FileName);
-                var filePath = Path.Combine(uploadsFolder, fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                // Check if username is changed and already exists
+                if (owner.UserName != model.UserName && await _context.Owners.AnyAsync(o => o.UserName == model.UserName))
                 {
-                    await model.ImgFile.CopyToAsync(stream);
+                    ModelState.AddModelError("UserName", "This username is already taken");
+                    ViewBag.OwnerId = id;
+                    ViewBag.CurrentImg = owner.Img;
+                    return View(model);
                 }
 
-                owner.Img = "/uploads/" + fileName;
+                // Check if email is changed and already exists
+                if (owner.Email != model.Email && await _context.Owners.AnyAsync(o => o.Email == model.Email))
+                {
+                    ModelState.AddModelError("Email", "This email address is already registered");
+                    ViewBag.OwnerId = id;
+                    ViewBag.CurrentImg = owner.Img;
+                    return View(model);
+                }
+
+                // Process image upload if provided
+                if (model.ImgFile != null && model.ImgFile.Length > 0)
+                {
+                    // Validate file type
+                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                    var extension = Path.GetExtension(model.ImgFile.FileName).ToLowerInvariant();
+                    
+                    if (!allowedExtensions.Contains(extension))
+                    {
+                        ModelState.AddModelError("ImgFile", "Only image files (.jpg, .jpeg, .png, .gif) are allowed");
+                        ViewBag.OwnerId = id;
+                        ViewBag.CurrentImg = owner.Img;
+                        return View(model);
+                    }
+
+                    // Validate file size (max 5MB)
+                    if (model.ImgFile.Length > 5 * 1024 * 1024)
+                    {
+                        ModelState.AddModelError("ImgFile", "The file size should not exceed 5MB");
+                        ViewBag.OwnerId = id;
+                        ViewBag.CurrentImg = owner.Img;
+                        return View(model);
+                    }
+
+                    var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    var fileName = Guid.NewGuid().ToString() + extension;
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.ImgFile.CopyToAsync(stream);
+                    }
+
+                    // Delete old image file if it exists
+                    if (!string.IsNullOrEmpty(owner.Img))
+                    {
+                        var oldImagePath = Path.Combine(_env.WebRootPath, owner.Img.TrimStart('/'));
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            try
+                            {
+                                System.IO.File.Delete(oldImagePath);
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogWarning(ex, "Failed to delete old image file: {FilePath}", oldImagePath);
+                            }
+                        }
+                    }
+
+                    owner.Img = "/uploads/" + fileName;
+                }
+
+                // Update owner properties
+                owner.UserName = model.UserName;
+                owner.Email = model.Email;
+                owner.PhoneNum = model.PhoneNum;
+                owner.Password = model.Password; // In a real application, this should be hashed
+                owner.FullName = model.FullName;
+                owner.Dob = model.Dob;
+                owner.Gender = model.Gender;
+                owner.UpdatedAt = DateTime.Now;
+
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Owner updated successfully";
+                return RedirectToAction("OwnerIndex");
             }
-
-            await _context.SaveChangesAsync();
-
-            TempData["SuccessMessage"] = "Updated owner successfully";
-            return RedirectToAction("OwnerIndex");
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating owner with ID {OwnerId}", id);
+                ModelState.AddModelError("", "An error occurred while updating the owner. Please try again.");
+                ViewBag.OwnerId = id;
+                ViewBag.CurrentImg = (await _context.Owners.FindAsync(id))?.Img;
+                return View(model);
+            }
         }
 
         [HttpGet]
@@ -230,13 +349,45 @@ namespace veterinarian_tracker_system.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var owner = await _context.Owners.FindAsync(id);
-            if (owner == null) return NotFound();
+            try
+            {
+                var owner = await _context.Owners.Include(o => o.Pets).FirstOrDefaultAsync(o => o.IdOwnerUser == id);
+                if (owner == null) return NotFound();
 
-            _context.Owners.Remove(owner);
-            await _context.SaveChangesAsync();
+                // Check if owner has pets
+                if (owner.Pets != null && owner.Pets.Any())
+                {
+                    TempData["ErrorMessage"] = "Cannot delete owner with associated pets. Please remove or reassign the pets first.";
+                    return RedirectToAction("OwnerIndex");
+                }
 
-            TempData["SuccessMessage"] = "Deleted owner successfully";
+                // Delete owner's image file if it exists
+                if (!string.IsNullOrEmpty(owner.Img))
+                {
+                    var imagePath = Path.Combine(_env.WebRootPath, owner.Img.TrimStart('/'));
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        try
+                        {
+                            System.IO.File.Delete(imagePath);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning(ex, "Failed to delete image file: {FilePath}", imagePath);
+                        }
+                    }
+                }
+
+                _context.Owners.Remove(owner);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Owner deleted successfully";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting owner with ID {OwnerId}", id);
+                TempData["ErrorMessage"] = "An error occurred while deleting the owner. Please try again.";
+            }
 
             return RedirectToAction("OwnerIndex");
         }
