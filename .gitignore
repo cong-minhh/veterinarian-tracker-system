@@ -12,5 +12,14 @@ obj/
 
 # Visual Studio workspace files
 .vs/
+**/.vs/
+**/.vscode/
 
+**/obj/
+**/bin/
 # End of https://www.toptal.com/developers/gitignore/api/dotnetcore
+
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
