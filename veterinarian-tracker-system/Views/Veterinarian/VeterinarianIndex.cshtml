@@ -1,4 +1,4 @@
-@model List<TuyetDang.MyVetTracer.Entity.Veterinarian>
+﻿@model List<TuyetDang.MyVetTracer.Entity.Veterinarian>
 @{
     ViewData["Title"] = "Veterinarians Management";
 }
@@ -10,7 +10,7 @@
 
 <div class="vet-container fade-in">
     <div class="vet-header">
-        <h2><i class="bi bi-hospital"></i> Veterinarians Management</h2>
+        <h2><i class="bi bi-hospital"></i></h2>
         <a href="@Url.Action("Create", "Veterinarian")" class="btn vet-btn vet-btn-success">
             <i class="bi bi-plus-circle"></i> Add New Veterinarian
         </a>
@@ -107,10 +107,10 @@
     <!-- Toggle View Buttons -->
     <div class="mb-4">
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-outline-primary active" id="cardViewBtn"><i
-                    class="bi bi-grid-3x3-gap"></i> Card View</button>
             <button type="button" class="btn btn-outline-primary" id="tableViewBtn"><i class="bi bi-table"></i> Table
                 View</button>
+            <button type="button" class="btn btn-outline-primary active" id="cardViewBtn"><i
+                    class="bi bi-grid-3x3-gap"></i> Card View</button>
         </div>
     </div>
 
@@ -128,7 +128,7 @@
                         </div>
                         <div class="text-center position-relative">
                             <img src="@(string.IsNullOrEmpty(vet.Img) ? "/img/default-vet.jpg" : vet.Img)" alt="@vet.FullName"
-                                class="vet-card-img mt-3" />
+                                class="vet-card-img mt-3 js-avatar" data-vet-id="@vet.IdVetUser" />
                             <span
                                 class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-success mt-4 me-2">
                                 @(vet.Authentication == 1 ? "Verified" : "Pending")
@@ -138,11 +138,80 @@
                             <div class="mb-2">
                                 <span class="vet-badge vet-badge-primary">@vet.Qualification</span>
                                 <span class="vet-badge vet-badge-success">@(vet.Pets != null ? vet.Pets.Count : 0) Pets</span>
+                                
+                                @{
+                                  bool isBusy = vet.Appointments != null &&
+                                    vet.Appointments.Any(a =>
+                                  DateTime.TryParse(a.Time, out var time) &&
+                                   time.Date == DateTime.Now.Date);
+        }
+
+<span class="vet-status @(isBusy ? "vet-status-busy" : "vet-status-available") float-end">
+    @(isBusy ? "Busy" : "Available")
+</span>
                             </div>
+                            
                             <p><i class="bi bi-envelope"></i> @vet.Email</p>
                             <p><i class="bi bi-telephone"></i> @vet.PhoneNum</p>
                             <p><i class="bi bi-building"></i> @vet.NameOfConsultingRoom</p>
                             <p><i class="bi bi-geo-alt"></i> @vet.ClinicAddress</p>
+                            
+                            <!-- Toggle buttons -->
+                            <div class="mt-3">
+                                <button type="button" class="vet-toggle-btn js-toggle-pets" data-target="pets-@vet.IdVetUser">
+                                    <i class="bi bi-chevron-right"></i> Show Pets (@(vet.Pets != null ? vet.Pets.Count : 0))
+                                </button>
+                                <div id="pets-@vet.IdVetUser" class="vet-toggle-section">
+                                    <div class="vet-toggle-content">
+                                        @if (vet.Pets != null && vet.Pets.Count > 0)
+                                        {
+                                            foreach (var pet in vet.Pets)
+                                            {
+                                                <div class="vet-pet-item">
+                                                    <img src="@(string.IsNullOrEmpty(pet.Img) ? "/img/default-pet.jpg" : pet.Img)" alt="@pet.PetName" class="vet-pet-img" />
+                                                    <div class="vet-pet-info">
+                                                        <p class="vet-pet-name">@pet.PetName</p>
+                                                        <p class="vet-pet-type">@pet.PetType, @pet.Age years old</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <p class="text-muted">No pets assigned yet.</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <button type="button" class="vet-toggle-btn js-toggle-appointments" data-target="appointments-@vet.IdVetUser">
+                                    <i class="bi bi-chevron-right"></i> Show Appointments (@(vet.Appointments != null ? vet.Appointments.Count : 0))
+                                </button>
+                                <div id="appointments-@vet.IdVetUser" class="vet-toggle-section">
+                                    <div class="vet-toggle-content">
+                                        @if (vet.Appointments != null && vet.Appointments.Count > 0)
+                                        {
+                                            foreach (var appointment in vet.Appointments.OrderBy(a => a.Time))
+                                            {
+                                                <div class="vet-appointment-item">
+                                                    <div class="vet-appointment-info">
+                                                        <p class="vet-appointment-time">@appointment.Time</p>
+                                                        <p class="vet-appointment-pet">Pet: @(appointment.Pet?.PetName ?? "Not specified")</p>
+                                                    </div>
+                                                    <span class="vet-badge @(appointment.IsConfirmed == 1 ? "vet-badge-success" : "vet-badge-primary")">
+                                                        @(appointment.IsConfirmed == 1 ? "Confirmed" : "Pending")
+                                                    </span>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <p class="text-muted">No appointments scheduled.</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="vet-card-footer d-flex justify-content-between">
                             <a href="@Url.Action("Edit", "Veterinarian", new { id = vet.IdVetUser })"
@@ -204,6 +273,7 @@
                         <th scope="col">Consulting Room</th>
                         <th scope="col">Qualification</th>
                         <th scope="col">Pets</th>
+                        <th scope="col">Status</th>
                         <th scope="col" class="text-center">Actions</th>
                     </tr>
                 </thead>
@@ -212,30 +282,118 @@
                     {
                         foreach (var vet in Model)
                         {
-                            <tr>
+                            <tr data-vet-id="@vet.IdVetUser" class="vet-table-row">
                                 <td>
                                     <img src="@(string.IsNullOrEmpty(vet.Img) ? "/img/default-vet.jpg" : vet.Img)"
                                         alt="@vet.FullName" width="50" height="50"
-                                        style="object-fit: cover; border-radius: 50%;" />
+                                        class="js-avatar" data-vet-id="@vet.IdVetUser"
+                                        style="object-fit: cover; border-radius: 50%; cursor: pointer;" />
                                 </td>
                                 <td>@vet.FullName</td>
                                 <td>@vet.Email</td>
                                 <td>@vet.PhoneNum</td>
                                 <td>@vet.NameOfConsultingRoom</td>
                                 <td><span class="vet-badge vet-badge-primary">@vet.Qualification</span></td>
-                                <td><span class="vet-badge vet-badge-success">@(vet.Pets != null ? vet.Pets.Count : 0)</span>
+                                <td>
+                                    <span class="vet-badge vet-badge-success">@(vet.Pets != null ? vet.Pets.Count : 0)</span>
+                                </td>
+                                <td>
+                                    <span class="vet-status @(vet.Appointments != null && vet.Appointments.Any(a => a.Time.Contains(DateTime.Now.ToString("yyyy-MM-dd"))) ? "vet-status-busy" : "vet-status-available")">
+                                        @(vet.Appointments != null && vet.Appointments.Any(a => a.Time.Contains(DateTime.Now.ToString("yyyy-MM-dd"))) ? "Busy" : "Available")
+                                    </span>
                                 </td>
                                 <td class="text-center">
-                                    <a href="@Url.Action("Edit", "Veterinarian", new { id = vet.IdVetUser })"
-                                        class="btn btn-sm vet-btn-primary me-1">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-                                    <button type="button" class="btn btn-sm vet-btn-danger" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal-@vet.IdVetUser">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <a href="@Url.Action("Edit", "Veterinarian", new { id = vet.IdVetUser })" class="btn btn-sm vet-btn-primary me-2">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm vet-btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal-@vet.IdVetUser">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                        <button type="button" class="table-toggle-arrow js-toggle-row" data-vet-id="@vet.IdVetUser">
+                                            <i class="bi bi-chevron-right"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
+                            <tr id="expanded-row-@vet.IdVetUser" class="expanded-row" style="display: none;">
+                                <td colspan="9">
+                                    <div class="expanded-content">
+                                        <div class="expanded-section">
+                                            <div class="expanded-section-title">
+                                                <i class="bi bi-heart-pulse"></i> Pets (@(vet.Pets != null ? vet.Pets.Count : 0))
+                                            </div>
+                                            <div class="expanded-pets">
+                                                @if (vet.Pets != null && vet.Pets.Count > 0)
+                                                {
+                                                    foreach (var pet in vet.Pets)
+                                                    {
+                                                        <div class="vet-pet-item">
+                                                            <img src="@(string.IsNullOrEmpty(pet.Img) ? "/img/default-pet.jpg" : pet.Img)" alt="@pet.PetName" class="vet-pet-img" />
+                                                            <div class="vet-pet-info">
+                                                                <p class="vet-pet-name">@pet.PetName</p>
+                                                                <p class="vet-pet-type">@pet.PetType, @pet.Age years old</p>
+                                                            </div>
+                                                            <div class="vet-pet-tooltip">
+                                                                <div class="vet-tooltip-header">@pet.PetName</div>
+                                                                <div class="vet-tooltip-info">
+                                                                    <p><strong>Type:</strong> @pet.PetType</p>
+                                                                    <p><strong>Age:</strong> @pet.Age years</p>
+                                                                    <p><strong>Sex:</strong> @pet.Sex</p>
+                                                                    <p><strong>Weight:</strong> @pet.Weight kg</p>
+                                                                    <p><strong>Height:</strong> @pet.Height cm</p>
+                                                                    <p><strong>ID:</strong> @pet.Identification</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <p class="text-muted">No pets assigned yet.</p>
+                                                }
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="expanded-section">
+                                            <div class="expanded-section-title">
+                                                <i class="bi bi-calendar-check"></i> Appointments (@(vet.Appointments != null ? vet.Appointments.Count : 0))
+                                            </div>
+                                            <div class="expanded-appointments">
+                                                @if (vet.Appointments != null && vet.Appointments.Count > 0)
+                                                {
+                                                    foreach (var appointment in vet.Appointments.OrderBy(a => a.Time))
+                                                    {
+                                                        <div class="vet-appointment-item">
+                                                            <div class="vet-appointment-info">
+                                                                <p class="vet-appointment-time">@appointment.Time</p>
+                                                                <p class="vet-appointment-pet">Pet: @(appointment.Pet?.PetName ?? "Not specified")</p>
+                                                            </div>
+                                                            <span class="vet-badge @(appointment.IsConfirmed == 1 ? "vet-badge-success" : "vet-badge-primary")">
+                                                                @(appointment.IsConfirmed == 1 ? "Confirmed" : "Pending")
+                                                            </span>
+                                                            <div class="vet-appointment-tooltip">
+                                                                <div class="vet-tooltip-header">Appointment Details</div>
+                                                                <div class="vet-tooltip-info">
+                                                                    <p><strong>Date/Time:</strong> @appointment.Time</p>
+                                                                    <p><strong>Pet:</strong> @(appointment.Pet?.PetName ?? "Not specified")</p>
+                                                                    <p><strong>Pet Type:</strong> @(appointment.Pet?.PetType ?? "Not specified")</p>
+                                                                    <p><strong>Status:</strong> @(appointment.IsConfirmed == 1 ? "Confirmed" : "Pending")</p>
+                                                                    <p><strong>ID:</strong> @appointment.IdAppointment</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                <p class="text-muted">No appointments scheduled.</p>
+                                            }
+                                            </div>
+                                         </div>
+                                     </div>
+                                 </td>
+                             </tr>
                         }
                     }
                     else
@@ -326,4 +484,14 @@
             }
         };
     </script>
+}
+
+<!-- Avatar Modal -->
+<div id="avatarModal" class="avatar-modal">
+    <span class="avatar-modal-close">&times;</span>
+    <img class="avatar-modal-content" id="avatarModalImg">
+</div>
+
+@section Scripts {
+    <script src="~/js/veterinarian.js"></script>
 }

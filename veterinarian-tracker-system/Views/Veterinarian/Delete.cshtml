@@ -38,11 +38,15 @@
                                 <p><i class="bi bi-telephone"></i> <strong>Phone Number:</strong> @Model.PhoneNum</p>
                             </div>
                             <div class="col-md-6">
-                                <p><i class="bi bi-building"></i> <strong>Clinic Name:</strong> @Model.NameOfConsultingRoom</p>
-                                <p><i class="bi bi-geo-alt"></i> <strong>Clinic Address:</strong> @Model.ClinicAddress</p>
+                                <p><i class="bi bi-building"></i> <strong>Clinic Name:</strong>
+                                    @Model.NameOfConsultingRoom</p>
+                                <p><i class="bi bi-geo-alt"></i> <strong>Clinic Address:</strong> @Model.ClinicAddress
+                                </p>
                                 <p><i class="bi bi-award"></i> <strong>Qualification:</strong> @Model.Qualification</p>
-                                <p><i class="bi bi-shield-check"></i> <strong>Authentication:</strong> 
-                                    <span class="badge @(Model.Authentication == 1 ? "bg-success" : "bg-warning")">@(Model.Authentication == 1 ? "Verified" : "Pending")</span>
+                                <p><i class="bi bi-shield-check"></i> <strong>Authentication:</strong>
+                                    <span
+                                        class="badge @(Model.Authentication == 1 ? "bg-success" : "bg-warning")">@(Model.Authentication
+                                        == 1 ? "Verified" : "Pending")</span>
                                 </p>
                             </div>
                         </div>
@@ -50,7 +54,8 @@
                             <div class="col-12">
                                 <p><i class="bi bi-journal-text"></i> <strong>Experience:</strong></p>
                                 <div class="p-2 bg-light rounded">
-                                    @(string.IsNullOrEmpty(Model.Experience) ? "No experience information provided" : Model.Experience)
+                                    @(string.IsNullOrEmpty(Model.Experience) ? "No experience information provided" :
+                                        Model.Experience)
                                 </div>
                             </div>
                         </div>
@@ -59,7 +64,8 @@
                         <p><i class="bi bi-image"></i> <strong>Profile Image:</strong></p>
                         @if (!string.IsNullOrEmpty(Model.Img))
                         {
-                            <img src="@Model.Img" alt="Veterinarian Image" class="img-fluid rounded" style="max-height: 200px;" />
+                            <img src="@Model.Img" alt="Veterinarian Image" class="img-fluid rounded"
+                                style="max-height: 200px;" />
                         }
                         else
                         {
