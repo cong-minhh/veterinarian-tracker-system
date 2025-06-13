@@ -4,73 +4,165 @@
     ViewData["Title"] = "Edit Owner";
 }
 
-<h2>Edit Owner</h2>
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/owner.css" />
+}
 
-@using (Html.BeginForm("Edit", "Owner", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-
-    <input type="hidden" name="id" value="@ViewBag.OwnerId" />
-
-    <div class="form-group mb-3">
-        @Html.LabelFor(m => m.UserName)
-        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.UserName)
+<div class="owner-container fade-in">
+    <div class="owner-header">
+        <h2><i class="bi bi-pencil-square"></i> Edit Owner</h2>
+        <a href="@Url.Action("OwnerIndex", "Owner")" class="btn owner-btn owner-btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
     </div>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(m => m.Email)
-        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Email)
-    </div>
-
-    <div class="form-group mb-3">
-        @Html.LabelFor(m => m.PhoneNum)
-        @Html.TextBoxFor(m => m.PhoneNum, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.PhoneNum)
-    </div>
-
-    <div class="form-group mb-3">
-        @Html.LabelFor(m => m.Password)
-        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Password)
-    </div>
-
-    <div class="form-group mb-3">
-        @Html.LabelFor(m => m.FullName)
-        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.FullName)
-    </div>
-
-    <div class="form-group mb-3">
-        @Html.LabelFor(m => m.Dob)
-        @Html.TextBoxFor(m => m.Dob, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
-        @Html.ValidationMessageFor(m => m.Dob)
-    </div>
-
-    <div class="form-group mb-3">
-        @Html.LabelFor(m => m.Gender)
-        @Html.TextBoxFor(m => m.Gender, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Gender)
-    </div>
-
-    <div class="form-group mb-3">
-        <label>Current Image</label><br />
-        @if (!string.IsNullOrEmpty(ViewBag.CurrentImg))
+    <div class="owner-form-card">
+        @if (!ViewData.ModelState.IsValid)
         {
-            <img src="@ViewBag.CurrentImg" alt="Owner Image" style="height: 100px;" />
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle"></i> Please correct the errors below
+            </div>
         }
-        else
+
+        @if (TempData["ErrorMessage"] != null)
         {
-            <p>No image</p>
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle"></i> @TempData["ErrorMessage"]
+            </div>
+        }
+
+        @using (Html.BeginForm("Edit", "Owner", FormMethod.Post, new { enctype = "multipart/form-data", @class = "owner-form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="id" value="@ViewBag.OwnerId" />
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="owner-image-upload-container text-center">
+                        <div class="owner-image-preview">
+                            @if (!string.IsNullOrEmpty(ViewBag.CurrentImg))
+                            {
+                                <img id="imagePreview" src="@ViewBag.CurrentImg" alt="Owner Image" class="owner-avatar-img" />
+                            }
+                            else
+                            {
+                                <img id="imagePreview" src="/img/owners/default-profile.png" alt="Profile Preview" class="owner-avatar-img" />
+                            }
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="ImgFile" class="form-label"><i class="bi bi-camera"></i> Update Profile Image</label>
+                            <input type="file" id="ImgFile" name="ImgFile" class="form-control" accept="image/*" onchange="previewImage(this)" />
+                            @Html.ValidationMessage("ImgFile", "", new { @class = "text-danger" })
+                            <div class="form-text text-muted">Recommended: Square image, max 5MB (.jpg, .png, .gif)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="UserName" class="form-label"><i class="bi bi-person"></i> @Html.DisplayNameFor(model => model.UserName)</label>
+                                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", placeholder = "Enter username" })
+                                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="Email" class="form-label"><i class="bi bi-envelope"></i> @Html.DisplayNameFor(model => model.Email)</label>
+                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Enter email address" })
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="PhoneNum" class="form-label"><i class="bi bi-telephone"></i> @Html.DisplayNameFor(model => model.PhoneNum)</label>
+                                @Html.TextBoxFor(model => model.PhoneNum, new { @class = "form-control", placeholder = "Enter phone number" })
+                                @Html.ValidationMessageFor(model => model.PhoneNum, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="Password" class="form-label"><i class="bi bi-lock"></i> @Html.DisplayNameFor(model => model.Password)</label>
+                                @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Enter password" })
+                                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                <div class="form-text text-muted">Leave blank to keep current password</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="FullName" class="form-label"><i class="bi bi-person-badge"></i> @Html.DisplayNameFor(model => model.FullName)</label>
+                        @Html.TextBoxFor(model => model.FullName, new { @class = "form-control", placeholder = "Enter full name" })
+                        @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="Dob" class="form-label"><i class="bi bi-calendar"></i> @Html.DisplayNameFor(model => model.Dob)</label>
+                                @Html.TextBoxFor(model => model.Dob, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                                @Html.ValidationMessageFor(model => model.Dob, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="Gender" class="form-label"><i class="bi bi-gender-ambiguous"></i> @Html.DisplayNameFor(model => model.Gender)</label>
+                                @Html.DropDownListFor(model => model.Gender, 
+                                    new List<SelectListItem> { 
+                                        new SelectListItem { Text = "Select Gender", Value = "" },
+                                        new SelectListItem { Text = "Male", Value = "Male" },
+                                        new SelectListItem { Text = "Female", Value = "Female" },
+                                        new SelectListItem { Text = "Other", Value = "Other" }
+                                    }, 
+                                    new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group text-end mt-4">
+                <a href="@Url.Action("OwnerIndex", "Owner")" class="btn owner-btn owner-btn-outline-secondary me-2">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </a>
+                <button type="submit" class="btn owner-btn owner-btn-warning">
+                    <i class="bi bi-check-circle"></i> Save Changes
+                </button>
+            </div>
         }
     </div>
+</div>
 
-    <div class="form-group mb-3">
-        @Html.Label("ImgFile", "Upload New Image")
-        <input type="file" name="ImgFile" class="form-control" />
-    </div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                
+                reader.onload = function (e) {
+                    $('#imagePreview').attr('src', e.target.result);
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="OwnerIndex" class="btn btn-secondary">Cancel</a>
+        // Set the selected gender value
+        $(document).ready(function() {
+            var currentGender = '@Model.Gender';
+            if (currentGender) {
+                $('#Gender').val(currentGender);
+            }
+        });
+    </script>
+}
 }
