@@ -18,14 +18,20 @@
     </div>
 
     <div class="vet-form-container">
-        @using (Html.BeginForm("Create", "Veterinarian", FormMethod.Post, new { enctype = "multipart/form-data", @class = "row g-3" }))
+        @using (Html.BeginForm("Create", "Veterinarian", FormMethod.Post, new
+        {
+            enctype = "multipart/form-data",
+            @class
+        = "row g-3"
+        }))
         {
             @Html.AntiForgeryToken()
 
             <div class="col-md-6">
                 <div class="vet-form-group">
                     <label for="UserName" class="form-label"><i class="bi bi-person"></i> Username</label>
-                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control vet-form-control", placeholder = "Enter username" })
+                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control vet-form-control", placeholder =
+                "Enter username" })
                     @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -33,7 +39,8 @@
             <div class="col-md-6">
                 <div class="vet-form-group">
                     <label for="FullName" class="form-label"><i class="bi bi-person-badge"></i> Full Name</label>
-                    @Html.TextBoxFor(model => model.FullName, new { @class = "form-control vet-form-control", placeholder = "Enter full name" })
+                    @Html.TextBoxFor(model => model.FullName, new { @class = "form-control vet-form-control", placeholder =
+                "Enter full name" })
                     @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -41,7 +48,8 @@
             <div class="col-md-6">
                 <div class="vet-form-group">
                     <label for="Email" class="form-label"><i class="bi bi-envelope"></i> Email</label>
-                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control vet-form-control", placeholder = "Enter email address" })
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control vet-form-control", placeholder =
+                "Enter email address" })
                     @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -49,7 +57,8 @@
             <div class="col-md-6">
                 <div class="vet-form-group">
                     <label for="PhoneNum" class="form-label"><i class="bi bi-telephone"></i> Phone Number</label>
-                    @Html.TextBoxFor(model => model.PhoneNum, new { @class = "form-control vet-form-control", placeholder = "Enter phone number" })
+                    @Html.TextBoxFor(model => model.PhoneNum, new { @class = "form-control vet-form-control", placeholder =
+                "Enter phone number" })
                     @Html.ValidationMessageFor(model => model.PhoneNum, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -57,7 +66,8 @@
             <div class="col-md-6">
                 <div class="vet-form-group">
                     <label for="Password" class="form-label"><i class="bi bi-lock"></i> Password</label>
-                    @Html.PasswordFor(model => model.Password, new { @class = "form-control vet-form-control", placeholder = "Enter password" })
+                    @Html.PasswordFor(model => model.Password, new { @class = "form-control vet-form-control", placeholder =
+                "Enter password" })
                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -65,7 +75,8 @@
             <div class="col-md-6">
                 <div class="vet-form-group">
                     <label for="Dob" class="form-label"><i class="bi bi-calendar"></i> Date of Birth</label>
-                    @Html.TextBoxFor(model => model.Dob, "{0:yyyy-MM-dd}", new { @class = "form-control vet-form-control", type = "date" })
+                    @Html.TextBoxFor(model => model.Dob, "{0:yyyy-MM-dd}", new { @class = "form-control vet-form-control",
+                type = "date" })
                     @Html.ValidationMessageFor(model => model.Dob, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -85,8 +96,10 @@
 
             <div class="col-md-6">
                 <div class="vet-form-group">
-                    <label for="NameOfConsultingRoom" class="form-label"><i class="bi bi-building"></i> Consulting Room</label>
-                    @Html.TextBoxFor(model => model.NameOfConsultingRoom, new { @class = "form-control vet-form-control", placeholder = "Enter consulting room name" })
+                    <label for="NameOfConsultingRoom" class="form-label"><i class="bi bi-building"></i> Consulting
+                        Room</label>
+                    @Html.TextBoxFor(model => model.NameOfConsultingRoom, new { @class = "form-control vet-form-control",
+                placeholder = "Enter consulting room name" })
                     @Html.ValidationMessageFor(model => model.NameOfConsultingRoom, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -94,7 +107,8 @@
             <div class="col-md-12">
                 <div class="vet-form-group">
                     <label for="ClinicAddress" class="form-label"><i class="bi bi-geo-alt"></i> Clinic Address</label>
-                    @Html.TextBoxFor(model => model.ClinicAddress, new { @class = "form-control vet-form-control", placeholder = "Enter clinic address" })
+                    @Html.TextBoxFor(model => model.ClinicAddress, new { @class = "form-control vet-form-control",
+                placeholder = "Enter clinic address" })
                     @Html.ValidationMessageFor(model => model.ClinicAddress, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -127,7 +141,8 @@
             <div class="col-md-12">
                 <div class="vet-form-group">
                     <label for="Experience" class="form-label"><i class="bi bi-journal-text"></i> Experience</label>
-                    @Html.TextAreaFor(model => model.Experience, new { @class = "form-control vet-form-control", rows = "4", placeholder = "Enter professional experience" })
+                    @Html.TextAreaFor(model => model.Experience, new { @class = "form-control vet-form-control", rows = "4",
+                placeholder = "Enter professional experience" })
                     @Html.ValidationMessageFor(model => model.Experience, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -136,7 +151,8 @@
                 <div class="vet-form-group">
                     <label for="ImgFile" class="form-label"><i class="bi bi-image"></i> Profile Image</label>
                     <div class="input-group">
-                        <input type="file" name="ImgFile" id="ImgFile" class="form-control vet-form-control" accept="image/*" />
+                        <input type="file" name="ImgFile" id="ImgFile" class="form-control vet-form-control"
+                            accept="image/*" />
                         <label class="input-group-text" for="ImgFile"><i class="bi bi-upload"></i></label>
                     </div>
                     <div class="form-text">Upload a professional profile image (JPG, PNG).</div>
@@ -160,5 +176,7 @@
 
 @section Scripts {
     <script src="~/js/veterinarian.js"></script>
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

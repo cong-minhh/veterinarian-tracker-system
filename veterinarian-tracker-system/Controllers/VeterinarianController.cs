@@ -26,6 +26,8 @@ namespace veterinarian_tracker_system.Controllers
                 // Start with all veterinarians
                 var vetsQuery = _context.Veterinarians
                     .Include(v => v.Pets)
+                    .Include(v => v.Appointments)
+                        .ThenInclude(a => a.Pet)
                     .AsQueryable();
 
                 // Apply search if provided
