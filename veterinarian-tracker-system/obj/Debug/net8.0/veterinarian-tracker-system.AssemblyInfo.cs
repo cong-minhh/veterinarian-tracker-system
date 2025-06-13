@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("veterinarian-tracker-system")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0d14b90bba07fd337b724c1c6aaed2a0d1f4d5ea")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b1bbba85962850382b4ba00c672bfc7f0234640e")]
 [assembly: System.Reflection.AssemblyProductAttribute("veterinarian-tracker-system")]
 [assembly: System.Reflection.AssemblyTitleAttribute("veterinarian-tracker-system")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
