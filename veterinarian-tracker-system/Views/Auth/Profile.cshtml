@@ -1,0 +1,47 @@
+﻿@model TuyetDang.MyVetTracer.Entity.Owner
+
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Thông tin cá nhân</h4>
+        </div>
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-4">
+                <img src="@Model.Img" alt="Avatar" class="rounded-circle me-3" width="100" height="100" style="object-fit: cover;">
+                <div>
+                    <h5 class="mb-0">@Model.FullName</h5>
+                    <span class="text-muted">@Model.UserName</span>
+                </div>
+            </div>
+
+            <table class="table table-borderless">
+                <tr>
+                    <th>Email:</th>
+                    <td>@Model.Email</td>
+                </tr>
+                <tr>
+                    <th>Số điện thoại:</th>
+                    <td>@Model.PhoneNum</td>
+                </tr>
+                <tr>
+                    <th>Giới tính:</th>
+                    <td>@Model.Gender</td>
+                </tr>
+                <tr>
+                    <th>Ngày sinh:</th>
+                    <td>@Model.Dob?.ToString("dd/MM/yyyy")</td>
+                </tr>
+            </table>
+
+            <a href="@Url.Action("Edit", "Auth", new { id = Model.IdOwnerUser })" class="btn btn-outline-primary">
+                Chỉnh sửa thông tin
+            </a>
+
+
+        </div>
+    </div>
+</div>

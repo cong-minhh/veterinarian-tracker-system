@@ -10,7 +10,7 @@ using veterinarian_tracker_system.Models.Forms;
 
 namespace veterinarian_tracker_system.Controllers
 {
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly MyVetTracerDbContext _context;

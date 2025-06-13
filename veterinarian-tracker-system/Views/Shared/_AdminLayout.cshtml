@@ -578,13 +578,22 @@
                     <span class="theme-slider"></span>
                 </label>
 
-                <div class="user-profile">
-                    <img src="https://i.pinimg.com/736x/6d/ac/d4/6dacd4cf41a3637d021f0aba48de54fc.jpg" alt="Admin"
-                        class="user-avatar">
-                    <div class="user-info">
-                        <span class="user-name">Admin</span>
-                        <span class="user-role">Administrator</span>
-                    </div>
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://i.pinimg.com/736x/6d/ac/d4/6dacd4cf41a3637d021f0aba48de54fc.jpg"
+                             alt="Avatar"
+                             class="rounded-circle me-2"
+                             width="32"
+                             height="32"
+                             style="object-fit: cover;">
+                        <span class="fw-bold">@User.Identity.Name</span> <!-- Show logged-in user's name -->
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="/Auth/Profile">Thông tin cá nhân</a></li>
+                        <li><a class="dropdown-item" href="/User/ChangePassword">Đổi mật khẩu</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="/Auth/Logout">Đăng xuất</a></li>
+                    </ul>
                 </div>
             </div>
         </header>

@@ -16,7 +16,7 @@ namespace TuyetDang.MyVetTracer.ViewModels
         [Phone]
         public string PhoneNum { get; set; }
 
-        [Required]
+  
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
@@ -30,5 +30,8 @@ namespace TuyetDang.MyVetTracer.ViewModels
 
         // Upload ảnh
         public IFormFile ImgFile { get; set; }
+
+        // Thêm quyền người dùng (Role)
+        public string Role { get; set; }
     }
 }
