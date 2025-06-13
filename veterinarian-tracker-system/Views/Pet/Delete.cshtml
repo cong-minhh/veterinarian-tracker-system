@@ -4,34 +4,88 @@
     ViewData["Title"] = "Delete Pet";
 }
 
-<h2>Delete Pet</h2>
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/pet.css" />
+}
 
-<h4>Are you sure you want to delete this pet?</h4>
+<div class="pet-container fade-in">
+    <div class="pet-header">
+        <h2><i class="bi bi-trash"></i> Delete Pet</h2>
+        <a href="@Url.Action("PetIndex", "Pet")" class="btn pet-btn pet-btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+    </div>
 
-<div>
-    <strong>Pet Type:</strong> @Model.PetType<br />
-    <strong>Pet Name:</strong> @Model.PetName<br />
-    <strong>Age:</strong> @Model.Age<br />
-    <strong>Sex:</strong> @Model.Sex<br />
-    <strong>Weight:</strong> @Model.Weight<br />
-    <strong>Height:</strong> @Model.Height<br />
-    <strong>Identification:</strong> @Model.Identification<br />
-    <strong>Owner Id:</strong> @Model.IdOwnerUser<br />
-    <strong>Vet Id:</strong> @Model.IdVetUser<br />
-    <strong>Image:</strong><br />
-    @if (!string.IsNullOrEmpty(Model.Img))
-    {
-        <img src="@Model.Img" alt="Pet Image" style="height: 100px;" />
-    }
-    else
-    {
-        <p>No image</p>
-    }
+    <div class="pet-card">
+        <div class="pet-card-body">
+            <div class="alert alert-danger">
+                <h4 class="alert-heading"><i class="bi bi-exclamation-triangle-fill"></i> Warning!</h4>
+                <p>Are you sure you want to delete this pet? This action cannot be undone.</p>
+            </div>
+
+            <div class="row">
+                <!-- Left Column - Pet Details -->
+                <div class="col-md-7">
+                    <h4 class="mb-3">Pet Information</h4>
+                    <div class="pet-details">
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold"><i class="bi bi-bookmark"></i> Pet Type:</div>
+                            <div class="col-sm-8">@Model.PetType</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold"><i class="bi bi-tag"></i> Pet Name:</div>
+                            <div class="col-sm-8">@Model.PetName</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold"><i class="bi bi-calendar3"></i> Age:</div>
+                            <div class="col-sm-8">@Model.Age years</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold"><i class="bi bi-gender-ambiguous"></i> Sex:</div>
+                            <div class="col-sm-8">@Model.Sex</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold"><i class="bi bi-speedometer"></i> Weight:</div>
+                            <div class="col-sm-8">@Model.Weight kg</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold"><i class="bi bi-arrows-expand-vertical"></i> Height:</div>
+                            <div class="col-sm-8">@Model.Height cm</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold"><i class="bi bi-upc-scan"></i> Identification:</div>
+                            <div class="col-sm-8">@Model.Identification</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Pet Image -->
+                <div class="col-md-5 text-center">
+                    @if (ViewBag.CurrentImg != null)
+                    {
+                        <div class="pet-image-container mb-3">
+                            <h4 class="mb-3">Pet Image</h4>
+                            <img src="@ViewBag.CurrentImg" alt="Pet Image" class="img-thumbnail" style="max-height: 200px;" />
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="IdPet" value="@ViewBag.IdPet" />
+
+                <div class="d-flex justify-content-end mt-4">
+                    <a href="@Url.Action("PetIndex", "Pet")" class="btn pet-btn pet-btn-outline-secondary me-2">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn pet-btn pet-btn-danger">
+                        <i class="bi bi-trash"></i> Confirm Delete
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
 </div>
-
-<form asp-action="Delete" asp-controller="Pet" method="post">
-    @Html.AntiForgeryToken()
-    <input type="hidden" name="id" value="@Model.IdPet" />
-    <button type="submit" class="btn btn-danger mt-3">Delete</button>
-    <a asp-action="PetsManagement" class="btn btn-secondary mt-3">Cancel</a>
-</form>

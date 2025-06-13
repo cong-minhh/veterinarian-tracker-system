@@ -4,80 +4,182 @@
     ViewData["Title"] = "Edit Pet";
 }
 
-<h2>Edit Pet</h2>
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/pet.css" />
+}
 
-@using (Html.BeginForm("Edit", "Pet", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.PetType)
-        @Html.TextBoxFor(model => model.PetType, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.PetType)
+<div class="pet-container fade-in">
+    <div class="pet-header">
+        <h2><i class="bi bi-pencil-square"></i> Edit Pet</h2>
+        <a href="@Url.Action("PetIndex", "Pet")" class="btn pet-btn pet-btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
     </div>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.PetName)
-        @Html.TextBoxFor(model => model.PetName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.PetName)
-    </div>
+    <div class="pet-card">
+        <div class="pet-card-body">
+            @using (Html.BeginForm("Edit", "Pet", FormMethod.Post, new { enctype = "multipart/form-data", @class = "needs-validation" }))
+            {
+                @Html.AntiForgeryToken()
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Age)
-        @Html.TextBoxFor(model => model.Age, new { @class = "form-control", type = "number", min = "0" })
-        @Html.ValidationMessageFor(model => model.Age)
-    </div>
+                <div class="row">
+                    <!-- Left Column - Basic Info -->
+                    <div class="col-md-6">
+                        <h4 class="mb-3">Basic Information</h4>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Sex)
-        @Html.TextBoxFor(model => model.Sex, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Sex)
-    </div>
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(model => model.PetName, new { @class = "form-label fw-bold" })
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-tag"></i></span>
+                                @Html.TextBoxFor(model => model.PetName, new { @class = "form-control", placeholder = "Enter pet name" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.PetName, "", new { @class = "text-danger" })
+                        </div>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Weight)
-        @Html.TextBoxFor(model => model.Weight, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Weight)
-    </div>
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(model => model.PetType, new { @class = "form-label fw-bold" })
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-bookmark"></i></span>
+                                @Html.TextBoxFor(model => model.PetType, new { @class = "form-control", placeholder = "Dog, Cat, Bird, etc." })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.PetType, "", new { @class = "text-danger" })
+                        </div>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Height)
-        @Html.TextBoxFor(model => model.Height, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Height)
-    </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(model => model.Age, new { @class = "form-label fw-bold" })
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-calendar3"></i></span>
+                                        @Html.TextBoxFor(model => model.Age, new { @class = "form-control", type = "number", min = "0", placeholder = "Age in years" })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(model => model.Sex, new { @class = "form-label fw-bold" })
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-gender-ambiguous"></i></span>
+                                        <select asp-for="Sex" class="form-control">
+                                            <option value="">-- Select Sex --</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Sex, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Identification)
-        @Html.TextBoxFor(model => model.Identification, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Identification)
-    </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(model => model.Weight, new { @class = "form-label fw-bold" })
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-speedometer"></i></span>
+                                        @Html.TextBoxFor(model => model.Weight, new { @class = "form-control", placeholder = "Weight in kg" })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    @Html.LabelFor(model => model.Height, new { @class = "form-label fw-bold" })
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-arrows-expand-vertical"></i></span>
+                                        @Html.TextBoxFor(model => model.Height, new { @class = "form-control", placeholder = "Height in cm" })
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Height, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.IdOwnerUser, "Owner")
-        @Html.DropDownListFor(model => model.IdOwnerUser, new SelectList(ViewBag.Owners, "IdOwnerUser", "FullName"), "-- Select Owner --", new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.IdOwnerUser)
-    </div>
+                    <!-- Right Column - Additional Info -->
+                    <div class="col-md-6">
+                        <h4 class="mb-3">Additional Information</h4>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.IdVetUser, "Veterinarian")
-        @Html.DropDownListFor(model => model.IdVetUser, new SelectList(ViewBag.Vets, "IdVetUser", "FullName"), "-- Select Veterinarian --", new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.IdVetUser)
-    </div>
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(model => model.Identification, new { @class = "form-label fw-bold" })
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-upc-scan"></i></span>
+                                @Html.TextBoxFor(model => model.Identification, new { @class = "form-control", placeholder = "Microchip ID, tag number, etc." })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.Identification, "", new { @class = "text-danger" })
+                        </div>
 
-    <div class="form-group mb-3">
-        @Html.Label("ImgFile", "Upload New Image", new { @class = "form-label" })
-        <input type="file" name="ImgFile" class="form-control" accept="image/*" />
-        @Html.ValidationMessage("ImgFile", "", new { @class = "text-danger" })
-    </div>
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(model => model.IdOwnerUser, "Owner", new { @class = "form-label fw-bold" })
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                @Html.DropDownListFor(model => model.IdOwnerUser, new SelectList(ViewBag.Owners, "IdOwnerUser", "FullName"), "-- Select Owner --", new { @class = "form-control" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.IdOwnerUser, "", new { @class = "text-danger" })
+                        </div>
 
-    @if (ViewBag.CurrentImg != null)
-    {
-        <div class="form-group mb-3">
-            <label>Current Image:</label><br />
-            <img src="@ViewBag.CurrentImg" alt="Current Image" style="height: 100px;" />
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(model => model.IdVetUser, "Veterinarian", new { @class = "form-label fw-bold" })
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-hospital"></i></span>
+                                @Html.DropDownListFor(model => model.IdVetUser, new SelectList(ViewBag.Vets, "IdVetUser", "FullName"), "-- Select Veterinarian --", new { @class = "form-control" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.IdVetUser, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="ImgFile" class="form-label fw-bold">Pet Image</label>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text"><i class="bi bi-image"></i></span>
+                                <input type="file" name="ImgFile" id="ImgFile" class="form-control" accept="image/*" />
+                            </div>
+                            @Html.ValidationMessage("ImgFile", "", new { @class = "text-danger" })
+                        </div>
+
+                        @if (ViewBag.CurrentImg != null)
+                        {
+                            <div class="form-group mb-3">
+                                <label class="form-label fw-bold">Current Image:</label>
+                                <div class="current-image-container">
+                                    <img src="@ViewBag.CurrentImg" alt="Current Image" class="img-thumbnail" style="max-height: 150px;" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <a href="@Url.Action("PetIndex", "Pet")" class="btn pet-btn pet-btn-outline-secondary me-2">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn pet-btn pet-btn-primary">
+                        <i class="bi bi-check-circle"></i> Save Changes
+                    </button>
+                </div>
+            }
         </div>
-    }
+    </div>
+</div>
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-    <a asp-action="PetsManagement" class="btn btn-secondary">Cancel</a>
+@section Scripts {
+    <script>
+        // Image preview functionality
+        document.getElementById('ImgFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // If there's a current image container, update it
+                    const currentImageContainer = document.querySelector('.current-image-container');
+                    if (currentImageContainer) {
+                        const img = currentImageContainer.querySelector('img');
+                        img.src = e.target.result;
+                    }
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
