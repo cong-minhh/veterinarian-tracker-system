@@ -19,12 +19,82 @@ namespace veterinarian_tracker_system.Controllers
             _env = env;
         }
 
-        public async Task<IActionResult> OwnerIndex()
+        public async Task<IActionResult> OwnerIndex(string searchString, string sortOrder, int page = 1)
         {
-            var owners = await _context.Owners
-                                       .Include(o => o.Pets)
-                                       .ToListAsync();
-            return View(owners);
+            try
+            {
+                // Start with all owners
+                var ownersQuery = _context.Owners
+                    .Include(o => o.Pets)
+                    .AsQueryable();
+
+                // Apply search if provided
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    searchString = searchString.ToLower();
+                    ownersQuery = ownersQuery.Where(o =>
+                        o.UserName.ToLower().Contains(searchString) ||
+                        o.FullName.ToLower().Contains(searchString) ||
+                        o.Email.ToLower().Contains(searchString) ||
+                        o.PhoneNum.ToLower().Contains(searchString) ||
+                        o.Gender.ToLower().Contains(searchString)
+                    );
+                }
+
+                // Count total records for pagination
+                int totalRecords = await ownersQuery.CountAsync();
+                int pageSize = 9; // Number of records per page
+                int totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+                // Ensure page is within valid range
+                page = Math.Max(1, Math.Min(page, Math.Max(1, totalPages)));
+
+                // Apply sorting
+                switch (sortOrder)
+                {
+                    case "name_desc":
+                        ownersQuery = ownersQuery.OrderByDescending(o => o.FullName);
+                        break;
+                    case "date_asc":
+                        ownersQuery = ownersQuery.OrderBy(o => o.CreatedAt);
+                        break;
+                    case "date_desc":
+                        ownersQuery = ownersQuery.OrderByDescending(o => o.CreatedAt);
+                        break;
+                    case "pets_asc":
+                        ownersQuery = ownersQuery.OrderBy(o => o.Pets.Count);
+                        break;
+                    case "pets_desc":
+                        ownersQuery = ownersQuery.OrderByDescending(o => o.Pets.Count);
+                        break;
+                    case "name_asc":
+                    default: // Default to name ascending
+                        ownersQuery = ownersQuery.OrderBy(o => o.FullName);
+                        break;
+                }
+
+                // Apply pagination
+                var owners = await ownersQuery
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                // Pass data to view
+                ViewBag.CurrentFilter = searchString;
+                ViewBag.CurrentSort = sortOrder;
+                ViewBag.CurrentPage = page;
+                ViewBag.TotalPages = totalPages;
+                ViewBag.HasPreviousPage = page > 1;
+                ViewBag.HasNextPage = page < totalPages;
+                ViewBag.TotalOwners = totalRecords;
+
+                return View(owners);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving owners");
+                return View(new List<Owner>());
+            }
         }
 
         [HttpGet]

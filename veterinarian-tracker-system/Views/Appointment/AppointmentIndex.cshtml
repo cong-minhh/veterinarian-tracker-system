@@ -4,14 +4,255 @@
     ViewData["Title"] = "Appointment List";
 }
 
-<h2>Appointment Management</h2>
-<div class="mb-3">
-    <a href="@Url.Action("Create", "Appointment")" class="btn btn-success">
-        <i class="bi bi-plus-circle"></i> Create New Appointment
-    </a>
-</div>
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/appointment.css" />
+}
 
-<table class="table table-dark table-bordered table-striped table-responsive">
+<div class="appointment-container fade-in">
+    <div class="appointment-header">
+        <h2><i class="bi bi-calendar-check"></i> Appointments Management</h2>
+        <a href="@Url.Action("Create", "Appointment")" class="btn appointment-btn appointment-btn-success">
+            <i class="bi bi-plus-circle"></i> Add New Appointment
+        </a>
+    </div>
+
+    <!-- Error Message Alert -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Success Message Alert -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Dashboard Stats -->
+    <div class="appointment-stats-container mb-4">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="appointment-stat-card bg-primary text-white">
+                    <div class="appointment-stat-icon"><i class="bi bi-calendar-check-fill"></i></div>
+                    <div class="appointment-stat-info">
+                        <h3>@Model.Count</h3>
+                        <p>Total Appointments</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="appointment-stat-card bg-success text-white">
+                    <div class="appointment-stat-icon"><i class="bi bi-check-circle-fill"></i></div>
+                    <div class="appointment-stat-info">
+                        <h3>@Model.Count(a => a.IsConfirmed == 1)</h3>
+                        <p>Confirmed</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="appointment-stat-card bg-warning text-white">
+                    <div class="appointment-stat-icon"><i class="bi bi-hourglass-split"></i></div>
+                    <div class="appointment-stat-info">
+                        <h3>@Model.Count(a => a.IsConfirmed == 0)</h3>
+                        <p>Pending</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="appointment-search-container mb-4">
+        <form id="filterForm" method="get" action="@Url.Action("AppointmentIndex", "Appointment")" class="row g-3">
+            <div class="col-md-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Search pet, owner, or vet..." name="searchString" value="@ViewBag.CurrentFilter">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-calendar-range"></i></span>
+                    <input type="text" class="form-control" id="dateRangePicker" placeholder="Date range" name="dateRange" value="@ViewBag.CurrentDateRange">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" name="statusFilter">
+                    <option value="" selected="@(string.IsNullOrEmpty(ViewBag.CurrentStatus))">All Status</option>
+<option value="confirmed" selected="@(ViewBag.CurrentStatus == "confirmed")">Confirmed</option>
+<option value="pending" selected="@(ViewBag.CurrentStatus == "pending")">Pending</option>
+
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn appointment-btn appointment-btn-primary w-100"><i class="bi bi-filter"></i> Apply</button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" id="resetFilters" class="btn appointment-btn appointment-btn-outline-secondary w-100"><i class="bi bi-x-circle"></i> Reset</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- View Toggle Buttons -->
+    <div class="mb-4">
+        <div class="btn-group" role="group">
+            <button id="cardViewBtn" type="button" class="btn appointment-btn appointment-btn-outline-primary active">
+                <i class="bi bi-grid-3x3-gap"></i> Card View
+            </button>
+            <button id="tableViewBtn" type="button" class="btn appointment-btn appointment-btn-outline-primary">
+                <i class="bi bi-table"></i> Table View
+            </button>
+            <button id="calendarViewBtn" type="button" class="btn appointment-btn appointment-btn-outline-primary">
+                <i class="bi bi-calendar3"></i> Calendar View
+            </button>
+        </div>
+    </div>
+
+    <!-- Card View -->
+    <div id="cardView" class="row g-4 mb-4">
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var appointment in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="appointment-card">
+                        <div class="appointment-card-header @(appointment.IsConfirmed == 1? "appointment-card-confirmed" : "appointment-card-pending")">
+                            <div class="appointment-date">
+                                <div class="appointment-date-day">@DateTime.Parse(appointment.Time).Day</div>
+                                <div class="appointment-date-month">@DateTime.Parse(appointment.Time).ToString("MMM")</div>
+                            </div>
+                            <div class="appointment-time">
+                                <i class="bi bi-clock"></i> @DateTime.Parse(appointment.Time).ToString("HH:mm")
+                            </div>
+                            <div class="appointment-status @(appointment.IsConfirmed == 1? "appointment-status-confirmed" : "appointment-status-pending")">
+                                @(appointment.IsConfirmed == 1? "Confirmed" : "Pending")
+                            </div>
+                        </div>
+                        <div class="appointment-card-body">
+                            <div class="mb-3">
+                                <button class="pet-toggle-btn" data-target="petSection-@appointment.IdAppointment">
+                                    <i class="bi bi-chevron-right"></i> Pet Information
+                                </button>
+                                <div id="petSection-@appointment.IdAppointment" class="pet-toggle-section">
+                                    @if (appointment.Pet != null)
+                                    {
+                                        <div class="pet-toggle-content">
+                                            <div class="pet-item">
+                                                <img src="@appointment.Pet.Img" alt="@appointment.Pet.PetName" class="pet-item-img">
+                                                <div class="pet-item-info">
+                                                    <h6>@appointment.Pet.PetName</h6>
+                                                    <p>@appointment.Pet.PetType | @appointment.Pet.Age years | @appointment.Pet.Sex</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="pet-toggle-content">
+                                            <p class="text-muted">No pet information</p>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <button class="owner-toggle-btn" data-target="ownerSection-@appointment.IdAppointment">
+                                    <i class="bi bi-chevron-right"></i> Owner Information
+                                </button>
+                                <div id="ownerSection-@appointment.IdAppointment" class="owner-toggle-section">
+                                    @if (appointment.Pet.OwnerUser != null)
+                                    {
+                                        <div class="owner-toggle-content">
+                                            <div class="owner-item">
+                                                <img src="@appointment.Pet.OwnerUser.Img" alt="@appointment.Pet.OwnerUser.FullName" class="owner-item-img">
+                                                <div class="owner-item-info">
+                                                    <h6>@appointment.Pet.OwnerUser.FullName</h6>
+                                                    <p>@appointment.Pet.OwnerUser.Email | @appointment.Pet.OwnerUser.PhoneNum</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="owner-toggle-content">
+                                            <p class="text-muted">No owner information</p>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <button class="vet-toggle-btn" data-target="vetSection-@appointment.IdAppointment">
+                                    <i class="bi bi-chevron-right"></i> Veterinarian Information
+                                </button>
+                                <div id="vetSection-@appointment.IdAppointment" class="vet-toggle-section">
+                                    @if (appointment.VetUser != null)
+                                    {
+                                        <div class="vet-toggle-content">
+                                            <div class="vet-item">
+                                                <img src="@appointment.VetUser.Img" alt="@appointment.VetUser.FullName" class="vet-item-img">
+                                                <div class="vet-item-info">
+                                                    <h6>@appointment.VetUser.FullName</h6>
+                                                    <p>@appointment.VetUser.Email | @appointment.VetUser.PhoneNum</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="vet-toggle-content">
+                                            <p class="text-muted">No veterinarian assigned</p>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appointment-card-footer">
+                            <a href="@Url.Action("Edit", "Appointment", new { id = appointment.IdAppointment })" class="btn appointment-btn appointment-btn-warning me-1">
+                                <i class="bi bi-pencil-square"></i> Edit
+                            </a>
+                            <button class="btn appointment-btn appointment-btn-danger delete-appointment-btn" data-bs-toggle="modal" data-bs-target="#deleteModal" 
+                                    data-appointment-id="@appointment.IdAppointment" data-pet-name="@(appointment.Pet != null ? appointment.Pet.PetName : "Unknown Pet")">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-info">No appointments found.</div>
+            </div>
+        }
+    </div>
+
+    <!-- Calendar View -->
+    <div id="calendarView" style="display: none;" class="mb-4">
+        <div id="appointmentCalendar" data-appointments="@Json.Serialize(Model.Select(a => new {
+            id = a.IdAppointment,
+            petName = a.Pet?.PetName ?? "Unknown Pet",
+            vetName = a.VetUser?.FullName ?? "Unassigned",
+            time = a.Time,
+            status = a.IsConfirmed == 1 ? "confirmed" : "pending",
+            petId = a.Pet?.IdPet,
+            vetId = a.VetUser?.IdVetUser,
+            notes = ""
+        }))"></div>
+    </div>
+
+    <!-- Table View -->
+    <div id="tableView" style="display: none;">
+        <div class="table-responsive">
+            <table class="table appointment-table">
     <thead>
         <tr>
             <th>Id</th>
@@ -29,7 +270,7 @@
         {
             foreach (var appt in Model)
             {
-                <tr>
+                <tr class="appointment-table-row" data-appointment-id="@appt.IdAppointment">
                     <td>@appt.IdAppointment</td>
                     <td>@(appt.Pet != null ? appt.Pet.PetName : "-")</td>
                     <td>@(appt.Pet?.OwnerUser != null ? appt.Pet.OwnerUser.FullName : "-")</td>
@@ -38,6 +279,9 @@
                     <td>@(appt.IsConfirmed == 1 ? "Yes" : "No")</td>
                     <td>@appt.CreatedAt</td>
                     <td class="text-center" style="width: 250px;">
+                        <button type="button" class="btn btn-sm btn-info me-1 js-toggle-row" data-appointment-id="@appt.IdAppointment">
+                            <i class="bi bi-chevron-down"></i>
+                        </button>
                         <a href="@Url.Action("Edit", "Appointment", new { id = appt.IdAppointment })" class="btn btn-sm btn-warning me-1">
                             <i class="bi bi-pencil-square"></i> Edit
                         </a>
@@ -46,6 +290,262 @@
                            onclick="return confirm('Are you sure you want to delete this appointment?');">
                             <i class="bi bi-trash"></i> Delete
                         </a>
+                    </td>
+                </tr>
+                <tr id="expanded-row-@appt.IdAppointment" class="expanded-row" style="display: none;">
+                    <td colspan="8">
+                        <div class="expanded-content">
+                            <!-- Appointment Details Section -->
+                            <div class="expanded-section">
+                                <div class="section-title">
+                                    <i class="bi bi-calendar-check"></i>
+                                    <h5>Appointment Details</h5>
+                                </div>
+                                <div class="section-content">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Status:</span>
+                                        <span class="detail-value">
+                                            @if (appt.IsConfirmed == 1)
+                                            {
+                                                <span class="badge bg-success">Confirmed</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">Pending</span>
+                                            }
+                                        </span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Date:</span>
+                                        <span class="detail-value">@appt.Time</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Time:</span>
+                                        <span class="detail-value">@appt.Time</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Created:</span>
+                                        <span class="detail-value">@appt.CreatedAt.ToString("yyyy-MM-dd HH:mm")</span>
+                                    </div>
+                                    @* @if (!string.IsNullOrEmpty(appt.))
+                                    {
+                                        <div class="detail-item">
+                                            <span class="detail-label">Notes:</span>
+                                            <span class="detail-value">@appt.Notes</span>
+                                        </div>
+                                    } *@
+                                </div>
+                            </div>
+
+                            <!-- Pet Information Section -->
+                            @if (appt.Pet != null)
+                            {
+                                <div class="expanded-section">
+                                    <div class="section-title">
+                                        <i class="bi bi-heart"></i>
+                                        <h5>Pet Information</h5>
+                                    </div>
+                                    <div class="section-content">
+                                        <div class="appointment-pet-item" data-pet-id="@appt.Pet.IdPet">
+                                            <div class="item-content">
+                                                <div class="item-avatar">
+                                                    @if (!string.IsNullOrEmpty(appt.Pet.Img))
+                                                    {
+                                                        <img src="@appt.Pet.Img" alt="@appt.Pet.PetName" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="default-avatar">@appt.Pet.PetName.Substring(0, 1).ToUpper()</div>
+                                                    }
+                                                </div>
+                                                <div class="item-details">
+                                                    <h6>@appt.Pet.PetName</h6>
+                                                    <p>@appt.Pet.PetType - @appt.Pet.Identification</p>
+                                                </div>
+                                            </div>
+                                            <div class="appointment-pet-tooltip">
+                                                <div class="tooltip-header">
+                                                    <div class="tooltip-avatar">
+                                                        @if (!string.IsNullOrEmpty(appt.Pet.Img))
+                                                        {
+                                                            <img src="@appt.Pet.Img" alt="@appt.Pet.PetName" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="default-avatar">@appt.Pet.PetName.Substring(0, 1).ToUpper()</div>
+                                                        }
+                                                    </div>
+                                                    <div class="tooltip-title">
+                                                        <h6>@appt.Pet.PetName</h6>
+                                                        <p>@appt.Pet.PetType - @appt.Pet.Identification</p>
+                                                    </div>
+                                                </div>
+                                                <div class="tooltip-body">
+                                                    <div class="tooltip-detail">
+                                                        <span class="detail-label">Age:</span>
+                                                        <span class="detail-value">@appt.Pet.Age years</span>
+                                                    </div>
+                                                    <div class="tooltip-detail">
+                                                        <span class="detail-label">Gender:</span>
+                                                        <span class="detail-value">@appt.Pet.Sex</span>
+                                                    </div>
+                                                    <div class="tooltip-detail">
+                                                        <span class="detail-label">Weight:</span>
+                                                        <span class="detail-value">@appt.Pet.Weight kg</span>
+                                                    </div>
+                                                    @* @if (!string.IsNullOrEmpty(appt.Pet.))
+                                                    {
+                                                        <div class="tooltip-detail">
+                                                            <span class="detail-label">Medical History:</span>
+                                                            <span class="detail-value">@appt.Pet.MedicalHistory</span>
+                                                        </div>
+                                                    } *@
+                                                </div>
+                                                <div class="tooltip-footer">
+                                                    <a href="@Url.Action("Details", "Pet", new { id = appt.Pet.IdPet })" class="btn btn-sm btn-primary">
+                                                        View Pet Details
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- Owner Information Section -->
+                            @if (appt.Pet?.OwnerUser != null)
+                            {
+                                <div class="expanded-section">
+                                    <div class="section-title">
+                                        <i class="bi bi-person"></i>
+                                        <h5>Owner Information</h5>
+                                    </div>
+                                    <div class="section-content">
+                                        <div class="appointment-owner-item" data-owner-id="@appt.Pet.OwnerUser.IdOwnerUser">
+                                            <div class="item-content">
+                                                <div class="item-avatar">
+                                                    @if (!string.IsNullOrEmpty(appt.Pet.OwnerUser.Img))
+                                                    {
+                                                        <img src="@appt.Pet.OwnerUser.Img" alt="@appt.Pet.OwnerUser.FullName" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="default-avatar">@appt.Pet.OwnerUser.FullName.Substring(0, 1).ToUpper()</div>
+                                                    }
+                                                </div>
+                                                <div class="item-details">
+                                                    <h6>@appt.Pet.OwnerUser.FullName</h6>
+                                                    <p>@appt.Pet.OwnerUser.Email</p>
+                                                </div>
+                                            </div>
+                                            <div class="appointment-owner-tooltip">
+                                                <div class="tooltip-header">
+                                                    <div class="tooltip-avatar">
+                                                        @if (!string.IsNullOrEmpty(appt.Pet.OwnerUser.Img))
+                                                        {
+                                                            <img src="@appt.Pet.OwnerUser.Img" alt="@appt.Pet.OwnerUser.FullName" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="default-avatar">@appt.Pet.OwnerUser.FullName.Substring(0, 1).ToUpper()</div>
+                                                        }
+                                                    </div>
+                                                    <div class="tooltip-title">
+                                                        <h6>@appt.Pet.OwnerUser.FullName</h6>
+                                                        <p>@appt.Pet.OwnerUser.Email</p>
+                                                    </div>
+                                                </div>
+                                                <div class="tooltip-body">
+                                                    <div class="tooltip-detail">
+                                                        <span class="detail-label">PhoneNum:</span>
+                                                        <span class="detail-value">@appt.Pet.OwnerUser.PhoneNum</span>
+                                                    </div>
+                                                    @* @if (!string.IsNullOrEmpty(appt.Pet.OwnerUser.Address))
+                                                    {
+                                                        <div class="tooltip-detail">
+                                                            <span class="detail-label">Address:</span>
+                                                            <span class="detail-value">@appt.Pet.OwnerUser.Address</span>
+                                                        </div>
+                                                    } *@
+                                                </div>
+                                                <div class="tooltip-footer">
+                                                    <a href="@Url.Action("Details", "Owner", new { id = appt.Pet.OwnerUser.IdOwnerUser })" class="btn btn-sm btn-primary">
+                                                        View Owner Details
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- Veterinarian Information Section -->
+                            @if (appt.VetUser != null)
+                            {
+                                <div class="expanded-section">
+                                    <div class="section-title">
+                                        <i class="bi bi-person-badge"></i>
+                                        <h5>Veterinarian Information</h5>
+                                    </div>
+                                    <div class="section-content">
+                                        <div class="appointment-veterinarian-item" data-vet-id="@appt.VetUser.IdVetUser">
+                                            <div class="item-content">
+                                                <div class="item-avatar">
+                                                    @if (!string.IsNullOrEmpty(appt.VetUser.Img))
+                                                    {
+                                                        <img src="@appt.VetUser.Img" alt="@appt.VetUser.FullName" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="default-avatar">@appt.VetUser.FullName.Substring(0, 1).ToUpper()</div>
+                                                    }
+                                                </div>
+                                                <div class="item-details">
+                                                    <h6>@appt.VetUser.FullName</h6>
+                                                    <p>@appt.VetUser.Email</p>
+                                                </div>
+                                            </div>
+                                            <div class="appointment-veterinarian-tooltip">
+                                                <div class="tooltip-header">
+                                                    <div class="tooltip-avatar">
+                                                        @if (!string.IsNullOrEmpty(appt.VetUser.Img))
+                                                        {
+                                                            <img src="@appt.VetUser.Img" alt="@appt.VetUser.FullName" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="default-avatar">@appt.VetUser.FullName.Substring(0, 1).ToUpper()</div>
+                                                        }
+                                                    </div>
+                                                    <div class="tooltip-title">
+                                                        <h6>@appt.VetUser.FullName</h6>
+                                                        <p>@appt.VetUser.Email</p>
+                                                    </div>
+                                                </div>
+                                                <div class="tooltip-body">
+                                                    <div class="tooltip-detail">
+                                                        <span class="detail-label">PhoneNum:</span>
+                                                        <span class="detail-value">@appt.VetUser.PhoneNum</span>
+                                                    </div>
+                                                    @if (!string.IsNullOrEmpty(appt.VetUser.Qualification))
+                                                    {
+                                                        <div class="tooltip-detail">
+                                                            <span class="detail-label">Qualification:</span>
+                                                            <span class="detail-value">@appt.VetUser.Qualification</span>
+                                                        </div>
+                                                    }
+                                                </div>
+                                                <div class="tooltip-footer">
+                                                    <a href="@Url.Action("Details", "Veterinarian", new { id = appt.VetUser.IdVetUser })" class="btn btn-sm btn-primary">
+                                                        View Veterinarian Details
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     </td>
                 </tr>
             }
@@ -58,19 +558,6 @@
         }
     </tbody>
 </table>
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    @TempData["SuccessMessage"]
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>
-    </div>
-
     <script type="text/javascript">
         window.onload = function () {
             var toastEl = document.getElementById('successToast');
@@ -80,4 +567,71 @@
             }
         };
     </script>
+    
 }
+
+<!-- Appointment Detail Modal for Calendar View -->
+<div class="modal fade" id="appointmentDetailModal" tabindex="-1" aria-labelledby="appointmentDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="appointmentDetailModalLabel">Appointment Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6 id="modalAppointmentTitle"></h6>
+                <div class="mb-3">
+                    <strong>Time:</strong> <span id="modalAppointmentTime"></span>
+                </div>
+                <div class="mb-3">
+                    <strong>Status:</strong> <span id="modalAppointmentStatus"></span>
+                </div>
+                <div class="mb-3">
+                    <strong>Notes:</strong> <span id="modalAppointmentNotes"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" id="editAppointmentBtn" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
+                <button type="button" id="deleteAppointmentBtn" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash"></i> Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- FullCalendar Library -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.js"></script>
+    
+    <!-- DateRangePicker Library -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker@3.1.0/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker@3.1.0/daterangepicker.min.js"></script>
+    
+    <!-- Appointment JS -->
+    <script src="~/js/appointment.js"></script>
+}
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the appointment for <span id="deletePetName"></span> scheduled at <span id="deleteAppointmentTime"></span>?</p>
+                <p class="text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post">
+                    <input type="hidden" id="deleteAppointmentId" name="id" value="" />
+                    <button type="submit" id="confirmDelete" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
