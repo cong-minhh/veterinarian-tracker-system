@@ -1,87 +1,318 @@
 ﻿@model List<TuyetDang.MyVetTracer.Entity.Veterinarian>
 @{
-    Layout = "_AdminLayout";
+    ViewData["Title"] = "Veterinarians Management";
 }
 
-<h2>Veterinarians Management</h2>
-<div class="mb-3">
-    <a href="@Url.Action("Create", "Veterinarian")" class="btn btn-success">
-        <i class="bi bi-plus-circle"></i> Create New Veterinarian
-    </a>
-</div>
-<table class="table table-dark table-bordered table-striped table-responsive">
-    <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Avatar</th>
-            <th scope="col">User Name</th>
-            <th scope="col">Full Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Phone Number</th>
-            <th scope="col">Date of Birth</th>
-            <th scope="col">Gender</th>
-            <th scope="col">Consulting Room</th>
-            <th scope="col">Clinic Address</th>
-            <th scope="col">Qualification</th>
-            <th scope="col">Authentication</th>
-            <th scope="col">Registed Pets</th>
-            <th scope="col">Created Date</th>
-            <th scope="col" class="text-center" style="width: 250px;">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/veterinarian.css" />
+}
+
+<div class="vet-container fade-in">
+    <div class="vet-header">
+        <h2><i class="bi bi-hospital"></i> Veterinarians Management</h2>
+        <a href="@Url.Action("Create", "Veterinarian")" class="btn vet-btn vet-btn-success">
+            <i class="bi bi-plus-circle"></i> Add New Veterinarian
+        </a>
+    </div>
+
+    <!-- Dashboard Stats -->
+    <div class="vet-stats-container mb-4">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="vet-stat-card bg-primary text-white">
+                    <div class="vet-stat-icon"><i class="bi bi-people-fill"></i></div>
+                    <div class="vet-stat-info">
+                        <h3>@ViewBag.TotalVeterinarians</h3>
+                        <p>Total Veterinarians</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="vet-stat-card bg-success text-white">
+                    <div class="vet-stat-icon"><i class="bi bi-check-circle-fill"></i></div>
+                    <div class="vet-stat-info">
+                        <h3>@ViewBag.VerifiedVeterinarians</h3>
+                        <p>Verified Veterinarians</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="vet-stat-card bg-warning text-dark">
+                    <div class="vet-stat-icon"><i class="bi bi-hourglass-split"></i></div>
+                    <div class="vet-stat-info">
+                        <h3>@ViewBag.PendingVeterinarians</h3>
+                        <p>Pending Verification</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="vet-stat-card bg-info text-white">
+                    <div class="vet-stat-icon"><i class="bi bi-heart-fill"></i></div>
+                    <div class="vet-stat-info">
+                        <h3>@ViewBag.TotalPets</h3>
+                        <p>Total Pets</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="vet-search-container">
+        <form id="searchForm" method="get" class="row g-3">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" id="searchTerm" name="searchTerm" class="form-control"
+                        placeholder="Search by name, email, or qualification..." value="@ViewBag.CurrentSearch">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select id="filterQualification" name="qualification" class="form-select">
+                    <option value="">All Qualifications</option>
+                    @if (ViewBag.Qualifications != null)
+                    {
+                        foreach (var qual in ViewBag.Qualifications)
+                        {
+                            if (!string.IsNullOrEmpty(qual.Qualification))
+                            {
+                                <option value="@qual.Qualification"
+                                    selected="@(ViewBag.CurrentQualification == qual.Qualification)">
+                                    @qual.Qualification
+                                </option>
+
+                            }
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select id="sortBy" name="sortBy" class="form-select">
+                    <option value="name" selected="@(ViewBag.CurrentSortBy == "name")">Sort by Name (A-Z)</option>
+                    <option value="name-desc" selected="@(ViewBag.CurrentSortBy == "name-desc")">Sort by Name (Z-A)
+                    </option>
+                    <option value="date" selected="@(ViewBag.CurrentSortBy == "date")">Sort by Date</option>
+                    <option value="pets" selected="@(ViewBag.CurrentSortBy == "pets")">Sort by Pets Count</option>
+
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn vet-btn vet-btn-primary w-100">Apply</button>
+            </div>
+            <input type="hidden" name="page" value="1" /> <!-- Reset to page 1 when filtering -->
+        </form>
+    </div>
+
+    <!-- Toggle View Buttons -->
+    <div class="mb-4">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-primary active" id="cardViewBtn"><i
+                    class="bi bi-grid-3x3-gap"></i> Card View</button>
+            <button type="button" class="btn btn-outline-primary" id="tableViewBtn"><i class="bi bi-table"></i> Table
+                View</button>
+        </div>
+    </div>
+
+    <!-- Card View -->
+    <div id="cardView" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
         @if (Model != null && Model.Count > 0)
         {
             foreach (var vet in Model)
             {
-                <tr>
-                    <td>@vet.IdVetUser</td>
-                    <td>
-                        <img src="@vet.Img" alt="Vet Image" width="50" height="50" style="object-fit: cover; border-radius: 50%;" />
-                    </td>
-                    <td>@vet.UserName</td>
-                    <td>@vet.FullName</td>
-                    <td>@vet.Email</td>
-                    <td>@vet.PhoneNum</td>
-                    <td>@(vet.Dob.HasValue ? vet.Dob.Value.ToString("yyyy-MM-dd") : "-")</td>
-                    <td>@vet.Gender</td>
-                    <td>@vet.NameOfConsultingRoom</td>
-                    <td>@vet.ClinicAddress</td>
-                    <td>@vet.Qualification</td>
-                    <td>@vet.Authentication</td>
-                    <td>@(vet.Pets != null ? vet.Pets.Count : 0)</td>
-					<td>@vet.CreatedAt</td>
-                    <td class="text-center" style="width: 250px; white-space: nowrap;">
-                        <a href="@Url.Action("Edit", "Veterinarian", new { id = vet.IdVetUser })"
-                           class="btn btn-sm btn-warning d-inline-block me-1">
-                            <i class="bi bi-pencil-square"></i> Edit
-                        </a>
-                        <a href="@Url.Action("Delete", "Veterinarian", new { id = vet.IdVetUser })"
-                           class="btn btn-sm btn-danger d-inline-block"
-                           onclick="return confirm('Are you sure you want to delete this veterinarian?');">
-                            <i class="bi bi-trash"></i> Delete
-                        </a>
-                    </td>
-                </tr>
+                <div class="col fade-in">
+                    <div class="vet-card">
+                        <div class="vet-card-header">
+                            <h5 class="mb-0">@vet.FullName</h5>
+                            <small>@vet.UserName</small>
+                        </div>
+                        <div class="text-center position-relative">
+                            <img src="@(string.IsNullOrEmpty(vet.Img) ? "/img/default-vet.jpg" : vet.Img)" alt="@vet.FullName"
+                                class="vet-card-img mt-3" />
+                            <span
+                                class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-success mt-4 me-2">
+                                @(vet.Authentication == 1 ? "Verified" : "Pending")
+                            </span>
+                        </div>
+                        <div class="vet-card-body">
+                            <div class="mb-2">
+                                <span class="vet-badge vet-badge-primary">@vet.Qualification</span>
+                                <span class="vet-badge vet-badge-success">@(vet.Pets != null ? vet.Pets.Count : 0) Pets</span>
+                            </div>
+                            <p><i class="bi bi-envelope"></i> @vet.Email</p>
+                            <p><i class="bi bi-telephone"></i> @vet.PhoneNum</p>
+                            <p><i class="bi bi-building"></i> @vet.NameOfConsultingRoom</p>
+                            <p><i class="bi bi-geo-alt"></i> @vet.ClinicAddress</p>
+                        </div>
+                        <div class="vet-card-footer d-flex justify-content-between">
+                            <a href="@Url.Action("Edit", "Veterinarian", new { id = vet.IdVetUser })"
+                                class="btn vet-btn vet-btn-primary">
+                                <i class="bi bi-pencil-square"></i> Edit
+                            </a>
+                            <button type="button" class="btn vet-btn vet-btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteModal-@vet.IdVetUser">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Confirmation Modal -->
+                <div class="modal fade" id="deleteModal-@vet.IdVetUser" tabindex="-1"
+                    aria-labelledby="deleteModalLabel-@vet.IdVetUser" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered vet-modal-content">
+                        <div class="modal-content">
+                            <div class="modal-header vet-modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel-@vet.IdVetUser">Confirm Deletion</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to delete <strong>@vet.FullName</strong>?</p>
+                                <p class="text-danger"><small>This action cannot be undone.</small></p>
+                            </div>
+                            <div class="modal-footer vet-modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <a href="@Url.Action("Delete", "Veterinarian", new { id = vet.IdVetUser })"
+                                    class="btn vet-btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
         }
         else
         {
-            <tr>
-                <td colspan="15" class="text-center">No veterinarian found.</td>
-            </tr>
+            <div class="col-12 text-center py-5">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle-fill me-2"></i> No veterinarians found.
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+
+    <!-- Table View (Hidden by Default) -->
+    <div id="tableView" class="mb-4" style="display: none;">
+        <div class="table-responsive">
+            <table class="table vet-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Avatar</th>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Consulting Room</th>
+                        <th scope="col">Qualification</th>
+                        <th scope="col">Pets</th>
+                        <th scope="col" class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        foreach (var vet in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <img src="@(string.IsNullOrEmpty(vet.Img) ? "/img/default-vet.jpg" : vet.Img)"
+                                        alt="@vet.FullName" width="50" height="50"
+                                        style="object-fit: cover; border-radius: 50%;" />
+                                </td>
+                                <td>@vet.FullName</td>
+                                <td>@vet.Email</td>
+                                <td>@vet.PhoneNum</td>
+                                <td>@vet.NameOfConsultingRoom</td>
+                                <td><span class="vet-badge vet-badge-primary">@vet.Qualification</span></td>
+                                <td><span class="vet-badge vet-badge-success">@(vet.Pets != null ? vet.Pets.Count : 0)</span>
+                                </td>
+                                <td class="text-center">
+                                    <a href="@Url.Action("Edit", "Veterinarian", new { id = vet.IdVetUser })"
+                                        class="btn btn-sm vet-btn-primary me-1">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm vet-btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal-@vet.IdVetUser">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center">No veterinarians found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav aria-label="Page navigation" class="vet-pagination">
+            <ul class="pagination">
+                <!-- Previous Page -->
+                <li class="page-item @(!ViewBag.HasPreviousPage ? "disabled" : "")">
+                    <a class="page-link"
+                        href="@Url.Action("VeterinarianIndex", new { searchTerm = ViewBag.CurrentSearch, qualification = ViewBag.CurrentQualification, sortBy = ViewBag.CurrentSortBy, page = ViewBag.CurrentPage - 1 })"
+                        tabindex="-1" aria-disabled="@(!ViewBag.HasPreviousPage)">
+                        <i class="bi bi-chevron-left"></i> Previous
+                    </a>
+                </li>
+
+                <!-- Page Numbers -->
+                @{
+                    int startPage = Math.Max(1, ViewBag.CurrentPage - 2);
+                    int endPage = Math.Min(ViewBag.TotalPages, startPage + 4);
+
+                    // Adjust start page if we're near the end
+                    if (endPage - startPage < 4 && startPage > 1)
+                    {
+                        startPage = Math.Max(1, endPage - 4);
+                    }
+                }
+
+                @for (int i = startPage; i <= endPage; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link"
+                            href="@Url.Action("VeterinarianIndex", new { searchTerm = ViewBag.CurrentSearch, qualification = ViewBag.CurrentQualification, sortBy = ViewBag.CurrentSortBy, page = i })">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                <!-- Next Page -->
+                <li class="page-item @(!ViewBag.HasNextPage ? "disabled" : "")">
+                    <a class="page-link"
+                        href="@Url.Action("VeterinarianIndex", new { searchTerm = ViewBag.CurrentSearch, qualification = ViewBag.CurrentQualification, sortBy = ViewBag.CurrentSortBy, page = ViewBag.CurrentPage + 1 })">
+                        Next <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+
+    <!-- Results Summary -->
+    <div class="vet-results-summary text-muted mb-3">
+        <small>Showing page @ViewBag.CurrentPage of @ViewBag.TotalPages (@ViewBag.TotalVeterinarians total
+            records)</small>
+    </div>
+</div>
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
+            aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
                     @TempData["SuccessMessage"]
                 </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
             </div>
         </div>
     </div>

@@ -5,98 +5,203 @@
     ViewData["Title"] = "Edit Veterinarian";
 }
 
-<h2>Edit Veterinarian</h2>
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/veterinarian.css" />
+}
 
-@using (Html.BeginForm("Edit", "Veterinarian", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.UserName)
-        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.UserName)
+<div class="vet-container fade-in">
+    <div class="vet-header">
+        <h2><i class="bi bi-pencil-square"></i> Edit Veterinarian</h2>
+        <a href="@Url.Action("VeterinarianIndex", "Veterinarian")" class="btn vet-btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
     </div>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Email)
-        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Email)
-    </div>
+    <div class="vet-form-container">
+        @using (Html.BeginForm("Edit", "Veterinarian", FormMethod.Post, new
+        {
+            enctype = "multipart/form-data",
+            @class =
+        "row g-3"
+        }))
+        {
+            @Html.AntiForgeryToken()
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.PhoneNum)
-        @Html.TextBoxFor(model => model.PhoneNum, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.PhoneNum)
-    </div>
+            <div class="col-md-6">
+                <div class="vet-form-group">
+                    <label for="UserName" class="form-label"><i class="bi bi-person"></i> Username</label>
+                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control vet-form-control", placeholder =
+                "Enter username" })
+                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Password)
-        @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Password)
-    </div>
+            <div class="col-md-6">
+                <div class="vet-form-group">
+                    <label for="FullName" class="form-label"><i class="bi bi-person-badge"></i> Full Name</label>
+                    @Html.TextBoxFor(model => model.FullName, new { @class = "form-control vet-form-control", placeholder =
+                "Enter full name" })
+                    @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.FullName)
-        @Html.TextBoxFor(model => model.FullName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.FullName)
-    </div>
+            <div class="col-md-6">
+                <div class="vet-form-group">
+                    <label for="Email" class="form-label"><i class="bi bi-envelope"></i> Email</label>
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control vet-form-control", placeholder =
+                "Enter email address" })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Dob)
-        @Html.TextBoxFor(model => model.Dob, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
-        @Html.ValidationMessageFor(model => model.Dob)
-    </div>
+            <div class="col-md-6">
+                <div class="vet-form-group">
+                    <label for="PhoneNum" class="form-label"><i class="bi bi-telephone"></i> Phone Number</label>
+                    @Html.TextBoxFor(model => model.PhoneNum, new { @class = "form-control vet-form-control", placeholder =
+                "Enter phone number" })
+                    @Html.ValidationMessageFor(model => model.PhoneNum, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Gender)
-        @Html.TextBoxFor(model => model.Gender, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Gender)
-    </div>
+            <div class="col-md-6">
+                <div class="vet-form-group">
+                    <label for="Password" class="form-label"><i class="bi bi-lock"></i> Password <span
+                            class="text-muted">(Optional)</span></label>
+                    @Html.PasswordFor(model => model.Password, new { @class = "form-control vet-form-control", placeholder =
+                "Leave blank to keep current password" })
+                    <div class="form-text">Leave blank to keep the current password. Enter a new password to change it.
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.NameOfConsultingRoom)
-        @Html.TextBoxFor(model => model.NameOfConsultingRoom, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.NameOfConsultingRoom)
-    </div>
+            <div class="col-md-6">
+                <div class="vet-form-group">
+                    <label for="Dob" class="form-label"><i class="bi bi-calendar"></i> Date of Birth</label>
+                    @Html.TextBoxFor(model => model.Dob, "{0:yyyy-MM-dd}", new { @class = "form-control vet-form-control",
+                type = "date" })
+                    @Html.ValidationMessageFor(model => model.Dob, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.ClinicAddress)
-        @Html.TextBoxFor(model => model.ClinicAddress, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.ClinicAddress)
-    </div>
+            <div class="col-md-6">
+                <div class="vet-form-group">
+                    <label for="Gender" class="form-label"><i class="bi bi-gender-ambiguous"></i> Gender</label>
+                    <select name="Gender" id="Gender" class="form-select vet-form-control">
+                        <option value="">Select Gender</option>
+                        <option value="Male" selected="@(Model.Gender == "Male")">Male</option>
+                        <option value="Female" selected="@(Model.Gender == "Female")">Female</option>
+                        <option value="Other" selected="@(Model.Gender == "Other")">Other</option>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Qualification)
-        @Html.TextBoxFor(model => model.Qualification, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Qualification)
-    </div>
+                    </select>
+                    @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Experience)
-        @Html.TextAreaFor(model => model.Experience, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Experience)
-    </div>
+            <div class="col-md-6">
+                <div class="vet-form-group">
+                    <label for="NameOfConsultingRoom" class="form-label"><i class="bi bi-building"></i> Consulting
+                        Room</label>
+                    @Html.TextBoxFor(model => model.NameOfConsultingRoom, new { @class = "form-control vet-form-control",
+                placeholder = "Enter consulting room name" })
+                    @Html.ValidationMessageFor(model => model.NameOfConsultingRoom, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-    <div class="form-group mb-3">
-        @Html.Label("ImgFile", "Upload New Image", new { @class = "form-label" })
-        <input type="file" name="ImgFile" class="form-control" accept="image/*" />
-        @Html.ValidationMessage("ImgFile", "", new { @class = "text-danger" })
-    </div>
+            <div class="col-md-12">
+                <div class="vet-form-group">
+                    <label for="ClinicAddress" class="form-label"><i class="bi bi-geo-alt"></i> Clinic Address</label>
+                    @Html.TextBoxFor(model => model.ClinicAddress, new { @class = "form-control vet-form-control",
+                placeholder = "Enter clinic address" })
+                    @Html.ValidationMessageFor(model => model.ClinicAddress, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-    @if (ViewBag.CurrentImg != null)
-    {
-        <div class="form-group mb-3">
-            <label>Current Image:</label><br />
-            <img src="@ViewBag.CurrentImg" alt="Current Image" style="height: 100px;" />
-        </div>
+            <div class="col-md-6">
+                <div class="vet-form-group">
+                    <label for="Qualification" class="form-label"><i class="bi bi-award"></i> Qualification</label>
+                    <select name="Qualification" id="Qualification" class="form-select vet-form-control">
+                        <option value="">Select Qualification</option>
+                        <option value="DVM" selected="@(Model.Qualification == "DVM")">Doctor of Veterinary Medicine (DVM)
+                        </option>
+                        <option value="VMD" selected="@(Model.Qualification == "VMD")">Veterinariae Medicinae Doctoris (VMD)
+                        </option>
+                        <option value="BVSc" selected="@(Model.Qualification == "BVSc")">Bachelor of Veterinary Science
+                            (BVSc)</option>
+                        <option value="PhD" selected="@(Model.Qualification == "PhD")">Doctor of Philosophy (PhD)</option>
+
+                    </select>
+                    @Html.ValidationMessageFor(model => model.Qualification, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="vet-form-group">
+                    <label for="Authentication" class="form-label"><i class="bi bi-shield-check"></i> Authentication</label>
+                    <select name="Authentication" id="Authentication" class="form-select vet-form-control">
+                        <option value="0" selected="@(Model.Authentication == 0)">Pending</option>
+                        <option value="1" selected="@(Model.Authentication == 1)">Verified</option>
+
+                    </select>
+                    @Html.ValidationMessageFor(model => model.Authentication, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="vet-form-group">
+                    <label for="Experience" class="form-label"><i class="bi bi-journal-text"></i> Experience</label>
+                    @Html.TextAreaFor(model => model.Experience, new { @class = "form-control vet-form-control", rows = "4",
+                placeholder = "Enter professional experience" })
+                    @Html.ValidationMessageFor(model => model.Experience, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="vet-form-group">
+                    <label for="ImgFile" class="form-label"><i class="bi bi-image"></i> Profile Image <span
+                            class="text-muted">(Optional)</span></label>
+                    <div class="input-group">
+                        <input type="file" name="ImgFile" id="ImgFile" class="form-control vet-form-control"
+                            accept="image/*" />
+                        <label class="input-group-text" for="ImgFile"><i class="bi bi-upload"></i></label>
+                    </div>
+                    <div class="form-text">Upload a new profile image (JPG, PNG) or leave blank to keep current image.</div>
+                    @Html.ValidationMessage("ImgFile", "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @if (ViewBag.CurrentImg != null)
+            {
+                <div class="col-md-12">
+                    <div class="vet-form-group">
+                        <label class="form-label"><i class="bi bi-image-fill"></i> Current Image</label>
+                        <div class="text-center p-3 bg-light rounded">
+                            <img src="@ViewBag.CurrentImg" alt="Current Image" class="img-fluid rounded"
+                                style="max-height: 200px;" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="col-12 mt-4">
+                <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("VeterinarianIndex", "Veterinarian")" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn vet-btn vet-btn-primary">
+                        <i class="bi bi-check-circle"></i> Save Changes
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/veterinarian.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Authentication)
-        @Html.TextBoxFor(model => model.Authentication, new { @class = "form-control", type = "number" })
-        @Html.ValidationMessageFor(model => model.Authentication)
-    </div>
-
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-    <a asp-action="VeterinariansManagement" class="btn btn-secondary">Cancel</a>
+}
 }

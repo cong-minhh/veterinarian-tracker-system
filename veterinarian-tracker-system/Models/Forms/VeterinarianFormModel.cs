@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
@@ -16,7 +16,6 @@ namespace TuyetDang.MyVetTracer.ViewModels
         [Phone]
         public string PhoneNum { get; set; }
 
-        [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
