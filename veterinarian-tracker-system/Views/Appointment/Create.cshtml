@@ -4,6 +4,10 @@
     ViewData["Title"] = "Create Appointment";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/appointment.css" />
+}
+
 <h2>Create Appointment</h2>
 
 @using (Html.BeginForm("Create", "Appointment", FormMethod.Post))

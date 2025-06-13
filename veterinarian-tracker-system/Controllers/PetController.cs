@@ -19,13 +19,61 @@ namespace veterinarian_tracker_system.Controllers
             _env = env;
         }
 
-        public async Task<IActionResult> PetIndex()
+        public async Task<IActionResult> PetIndex(string searchString, string sortOrder)
         {
-            var pets = await _context.Pets
-                                     .Include(p => p.OwnerUser)
-                                     .Include(p => p.VetUser)
-                                     .ToListAsync();
-
+            // Store filter values in ViewBag for maintaining state in the view
+            ViewBag.CurrentFilter = searchString;
+            ViewBag.CurrentSort = sortOrder;
+            
+            // Set up sort options
+            ViewBag.NameSortParm = sortOrder == "name_asc" ? "name_desc" : "name_asc";
+            ViewBag.TypeSortParm = sortOrder == "type_asc" ? "type_desc" : "type_asc";
+            ViewBag.AgeSortParm = sortOrder == "age_asc" ? "age_desc" : "age_asc";
+            ViewBag.DateSortParm = sortOrder == "date_asc" ? "date_desc" : "date_asc";
+            
+            // Start with base query
+            var petsQuery = _context.Pets
+                .Include(p => p.OwnerUser)
+                .Include(p => p.VetUser)
+                .Include(p => p.Appointments)
+                    .ThenInclude(a => a.VetUser)
+                .Include(p => p.Meds)
+                    .ThenInclude(m => m.VetUser)
+                .Include(p => p.Vacs)
+                    .ThenInclude(v => v.VetUser)
+                .AsQueryable();
+            
+            // Apply search filter if provided
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                petsQuery = petsQuery.Where(p => 
+                    p.PetName.ToLower().Contains(searchString) ||
+                    p.PetType.ToLower().Contains(searchString) ||
+                    (p.Identification != null && p.Identification.ToLower().Contains(searchString)) ||
+                    (p.OwnerUser != null && p.OwnerUser.FullName.ToLower().Contains(searchString))
+                );
+            }
+            
+            // Apply sorting
+            petsQuery = sortOrder switch
+            {
+                "name_asc" => petsQuery.OrderBy(p => p.PetName),
+                "name_desc" => petsQuery.OrderByDescending(p => p.PetName),
+                "type_asc" => petsQuery.OrderBy(p => p.PetType),
+                "type_desc" => petsQuery.OrderByDescending(p => p.PetType),
+                "age_asc" => petsQuery.OrderBy(p => p.Age),
+                "age_desc" => petsQuery.OrderByDescending(p => p.Age),
+                "date_asc" => petsQuery.OrderBy(p => p.CreatedAt),
+                "date_desc" => petsQuery.OrderByDescending(p => p.CreatedAt),
+                _ => petsQuery.OrderByDescending(p => p.CreatedAt) // Default sort is newest first
+            };
+            
+            var pets = await petsQuery.ToListAsync();
+            
+            // Log search results for debugging
+            _logger.LogInformation($"Pet search: {searchString ?? "none"}, Sort: {sortOrder ?? "none"}, Results: {pets.Count}");
+            
             return View(pets);
         }
         [HttpGet]

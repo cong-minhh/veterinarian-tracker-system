@@ -1,0 +1,817 @@
+/* Pet Module Styling */
+
+/* Main container styling */
+.pet-container {
+    padding: 1rem 0;
+}
+
+/* Fade-in animation */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Page header styling */
+.pet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.pet-header h2 {
+    margin: 0;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* Dashboard Stats */
+.pet-stats-container {
+    margin-bottom: 2rem;
+}
+
+.pet-stat-card {
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.pet-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+}
+
+.pet-stat-icon {
+    font-size: 2.5rem;
+    margin-right: 1rem;
+    opacity: 0.8;
+}
+
+.pet-stat-info {
+    flex-grow: 1;
+}
+
+.pet-stat-info h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1;
+}
+
+.pet-stat-info p {
+    margin: 0.5rem 0 0;
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+/* Search and filter section */
+.pet-search-container {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Search Input Styling */
+.search-filter-section .input-group {
+    position: relative;
+}
+
+.search-clear-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    border: none;
+    color: #6c757d;
+    transition: all 0.2s ease;
+}
+
+.search-clear-btn:hover {
+    background-color: #e2e6ea;
+    color: #343a40;
+}
+
+.search-clear-btn i {
+    font-size: 14px;
+}
+
+/* Filtered Results Indicator */
+.filtered-indicator {
+    font-size: 0.7em;
+    color: #6c757d;
+    font-weight: normal;
+    margin-left: 5px;
+}
+
+/* No Results Message */
+.alert-info {
+    background-color: #e8f4f8;
+    border-color: #bee5eb;
+    color: #0c5460;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Button styling */
+.pet-btn {
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.pet-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.pet-btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: white;
+}
+
+.pet-btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+    color: white;
+}
+
+.pet-btn-success {
+    background-color: #2ecc71;
+    border-color: #2ecc71;
+    color: white;
+}
+
+.pet-btn-success:hover {
+    background-color: #27ae60;
+    border-color: #27ae60;
+    color: white;
+}
+
+.pet-btn-warning {
+    background-color: #f39c12;
+    border-color: #f39c12;
+    color: white;
+}
+
+.pet-btn-warning:hover {
+    background-color: #e67e22;
+    border-color: #e67e22;
+    color: white;
+}
+
+.pet-btn-danger {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+    color: white;
+}
+
+.pet-btn-danger:hover {
+    background-color: #c0392b;
+    border-color: #c0392b;
+    color: white;
+}
+
+.pet-btn-secondary {
+    background-color: #95a5a6;
+    border-color: #95a5a6;
+    color: white;
+}
+
+.pet-btn-secondary:hover {
+    background-color: #7f8c8d;
+    border-color: #7f8c8d;
+    color: white;
+}
+
+.pet-btn-outline-primary {
+    background-color: transparent;
+    border-color: #3498db;
+    color: #3498db;
+}
+
+.pet-btn-outline-primary:hover, .pet-btn-outline-primary.active {
+    background-color: #3498db;
+    color: white;
+}
+
+.pet-btn-outline-secondary {
+    background-color: transparent;
+    border-color: #95a5a6;
+    color: #95a5a6;
+}
+
+.pet-btn-outline-secondary:hover {
+    background-color: #95a5a6;
+    color: white;
+}
+
+/* Badge styling */
+.pet-badge {
+    display: inline-block;
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.375rem;
+    background-color: #3498db;
+    color: white;
+}
+
+.pet-badge-success {
+    background-color: #2ecc71;
+}
+
+.pet-badge-primary {
+    background-color: #3498db;
+}
+
+.pet-badge-warning {
+    background-color: #f39c12;
+}
+
+.pet-badge-danger {
+    background-color: #e74c3c;
+}
+
+/* Card styling */
+.pet-card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border: none;
+    background-color: white;
+}
+
+.pet-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.pet-card-header {
+    background-color: #3498db;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pet-card-header h5 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.pet-card-img {
+    padding: 1.5rem 0;
+    background-color: #f8f9fa;
+}
+
+.pet-avatar-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pet-avatar-img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* Avatar modal styles */
+.avatar-modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-modal-content {
+    max-width: 80%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    animation: zoom 0.3s ease;
+}
+
+@keyframes zoom {
+    from {transform: scale(0.8); opacity: 0;}
+    to {transform: scale(1); opacity: 1;}
+}
+
+.avatar-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.avatar-modal-close:hover {
+    color: #bbb;
+    text-decoration: none;
+}
+
+.pet-card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+
+.pet-card-body p {
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.pet-card-body p i {
+    margin-right: 0.5rem;
+    color: #3498db;
+}
+
+.pet-card-footer {
+    padding: 1rem;
+    background-color: rgba(0,0,0,0.02);
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Toggle sections styling */
+.owner-toggle-btn,
+.appointment-toggle-btn,
+.medicine-toggle-btn,
+.vaccine-toggle-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #2c3e50;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.owner-toggle-btn:hover,
+.appointment-toggle-btn:hover,
+.medicine-toggle-btn:hover,
+.vaccine-toggle-btn:hover {
+    background-color: #e9ecef;
+}
+
+.owner-toggle-btn.active,
+.appointment-toggle-btn.active,
+.medicine-toggle-btn.active,
+.vaccine-toggle-btn.active {
+    background-color: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+.owner-toggle-btn i,
+.appointment-toggle-btn i,
+.medicine-toggle-btn i,
+.vaccine-toggle-btn i {
+    margin-right: 0.5rem;
+    transition: transform 0.2s ease;
+}
+
+.owner-toggle-section,
+.appointment-toggle-section,
+.medicine-toggle-section,
+.vaccine-toggle-section {
+    display: none;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.owner-toggle-section.show,
+.appointment-toggle-section.show,
+.medicine-toggle-section.show,
+.vaccine-toggle-section.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Owner item styling */
+.owner-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.owner-item-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1rem;
+    border: 2px solid #3498db;
+}
+
+.owner-item-info h6 {
+    margin: 0;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.owner-item-info p {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+/* Appointment item styling */
+.appointment-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 0.75rem;
+    position: relative;
+}
+
+.appointment-item-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 6px;
+    margin-right: 1rem;
+}
+
+.date-day {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.date-month {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.appointment-item-info {
+    flex-grow: 1;
+}
+
+.appointment-item-info h6 {
+    margin: 0;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.appointment-item-info p {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+.appointment-status {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.appointment-status.confirmed {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.appointment-status.pending {
+    background-color: #f39c12;
+    color: white;
+}
+
+/* Medicine item styling */
+.medicine-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 0.75rem;
+    position: relative;
+}
+
+.medicine-item-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 50%;
+    margin-right: 1rem;
+    font-size: 1.25rem;
+}
+
+.medicine-item-info {
+    flex-grow: 1;
+}
+
+.medicine-item-info h6 {
+    margin: 0;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.medicine-item-info p {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+.medicine-item-info small {
+    display: block;
+    margin-top: 0.25rem;
+    color: #95a5a6;
+    font-style: italic;
+}
+
+/* Vaccine item styling */
+.vaccine-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 0.75rem;
+    position: relative;
+}
+
+.vaccine-item-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 6px;
+    margin-right: 1rem;
+}
+
+.vaccine-item-info {
+    flex-grow: 1;
+}
+
+.vaccine-item-info h6 {
+    margin: 0;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.vaccine-item-info p {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+/* Table styling */
+.pet-table {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.pet-table thead {
+    background-color: #3498db;
+    color: white;
+}
+
+.pet-table th {
+    font-weight: 500;
+    padding: 1rem;
+}
+
+.pet-table td {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+.pet-table-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.pet-table-row:hover {
+    background-color: rgba(52, 152, 219, 0.05);
+}
+
+.pet-table-row.expanded-parent {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.table-toggle-arrow {
+    background: none;
+    border: none;
+    color: #3498db;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.table-toggle-arrow.active i {
+    transform: rotate(90deg);
+}
+
+.expanded-row {
+    background-color: #f8f9fa;
+}
+
+.expanded-content {
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.expanded-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.expanded-section-title {
+    background-color: #3498db;
+    color: white;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.expanded-section-title i {
+    margin-right: 0.5rem;
+}
+
+.expanded-pet-details,
+.expanded-appointments,
+.expanded-medicines,
+.expanded-vaccines {
+    padding: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.detail-item {
+    display: flex;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.detail-label {
+    font-weight: 600;
+    width: 120px;
+    color: #2c3e50;
+}
+
+.detail-value {
+    flex-grow: 1;
+    color: #7f8c8d;
+}
+
+/* Tooltip styling */
+.pet-appointment-tooltip,
+.pet-medicine-tooltip,
+.pet-vaccine-tooltip {
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    width: 280px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+
+.pet-tooltip-header {
+    background-color: #3498db;
+    color: white;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.pet-tooltip-info {
+    padding: 1rem;
+}
+
+.pet-tooltip-info p {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+}
+
+.pet-tooltip-info p:last-child {
+    margin-bottom: 0;
+}
+
+/* Modal styling */
+.pet-modal-header {
+    background-color: #3498db;
+    color: white;
+}
+
+.pet-modal-footer {
+    background-color: #f8f9fa;
+}
+
+/* Toast styling */
+.toast-container {
+    z-index: 1060;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+    .pet-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .pet-header a {
+        margin-top: 1rem;
+        align-self: flex-start;
+    }
+    
+    .expanded-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .pet-card-header {
+        flex-direction: column;
+    }
+    
+    .pet-card-header .pet-badge {
+        margin-top: 0.5rem;
+    }
+}

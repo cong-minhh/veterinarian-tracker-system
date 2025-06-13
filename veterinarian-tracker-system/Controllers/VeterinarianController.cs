@@ -34,7 +34,7 @@ namespace veterinarian_tracker_system.Controllers
                 if (!string.IsNullOrEmpty(searchTerm))
                 {
                     searchTerm = searchTerm.ToLower();
-                    vetsQuery = vetsQuery.Where(v => 
+                    vetsQuery = vetsQuery.Where(v =>
                         v.UserName.ToLower().Contains(searchTerm) ||
                         v.FullName.ToLower().Contains(searchTerm) ||
                         v.Email.ToLower().Contains(searchTerm) ||
@@ -147,7 +147,7 @@ namespace veterinarian_tracker_system.Controllers
                 // Check if file is an image
                 var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
                 var extension = Path.GetExtension(model.ImgFile.FileName).ToLowerInvariant();
-                
+
                 if (!allowedExtensions.Contains(extension))
                 {
                     ModelState.AddModelError("ImgFile", "Only image files (jpg, jpeg, png, gif) are allowed.");
@@ -346,7 +346,7 @@ namespace veterinarian_tracker_system.Controllers
             var vet = await _context.Veterinarians
                 .Include(v => v.Pets)
                 .FirstOrDefaultAsync(v => v.IdVetUser == id);
-                
+
             if (vet == null) return NotFound();
 
             // Check if veterinarian has associated pets

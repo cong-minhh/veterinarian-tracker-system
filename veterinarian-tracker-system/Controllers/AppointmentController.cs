@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using TuyetDang.MyVetTracer.Data;
 using TuyetDang.MyVetTracer.Entity;
 using TuyetDang.MyVetTracer.ViewModels;
@@ -17,16 +20,90 @@ namespace veterinarian_tracker_system.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> AppointmentIndex()
+        public async Task<IActionResult> AppointmentIndex(string searchString, string dateRange, string statusFilter)
         {
-            var appointments = await _context.Appointments
-                                             .Include(a => a.Pet)
-                                                 .ThenInclude(p => p.OwnerUser)
-                                             .Include(a => a.VetUser)
-                                             .ToListAsync();
+            try
+            {
+                // Store filter values in ViewBag for maintaining state in the view
+                ViewBag.CurrentFilter = searchString;
+                ViewBag.CurrentDateRange = dateRange;
+                ViewBag.CurrentStatus = statusFilter;
 
-            return View(appointments);
+                // Start with base query
+                var appointmentsQuery = _context.Appointments
+                    .Include(a => a.Pet)
+                        .ThenInclude(p => p.OwnerUser)
+                    .Include(a => a.VetUser)
+                    .AsQueryable();
+
+                // Apply search filter if provided
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    searchString = searchString.ToLower();
+                    appointmentsQuery = appointmentsQuery.Where(a =>
+                        (a.Pet != null && a.Pet.PetName.ToLower().Contains(searchString)) ||
+                        (a.Pet != null && a.Pet.PetType.ToLower().Contains(searchString)) ||
+                        (a.Pet != null && a.Pet.OwnerUser != null && a.Pet.OwnerUser.FullName.ToLower().Contains(searchString)) ||
+                        (a.VetUser != null && a.VetUser.FullName.ToLower().Contains(searchString)) ||
+                        a.Time.ToLower().Contains(searchString)
+                    );
+                }
+
+                // Apply date range filter if provided
+                if (!string.IsNullOrEmpty(dateRange))
+                {
+                    // Parse date range (format: MM/DD/YYYY - MM/DD/YYYY)
+                    var dates = dateRange.Split('-');
+                    if (dates.Length == 2)
+                    {
+                        if (DateTime.TryParse(dates[0].Trim(), out DateTime startDate) && 
+                            DateTime.TryParse(dates[1].Trim(), out DateTime endDate))
+                        {
+                            // Add one day to end date to include the entire day
+                            endDate = endDate.AddDays(1).AddSeconds(-1);
+                            
+                            // Format dates to match the stored format
+                            string startDateStr = startDate.ToString("yyyy-MM-dd");
+                            string endDateStr = endDate.ToString("yyyy-MM-dd 23:59:59");
+                            
+                            appointmentsQuery = appointmentsQuery.Where(a => 
+                                string.Compare(a.Time, startDateStr) >= 0 && 
+                                string.Compare(a.Time, endDateStr) <= 0);
+                        }
+                    }
+                }
+
+                // Apply status filter if provided
+                if (!string.IsNullOrEmpty(statusFilter))
+                {
+                    if (statusFilter.ToLower() == "confirmed")
+                    {
+                        appointmentsQuery = appointmentsQuery.Where(a => a.IsConfirmed == 1);
+                    }
+                    else if (statusFilter.ToLower() == "pending")
+                    {
+                        appointmentsQuery = appointmentsQuery.Where(a => a.IsConfirmed == 0);
+                    }
+                }
+
+                // Order by date (newest first)
+                appointmentsQuery = appointmentsQuery.OrderByDescending(a => a.Time);
+
+                var appointments = await appointmentsQuery.ToListAsync();
+
+                // Log search results for debugging
+                _logger.LogInformation($"Appointment search: {searchString ?? "none"}, Date Range: {dateRange ?? "none"}, Status: {statusFilter ?? "all"}, Results: {appointments.Count}");
+
+                return View(appointments);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving appointments");
+                TempData["ErrorMessage"] = "An error occurred while retrieving appointments. Please try again.";
+                return View(new List<Appointment>());
+            }
         }
+
         [HttpGet]
         public async Task<IActionResult> Create()
         {
