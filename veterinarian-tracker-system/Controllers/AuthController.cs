@@ -7,10 +7,12 @@ using System.Security.Claims;
 using TuyetDang.MyVetTracer.Data;
 using TuyetDang.MyVetTracer.Entity;
 using TuyetDang.MyVetTracer.ViewModels;
+using BCrypt.Net;
 
 
 namespace veterinarian_tracker_system.Controllers
 {
+    
     public class AuthController : Controller
     {
         private readonly MyVetTracerDbContext _context;
@@ -239,6 +241,8 @@ namespace veterinarian_tracker_system.Controllers
                 imgPath = "/uploads/" + fileName;
             }
 
+            // Hash password with BCrypt
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
             if (model.Role == "Owner")
             {
@@ -248,12 +252,11 @@ namespace veterinarian_tracker_system.Controllers
                     UserName = model.UserName,
                     Email = model.Email,
                     PhoneNum = model.PhoneNum,
-                    Password = model.Password,
+                    Password = hashedPassword,
                     FullName = model.FullName,
                     Dob = model.Dob,
                     Gender = model.Gender
                 };
-
 
                 _context.Owners.Add(owner);
                 await _context.SaveChangesAsync();
@@ -268,12 +271,11 @@ namespace veterinarian_tracker_system.Controllers
                     UserName = model.UserName,
                     Email = model.Email,
                     PhoneNum = model.PhoneNum,
-                    Password = model.Password,
+                    Password = hashedPassword,
                     FullName = model.FullName,
                     Dob = model.Dob,
                     Gender = model.Gender
                 };
-
 
                 _context.Veterinarians.Add(vet);
                 await _context.SaveChangesAsync();
@@ -282,6 +284,6 @@ namespace veterinarian_tracker_system.Controllers
             }
         }
 
-    
-}
+
+    }
 }
